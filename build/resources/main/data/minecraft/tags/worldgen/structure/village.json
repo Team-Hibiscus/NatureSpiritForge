@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:village_plains",
+    "minecraft:village_desert",
+    "minecraft:village_savanna",
+    "minecraft:village_snowy",
+    "minecraft:village_taiga",
+    "natures_spirit:village_cypress",
+    "natures_spirit:village_wisteria",
+    "natures_spirit:village_adobe",
+    "natures_spirit:village_coconut"
+  ]
+}

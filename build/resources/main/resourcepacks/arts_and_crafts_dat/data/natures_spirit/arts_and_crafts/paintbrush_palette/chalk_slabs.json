@@ -1,0 +1,22 @@
+{
+    "blocks": "#natures_spirit:chalk_slabs",
+    "mappings": {
+        "arts_and_crafts:white_paintbrush": "natures_spirit:white_chalk_slab",
+        "arts_and_crafts:light_gray_paintbrush": "natures_spirit:light_gray_chalk_slab",
+        "arts_and_crafts:gray_paintbrush": "natures_spirit:gray_chalk_slab",
+        "arts_and_crafts:black_paintbrush": "natures_spirit:black_chalk_slab",
+        "arts_and_crafts:brown_paintbrush": "natures_spirit:brown_chalk_slab",
+        "arts_and_crafts:red_paintbrush": "natures_spirit:red_chalk_slab",
+        "arts_and_crafts:orange_paintbrush": "natures_spirit:orange_chalk_slab",
+        "arts_and_crafts:yellow_paintbrush": "natures_spirit:yellow_chalk_slab",
+        "arts_and_crafts:lime_paintbrush": "natures_spirit:lime_chalk_slab",
+        "arts_and_crafts:green_paintbrush": "natures_spirit:green_chalk_slab",
+        "arts_and_crafts:cyan_paintbrush": "natures_spirit:cyan_chalk_slab",
+        "arts_and_crafts:light_blue_paintbrush": "natures_spirit:light_blue_chalk_slab",
+        "arts_and_crafts:blue_paintbrush": "natures_spirit:blue_chalk_slab",
+        "arts_and_crafts:purple_paintbrush": "natures_spirit:purple_chalk_slab",
+        "arts_and_crafts:magenta_paintbrush": "natures_spirit:magenta_chalk_slab",
+        "arts_and_crafts:pink_paintbrush": "natures_spirit:pink_chalk_slab",
+        "arts_and_crafts:bleachdew_paintbrush": "natures_spirit:bleached_chalk_slab"
+    }
+}

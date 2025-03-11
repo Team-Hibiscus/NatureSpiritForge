@@ -1,0 +1,32 @@
+{
+  "mappings": {
+    "net/hibiscus/naturespirit/mixin/AnvilBlockMixin": {
+      "onLand": "Lnet/minecraft/world/level/block/AnvilBlock;m_48792_(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/item/FallingBlockEntity;)V"
+    },
+    "net/hibiscus/naturespirit/mixin/SurfaceBuilderMixin": {
+      "buildSurface": "Lnet/minecraft/world/level/levelgen/SurfaceSystem;m_224648_(Lnet/minecraft/world/level/levelgen/RandomState;Lnet/minecraft/world/level/biome/BiomeManager;Lnet/minecraft/core/Registry;ZLnet/minecraft/world/level/levelgen/WorldGenerationContext;Lnet/minecraft/world/level/chunk/ChunkAccess;Lnet/minecraft/world/level/levelgen/NoiseChunk;Lnet/minecraft/world/level/levelgen/SurfaceRules$RuleSource;)V",
+      "Lnet/minecraft/core/Holder;is(Lnet/minecraft/resources/ResourceKey;)Z": "Lnet/minecraft/core/Holder;m_203565_(Lnet/minecraft/resources/ResourceKey;)Z"
+    },
+    "net/hibiscus/naturespirit/mixin/BrushItemMixin": {
+      "useOn": "Lnet/minecraft/world/item/BrushItem;m_6225_(Lnet/minecraft/world/item/context/UseOnContext;)Lnet/minecraft/world/InteractionResult;",
+      "onUseTick": "Lnet/minecraft/world/item/BrushItem;m_5929_(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;I)V",
+      "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;": "Lnet/minecraft/world/level/Level;m_7702_(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"
+    }
+  },
+  "data": {
+    "searge": {
+      "net/hibiscus/naturespirit/mixin/AnvilBlockMixin": {
+        "onLand": "Lnet/minecraft/world/level/block/AnvilBlock;m_48792_(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/item/FallingBlockEntity;)V"
+      },
+      "net/hibiscus/naturespirit/mixin/SurfaceBuilderMixin": {
+        "buildSurface": "Lnet/minecraft/world/level/levelgen/SurfaceSystem;m_224648_(Lnet/minecraft/world/level/levelgen/RandomState;Lnet/minecraft/world/level/biome/BiomeManager;Lnet/minecraft/core/Registry;ZLnet/minecraft/world/level/levelgen/WorldGenerationContext;Lnet/minecraft/world/level/chunk/ChunkAccess;Lnet/minecraft/world/level/levelgen/NoiseChunk;Lnet/minecraft/world/level/levelgen/SurfaceRules$RuleSource;)V",
+        "Lnet/minecraft/core/Holder;is(Lnet/minecraft/resources/ResourceKey;)Z": "Lnet/minecraft/core/Holder;m_203565_(Lnet/minecraft/resources/ResourceKey;)Z"
+      },
+      "net/hibiscus/naturespirit/mixin/BrushItemMixin": {
+        "useOn": "Lnet/minecraft/world/item/BrushItem;m_6225_(Lnet/minecraft/world/item/context/UseOnContext;)Lnet/minecraft/world/InteractionResult;",
+        "onUseTick": "Lnet/minecraft/world/item/BrushItem;m_5929_(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;I)V",
+        "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;": "Lnet/minecraft/world/level/Level;m_7702_(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"
+      }
+    }
+  }
+}

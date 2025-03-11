@@ -1,0 +1,7 @@
+Java Launcher: C:\Program Files\Java\jdk-17\bin\java.exe
+Arguments: '--inJar, C:\Users\ekans\OneDrive\Documents\Projects\NatureSpiritForge\build\fg_cache\net\minecraftforge\forge\1.20.1-47.3.33\forge-1.20.1-47.3.33-injected.jar, --outJar, C:\Users\ekans\OneDrive\Documents\Projects\NatureSpiritForge\build\fg_cache\net\minecraftforge\forge\1.20.1-47.3.33_mapped_official_1.20.1\forge-1.20.1-47.3.33_mapped_official_1.20.1.jar, --logFile, accesstransform.log, --atFile, C:\Users\ekans\OneDrive\Documents\Projects\NatureSpiritForge\src\main\resources\META-INF\accesstransformer.cfg, --atFile, C:\Users\ekans\OneDrive\Documents\Projects\NatureSpiritForge\build\_atJar_4\parent_at.cfg'
+Classpath:
+ - C:\Users\ekans\.gradle\caches\forge_gradle\maven_downloader\net\minecraftforge\accesstransformers\8.2.1\accesstransformers-8.2.1-fatjar.jar
+Working directory: C:\Users\ekans\OneDrive\Documents\Projects\NatureSpiritForge\build\_atJar_4
+Main class: net.minecraftforge.accesstransformer.TransformerProcessor
+====================================

@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "All Rights Reserved"
+[[mods]]
+modId = "natures_spirit"
+version = "2.2.2-1.20.1"
+displayName = "Nature's Spirit"
+updateJSONURL="https://api.modrinth.com/updates/WBvnqHfV/forge_updates.json"
+displayURL="https://astonishing-chord-210.notion.site/194f058bb4ac80c2979fdfe22fb8010e"
+logoFile="assets/natures_spirit/icon.png"
+authors = "Team Hibiscus"
+
+description = '''A mod to expand Minecraft's nature!'''
+[[dependencies."natures_spirit"]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies."natures_spirit"]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20,1.20.1]"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies."natures_spirit"]]
+modId = "terrablender"
+mandatory = true
+versionRange = "[1,)"
+ordering = "NONE"
+side = "BOTH"
