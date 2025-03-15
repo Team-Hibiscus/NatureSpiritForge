@@ -119,3 +119,6 @@ run/
 !gradle-wrapper.jar
 
 # remappedSrc/
+*.probe
+*.bin
+*.lock
