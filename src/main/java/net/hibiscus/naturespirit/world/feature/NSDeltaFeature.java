@@ -3,8 +3,7 @@ package net.hibiscus.naturespirit.world.feature;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
-import net.hibiscus.naturespirit.registration.NSWoods;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
@@ -37,13 +36,13 @@ public class NSDeltaFeature extends Feature<DeltaFeatureConfiguration> {
         Blocks.NETHER_WART,
         Blocks.CHEST,
         Blocks.SPAWNER,
-        NSWoods.WISTERIA.getBlueLeaves().get(),
-        NSWoods.WISTERIA.getPurpleLeaves().get(),
-        NSWoods.WISTERIA.getWhiteLeaves().get(),
-        NSWoods.WISTERIA.getPinkLeaves().get(),
-        NSWoods.WILLOW.getLeaves().get()
+        NSBlocks.WISTERIA.getBlueLeaves().get(),
+        NSBlocks.WISTERIA.getPurpleLeaves().get(),
+        NSBlocks.WISTERIA.getWhiteLeaves().get(),
+        NSBlocks.WISTERIA.getPinkLeaves().get(),
+        NSBlocks.WILLOW.getLeaves().get()
     );
-    CAN_REPLACE = ImmutableList.of(Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.GRASS_BLOCK, Blocks.MUD, Blocks.SAND, NSMiscBlocks.PINK_SAND.get());
+    CAN_REPLACE = ImmutableList.of(Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.GRASS_BLOCK, Blocks.MUD, Blocks.SAND, NSBlocks.PINK_SAND.get());
     DIRECTIONS = Direction.values();
   }
 

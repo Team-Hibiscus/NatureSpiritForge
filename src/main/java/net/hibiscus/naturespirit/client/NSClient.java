@@ -2,14 +2,22 @@ package net.hibiscus.naturespirit.client;
 
 import net.hibiscus.naturespirit.NatureSpirit;
 import net.hibiscus.naturespirit.client.render.CheeseArrowEntityRenderer;
+import net.hibiscus.naturespirit.client.render.NSBoatRenderer;
 import net.hibiscus.naturespirit.client.render.PizzaBlockEntityRenderer;
 import net.hibiscus.naturespirit.client.render.PizzaToppingModel;
-import net.hibiscus.naturespirit.registration.*;
+import net.hibiscus.naturespirit.entity.NSBoatEntity;
+import net.hibiscus.naturespirit.registration.NSBlocks;
+import net.hibiscus.naturespirit.registration.NSEntityTypes;
+import net.hibiscus.naturespirit.registration.NSParticleTypes;
+import net.hibiscus.naturespirit.registration.NSRegistryHelper;
+import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.ChestBoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.particle.SuspendedTownParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.FoliageColor;
@@ -18,106 +26,126 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 
-import static net.hibiscus.naturespirit.NatureSpirit.MOD_ID;
-
-@Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = NatureSpirit.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class NSClient {
 
   public static final ModelLayerLocation PIZZA_TOPPING = new ModelLayerLocation(new ResourceLocation(NatureSpirit.MOD_ID, "pizza"), "toppings");
 
   @SubscribeEvent
-  public void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+  public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageGrassColor(blockAndTintGetter,
                     blockState.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER ? blockPos.below() : blockPos
-            ) : -1, NSMiscBlocks.CATTAIL.get());
+            ) : -1, NSBlocks.CATTAIL.get());
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageFoliageColor(blockAndTintGetter,
                     blockPos
-            ) : -1, NSWoods.SUGI.getLeaves().get());
+            ) : -1, NSBlocks.SUGI.getLeaves().get());
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageFoliageColor(blockAndTintGetter,
                     blockPos
-            ) : -1, NSWoods.MAHOGANY.getLeaves().get());
+            ) : -1, NSBlocks.MAHOGANY.getLeaves().get());
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageFoliageColor(blockAndTintGetter,
                     blockPos
-            ) : -1, NSWoods.LARCH.getLeaves().get());
+            ) : -1, NSBlocks.LARCH.getLeaves().get());
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageFoliageColor(blockAndTintGetter,
                     blockPos
-            ) : -1, NSWoods.ASPEN.getLeaves().get());
+            ) : -1, NSBlocks.ASPEN.getLeaves().get());
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageGrassColor(blockAndTintGetter,
                     blockPos
-            ) : -1, NSMiscBlocks.LOTUS_STEM.get());
+            ) : -1, NSBlocks.LOTUS_STEM.get());
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageGrassColor(blockAndTintGetter,
                     blockPos
-            ) : -1, NSMiscBlocks.LARGE_LUSH_FERN.get());
+            ) : -1, NSBlocks.LARGE_LUSH_FERN.get());
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageGrassColor(blockAndTintGetter,
                     blockPos
-            ) : -1, NSMiscBlocks.LUSH_FERN.get());
+            ) : -1, NSBlocks.LUSH_FERN.get());
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageGrassColor(blockAndTintGetter,
                     blockPos
-            ) : -1, NSMiscBlocks.POTTED_LUSH_FERN.get());
+            ) : -1, NSBlocks.POTTED_LUSH_FERN.get());
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageGrassColor(blockAndTintGetter,
                     blockPos
-            ) : -1, NSMiscBlocks.LOTUS_STEM.get());
+            ) : -1, NSBlocks.LOTUS_STEM.get());
     event.register(
             (blockState, blockAndTintGetter, blockPos, i) -> blockAndTintGetter != null && blockPos != null ? BiomeColors.getAverageGrassColor(blockAndTintGetter,
                     new BlockPos(blockPos.getX(), -64, blockPos.getZ())
-            ) : -1, NSMiscBlocks.LOTUS_FLOWER.get());
+            ) : -1, NSBlocks.LOTUS_FLOWER.get());
   }
 
   @SubscribeEvent
-  public void registerItemColors(RegisterColorHandlersEvent.Item event) {
-    event.register((stack, tintIndex) -> FoliageColor.getDefaultColor(), NSWoods.SUGI.getLeaves().get());
-    event.register((stack, tintIndex) -> FoliageColor.getDefaultColor(), NSWoods.LARCH.getLeaves().get());
-    event.register((stack, tintIndex) -> FoliageColor.getDefaultColor(), NSWoods.MAHOGANY.getLeaves().get());
-    event.register((stack, tintIndex) -> FoliageColor.getDefaultColor(), NSWoods.ASPEN.getLeaves().get());
-    event.register((stack, tintIndex) -> GrassColor.getDefaultColor(), NSMiscBlocks.LUSH_FERN.get());
-    event.register((stack, tintIndex) -> GrassColor.getDefaultColor(), NSMiscBlocks.LARGE_LUSH_FERN.get());
+  public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+    event.register((stack, tintIndex) -> FoliageColor.getDefaultColor(), NSBlocks.SUGI.getLeaves().get());
+    event.register((stack, tintIndex) -> FoliageColor.getDefaultColor(), NSBlocks.LARCH.getLeaves().get());
+    event.register((stack, tintIndex) -> FoliageColor.getDefaultColor(), NSBlocks.MAHOGANY.getLeaves().get());
+    event.register((stack, tintIndex) -> FoliageColor.getDefaultColor(), NSBlocks.ASPEN.getLeaves().get());
+    event.register((stack, tintIndex) -> GrassColor.getDefaultColor(), NSBlocks.LUSH_FERN.get());
+    event.register((stack, tintIndex) -> GrassColor.getDefaultColor(), NSBlocks.LARGE_LUSH_FERN.get());
   }
 
   @SubscribeEvent
-  public void registerClient(FMLClientSetupEvent event) {
-    ItemBlockRenderTypes.setRenderLayer(NSMiscBlocks.PIZZA_BLOCK.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSMiscBlocks.LARGE_CALCITE_BUD.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSMiscBlocks.SMALL_CALCITE_BUD.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSMiscBlocks.CALCITE_CLUSTER.get(), RenderType.cutout());
+  public static void registerClient(FMLClientSetupEvent event) {
+    Sheets.addWoodType(NSBlocks.REDWOOD.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.SUGI.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.WISTERIA.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.FIR.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.WILLOW.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.ASPEN.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.MAPLE.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.CYPRESS.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.OLIVE.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.JOSHUA.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.GHAF.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.PALO_VERDE.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.COCONUT.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.CEDAR.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.LARCH.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.MAHOGANY.getWoodType().get());
+    Sheets.addWoodType(NSBlocks.SAXAUL.getWoodType().get());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.PIZZA_BLOCK.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.LARGE_CALCITE_BUD.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.SMALL_CALCITE_BUD.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.CALCITE_CLUSTER.get(), RenderType.cutout());
 
     for (RegistryObject<Block> block : NSRegistryHelper.RenderLayerHashMap.values()) {
       ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutout());
     }
+    for (RegistryObject<Block> block : NSRegistryHelper.LeavesHashMap.values()) {
+      ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutoutMipped());
+    }
 
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.COCONUT_THATCH_CARPET.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.COCONUT_THATCH_SLAB.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.COCONUT_THATCH.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.COCONUT_THATCH_STAIRS.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.COCONUT_THATCH_CARPET.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.COCONUT_THATCH_SLAB.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.COCONUT_THATCH.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.COCONUT_THATCH_STAIRS.get(), RenderType.cutout());
 
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.EVERGREEN_THATCH_CARPET.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.EVERGREEN_THATCH_SLAB.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.EVERGREEN_THATCH.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.EVERGREEN_THATCH_STAIRS.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.EVERGREEN_THATCH_CARPET.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.EVERGREEN_THATCH_SLAB.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.EVERGREEN_THATCH.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.EVERGREEN_THATCH_STAIRS.get(), RenderType.cutout());
 
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.XERIC_THATCH_CARPET.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.XERIC_THATCH_SLAB.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.XERIC_THATCH.get(), RenderType.cutout());
-    ItemBlockRenderTypes.setRenderLayer(NSWoods.XERIC_THATCH_STAIRS.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.XERIC_THATCH_CARPET.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.XERIC_THATCH_SLAB.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.XERIC_THATCH.get(), RenderType.cutout());
+    ItemBlockRenderTypes.setRenderLayer(NSBlocks.XERIC_THATCH_STAIRS.get(), RenderType.cutout());
   }
 
   @SubscribeEvent
-  public void registerParticles(RegisterParticleProvidersEvent event) {
+  public static void registerParticles(RegisterParticleProvidersEvent event) {
     event.registerSpriteSet(NSParticleTypes.RED_MAPLE_LEAVES_PARTICLE.get(),
             ((spriteProvider) -> (parameters, world, x, y, z, velocityX, velocityY, velocityZ) -> new MapleLeavesParticle(world, x, y, z, spriteProvider))
     );
@@ -131,14 +159,19 @@ public class NSClient {
   }
 
   @SubscribeEvent
-  public void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-    event.registerBlockEntityRenderer(NSMiscBlocks.PIZZA_BLOCK_ENTITY_TYPE.get(), PizzaBlockEntityRenderer::new);
+  public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+    event.registerBlockEntityRenderer(NSBlocks.PIZZA_BLOCK_ENTITY_TYPE.get(), PizzaBlockEntityRenderer::new);
     event.registerEntityRenderer(NSEntityTypes.CHEESE_ARROW.get(), CheeseArrowEntityRenderer::new);
+    event.registerEntityRenderer(NSEntityTypes.NS_BOAT.get(), pContext -> new NSBoatRenderer(pContext, false));
+    event.registerEntityRenderer(NSEntityTypes.NS_CHEST_BOAT.get(), pContext -> new NSBoatRenderer(pContext, true));
   }
   @SubscribeEvent
-  public void registerEntityRenderLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+  public static void registerEntityRenderLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
     event.registerLayerDefinition(PIZZA_TOPPING, PizzaToppingModel::getTexturedModelData);
+    for(NSBoatEntity.Type type: NSBoatEntity.Type.values()) {
+      event.registerLayerDefinition(NSBoatRenderer.createBoatModelName(type), BoatModel::createBodyModel);
+      event.registerLayerDefinition(NSBoatRenderer.createChestBoatModelName(type), ChestBoatModel::createBodyModel);
+    }
   }
 
 }
-

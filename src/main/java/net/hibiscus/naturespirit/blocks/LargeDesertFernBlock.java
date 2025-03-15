@@ -12,13 +12,14 @@ import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.RegistryObject;
 
 public class LargeDesertFernBlock extends TallGrassBlock {
 
   protected static final VoxelShape SHAPE = Block.box(2D, 0D, 2D, 14D, 16D, 14D);
-  private final DoublePlantBlock tallBlock;
+  private final RegistryObject<Block> tallBlock;
 
-  public LargeDesertFernBlock(Properties properties, DoublePlantBlock tallBlock) {
+  public LargeDesertFernBlock(Properties properties, RegistryObject<Block> tallBlock) {
     super(properties);
     this.tallBlock = tallBlock;
   }
@@ -30,9 +31,8 @@ public class LargeDesertFernBlock extends TallGrassBlock {
 
   @Override
   public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
-    DoublePlantBlock tallPlantBlock = tallBlock;
-    if (tallPlantBlock.defaultBlockState().canSurvive(world, pos) && world.isEmptyBlock(pos.above())) {
-      DoublePlantBlock.placeAt(world, tallPlantBlock.defaultBlockState(), pos, 2);
+    if (tallBlock.get().defaultBlockState().canSurvive(world, pos) && world.isEmptyBlock(pos.above())) {
+      DoublePlantBlock.placeAt(world, tallBlock.get().defaultBlockState(), pos, 2);
     }
 
   }

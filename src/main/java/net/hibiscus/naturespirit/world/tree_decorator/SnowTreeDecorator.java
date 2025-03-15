@@ -18,7 +18,7 @@ public class SnowTreeDecorator extends TreeDecorator {
   }
 
   protected TreeDecoratorType<?> type() {
-    return NSWorldGen.SNOW_DECORATOR;
+    return NSWorldGen.SNOW_DECORATOR.get();
   }
 
   public void place(Context generator) {

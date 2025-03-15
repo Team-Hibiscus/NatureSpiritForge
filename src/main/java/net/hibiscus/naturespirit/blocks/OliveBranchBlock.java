@@ -1,6 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -67,7 +67,7 @@ public class OliveBranchBlock extends RodBlock implements BonemealableBlock {
     }
     if (i > 1) {
       int j = 1 + world.random.nextInt(2);
-      popResource(world, pos, new ItemStack(NSMiscBlocks.OLIVES.get(), j + (bl ? 1 : 0)));
+      popResource(world, pos, new ItemStack(NSBlocks.OLIVES.get(), j + (bl ? 1 : 0)));
       world.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + world.random.nextFloat() * 0.4F);
       world.setBlockAndUpdate(pos, state.setValue(AGE, 0));
       world.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);

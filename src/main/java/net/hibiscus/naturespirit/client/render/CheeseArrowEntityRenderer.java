@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class CheeseArrowEntityRenderer extends ArrowRenderer<CheeseArrowEntity> {
 
   public static final ResourceLocation TEXTURE = new ResourceLocation(NatureSpirit.MOD_ID, "textures/entity/projectiles/cheese_arrow.png");

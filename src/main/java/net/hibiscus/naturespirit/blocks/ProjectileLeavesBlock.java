@@ -10,12 +10,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ProjectileLeavesBlock extends LeavesBlock {
 
-  private final Block END_BLOCK;
+  private final RegistryObject<Block> END_BLOCK;
 
-  public ProjectileLeavesBlock(Properties settings, Block block) {
+  public ProjectileLeavesBlock(Properties settings, RegistryObject<Block> block) {
     super(settings);
     this.END_BLOCK = block;
   }
@@ -27,7 +28,7 @@ public class ProjectileLeavesBlock extends LeavesBlock {
       if (entity instanceof ServerPlayer serverPlayerEntity) {
         serverPlayerEntity.awardStat(Stats.TARGET_HIT);
       }
-      world.setBlockAndUpdate(hit.getBlockPos(), this.END_BLOCK.withPropertiesOf(state));
+      world.setBlockAndUpdate(hit.getBlockPos(), this.END_BLOCK.get().withPropertiesOf(state));
     }
   }
 }

@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class PizzaToppingModel extends Model {
   public final ModelPart slice0;
   public final ModelPart slice1;

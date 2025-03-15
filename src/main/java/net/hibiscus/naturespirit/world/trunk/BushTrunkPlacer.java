@@ -31,7 +31,7 @@ public class BushTrunkPlacer extends TrunkPlacer {
   }
 
   protected TrunkPlacerType<?> type() {
-    return NSWorldGen.BUSH_TRUNK_PLACER;
+    return NSWorldGen.BUSH_TRUNK_PLACER.get();
   }
 
   public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos, TreeConfiguration config) {

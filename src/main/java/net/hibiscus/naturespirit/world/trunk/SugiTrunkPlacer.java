@@ -58,7 +58,7 @@ public class SugiTrunkPlacer extends TrunkPlacer {
   }
 
   protected TrunkPlacerType<?> type() {
-    return NSWorldGen.SUGI_TRUNK_PLACER;
+    return NSWorldGen.SUGI_TRUNK_PLACER.get();
   }
 
   public List<FoliageAttachment> placeTrunk(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos, TreeConfiguration config) {

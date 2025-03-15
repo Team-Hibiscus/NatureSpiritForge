@@ -52,7 +52,7 @@ public class CoconutTrunkPlacer extends TrunkPlacer {
   }
 
   protected TrunkPlacerType<?> type() {
-    return NSWorldGen.COCONUT_TRUNK_PLACER;
+    return NSWorldGen.COCONUT_TRUNK_PLACER.get();
   }
 
   public List<FoliageAttachment> placeTrunk(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos, TreeConfiguration config) {

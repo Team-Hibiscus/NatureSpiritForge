@@ -2,7 +2,7 @@ package net.hibiscus.naturespirit.world.tree_decorator;
 
 import com.mojang.serialization.Codec;
 import net.hibiscus.naturespirit.blocks.OliveBranchBlock;
-import net.hibiscus.naturespirit.registration.NSWoods;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,7 +24,7 @@ public class OliveBranchTreeDecorator extends TreeDecorator {
   }
 
   protected TreeDecoratorType<?> type() {
-    return NSWorldGen.OLIVE_BRANCH_DECORATOR;
+    return NSWorldGen.OLIVE_BRANCH_DECORATOR.get();
   }
 
   public void place(Context generator) {
@@ -37,7 +37,7 @@ public class OliveBranchTreeDecorator extends TreeDecorator {
             Direction direction2 = direction.getOpposite();
             BlockPos blockPos = pos.offset(direction2.getStepX(), direction2.getStepY(), direction2.getStepZ());
             if (generator.isAir(blockPos)) {
-              generator.setBlock(blockPos, NSWoods.OLIVE_BRANCH.get().defaultBlockState().setValue(
+              generator.setBlock(blockPos, NSBlocks.OLIVE_BRANCH.get().defaultBlockState().setValue(
                   OliveBranchBlock.FACING,
                   direction.getOpposite()
               ).setValue(

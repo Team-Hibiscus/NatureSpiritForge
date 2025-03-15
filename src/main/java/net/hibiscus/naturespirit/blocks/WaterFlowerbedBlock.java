@@ -1,6 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -61,7 +61,7 @@ public class WaterFlowerbedBlock extends BushBlock implements BonemealableBlock 
 
   @Override
   public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-    boolean bl = player.getItemInHand(hand).is(NSMiscBlocks.HELVOLA_FLOWER_ITEM.get()) && state.getValue(FLOWER_AMOUNT) < 4;
+    boolean bl = player.getItemInHand(hand).is(NSBlocks.HELVOLA_FLOWER_ITEM.get()) && state.getValue(FLOWER_AMOUNT) < 4;
     if (bl) {
       world.setBlockAndUpdate(pos, state.setValue(FLOWER_AMOUNT, Math.min(4, state.getValue(FLOWER_AMOUNT) + 1)));
       if (!player.isCreative() && !player.isSpectator()) {

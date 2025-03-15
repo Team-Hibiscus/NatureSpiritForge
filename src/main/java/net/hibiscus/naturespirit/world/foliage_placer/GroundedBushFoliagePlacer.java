@@ -33,7 +33,7 @@ public class GroundedBushFoliagePlacer extends FoliagePlacer {
   }
 
   protected FoliagePlacerType<?> type() {
-    return NSWorldGen.GROUNDED_BUSH_PLACER_TYPE;
+    return NSWorldGen.GROUNDED_BUSH_PLACER_TYPE.get();
   }
 
   protected void createFoliage(LevelSimulatedReader world, FoliageSetter placer, RandomSource random, TreeConfiguration config, int trunkHeight, FoliageAttachment treeNode,

@@ -11,10 +11,9 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class MapleLeavesParticle extends CherryParticle {
 
-  protected MapleLeavesParticle(ClientLevel world, double x, double y, double z, SpriteSet spriteProvider) {
+  public MapleLeavesParticle(ClientLevel world, double x, double y, double z, SpriteSet spriteProvider) {
     super(world, x, y, z, spriteProvider);
     float f = this.random.nextBoolean() ? 0.133333F : 0.19999999995F;
     this.quadSize = f;

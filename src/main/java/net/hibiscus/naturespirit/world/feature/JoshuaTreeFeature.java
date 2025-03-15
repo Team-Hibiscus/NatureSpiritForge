@@ -2,7 +2,7 @@ package net.hibiscus.naturespirit.world.feature;
 
 import com.mojang.serialization.Codec;
 import net.hibiscus.naturespirit.blocks.BranchingTrunkBlock;
-import net.hibiscus.naturespirit.registration.NSWoods;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -46,7 +46,7 @@ public class JoshuaTreeFeature extends Feature<NoneFeatureConfiguration> {
   }
 
   private static boolean generate2(LevelAccessor world, BlockPos pos, RandomSource random, int layer) {
-    BranchingTrunkBlock branchingTrunkBlock = (BranchingTrunkBlock) NSWoods.JOSHUA.getLog().get();
+    BranchingTrunkBlock branchingTrunkBlock = (BranchingTrunkBlock) NSBlocks.JOSHUA.getLog().get();
     int i = random.nextIntBetweenInclusive(1, 3);
     if (layer == 0) i += 2;
 
@@ -85,25 +85,25 @@ public class JoshuaTreeFeature extends Feature<NoneFeatureConfiguration> {
 
           if (world.isEmptyBlock(blockPos2.above())) {
 
-            world.setBlock(blockPos2.above(), NSWoods.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
-            world.setBlock(blockPos2, ((BranchingTrunkBlock) NSWoods.JOSHUA.getLog().get()).withConnectionProperties(world, blockPos2), 2);
+            world.setBlock(blockPos2.above(), NSBlocks.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
+            world.setBlock(blockPos2, ((BranchingTrunkBlock) NSBlocks.JOSHUA.getLog().get()).withConnectionProperties(world, blockPos2), 2);
 
             Direction direction2 = Direction.Plane.HORIZONTAL.getRandomDirection(random);
             if (random.nextFloat() < .65F && world.isEmptyBlock(blockPos2.relative(direction, 1))) {
-              world.setBlock(blockPos2.relative(direction2, 1), NSWoods.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
-              world.setBlock(blockPos2, ((BranchingTrunkBlock) NSWoods.JOSHUA.getLog().get()).withConnectionProperties(world, blockPos2), 2);
+              world.setBlock(blockPos2.relative(direction2, 1), NSBlocks.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
+              world.setBlock(blockPos2, ((BranchingTrunkBlock) NSBlocks.JOSHUA.getLog().get()).withConnectionProperties(world, blockPos2), 2);
             }
 
           }
           else if (world.isEmptyBlock(blockPos2.above(2)) && !world.isEmptyBlock(blockPos2.above())) {
 
-            world.setBlock(blockPos2.above(2), NSWoods.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
-            world.setBlock(blockPos2.above(1), ((BranchingTrunkBlock) NSWoods.JOSHUA.getLog().get()).withConnectionProperties(world, blockPos2.above()), 2);
+            world.setBlock(blockPos2.above(2), NSBlocks.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
+            world.setBlock(blockPos2.above(1), ((BranchingTrunkBlock) NSBlocks.JOSHUA.getLog().get()).withConnectionProperties(world, blockPos2.above()), 2);
 
             Direction direction2 = Direction.Plane.HORIZONTAL.getRandomDirection(random);
             if (random.nextFloat() < .65F && world.isEmptyBlock(blockPos2.above().relative(direction, 1))) {
-              world.setBlock(blockPos2.above().relative(direction2, 1), NSWoods.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
-              world.setBlock(blockPos2.above(), ((BranchingTrunkBlock) NSWoods.JOSHUA.getLog().get()).withConnectionProperties(world, blockPos2.above()), 2);
+              world.setBlock(blockPos2.above().relative(direction2, 1), NSBlocks.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
+              world.setBlock(blockPos2.above(), ((BranchingTrunkBlock) NSBlocks.JOSHUA.getLog().get()).withConnectionProperties(world, blockPos2.above()), 2);
             }
 
           }
@@ -111,12 +111,12 @@ public class JoshuaTreeFeature extends Feature<NoneFeatureConfiguration> {
       }
       return true;
     }
-    world.setBlock(pos.above(i), NSWoods.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
-    world.setBlock(pos.above(i - 1), ((BranchingTrunkBlock) NSWoods.JOSHUA.getLog().get()).withConnectionProperties(world, pos.above(i - 1)), 2);
+    world.setBlock(pos.above(i), NSBlocks.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
+    world.setBlock(pos.above(i - 1), ((BranchingTrunkBlock) NSBlocks.JOSHUA.getLog().get()).withConnectionProperties(world, pos.above(i - 1)), 2);
     Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
     if (world.isEmptyBlock(pos.above(i - 1).relative(direction, 1))) {
-      world.setBlock(pos.above(i - 1).relative(direction, 1), NSWoods.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
-      world.setBlock(pos.above(i - 1), ((BranchingTrunkBlock) NSWoods.JOSHUA.getLog().get()).withConnectionProperties(world, pos.above(i - 1)), 2);
+      world.setBlock(pos.above(i - 1).relative(direction, 1), NSBlocks.JOSHUA.getLeaves().get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 2);
+      world.setBlock(pos.above(i - 1), ((BranchingTrunkBlock) NSBlocks.JOSHUA.getLog().get()).withConnectionProperties(world, pos.above(i - 1)), 2);
     }
     return true;
   }

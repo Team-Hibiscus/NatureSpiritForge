@@ -2,7 +2,7 @@ package net.hibiscus.naturespirit.world.tree_decorator;
 
 import com.mojang.serialization.Codec;
 import net.hibiscus.naturespirit.blocks.CoconutBlock;
-import net.hibiscus.naturespirit.registration.NSWoods;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,7 +24,7 @@ public class CoconutTreeDecorator extends TreeDecorator {
   }
 
   protected TreeDecoratorType<?> type() {
-    return NSWorldGen.COCONUT_TREE_DECORATOR;
+    return NSWorldGen.COCONUT_TREE_DECORATOR.get();
   }
 
   public void place(Context generator) {
@@ -38,7 +38,7 @@ public class CoconutTreeDecorator extends TreeDecorator {
             Direction direction2 = direction.getOpposite();
             BlockPos blockPos = pos.offset(direction2.getStepX(), 0, direction2.getStepZ());
             if (generator.isAir(blockPos)) {
-              generator.setBlock(blockPos, NSWoods.COCONUT_BLOCK.get().defaultBlockState().setValue(
+              generator.setBlock(blockPos, NSBlocks.COCONUT_BLOCK.get().defaultBlockState().setValue(
                   CoconutBlock.FACING,
                   direction.getOpposite()
               ));

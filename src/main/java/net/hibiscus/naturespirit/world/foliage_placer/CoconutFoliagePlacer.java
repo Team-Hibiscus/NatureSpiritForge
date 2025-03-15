@@ -27,7 +27,7 @@ public class CoconutFoliagePlacer extends FoliagePlacer {
   }
 
   protected FoliagePlacerType<?> type() {
-    return NSWorldGen.COCONUT_FOLIAGE_PLACER_TYPE;
+    return NSWorldGen.COCONUT_FOLIAGE_PLACER_TYPE.get();
   }
 
   protected void createFoliage(LevelSimulatedReader world, FoliageSetter placer, RandomSource random, TreeConfiguration config, int trunkHeight, FoliageAttachment treeNode, int foliageHeight, int radius,

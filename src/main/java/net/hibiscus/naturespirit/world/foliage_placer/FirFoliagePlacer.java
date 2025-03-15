@@ -27,7 +27,7 @@ public class FirFoliagePlacer extends FoliagePlacer {
   }
 
   protected FoliagePlacerType<?> type() {
-    return NSWorldGen.FIR_FOLIAGE_PLACER_TYPE;
+    return NSWorldGen.FIR_FOLIAGE_PLACER_TYPE.get();
   }
 
   protected void createFoliage(LevelSimulatedReader world, FoliageSetter placer, RandomSource random, TreeConfiguration config, int trunkHeight, FoliageAttachment treeNode, int foliageHeight, int radius,

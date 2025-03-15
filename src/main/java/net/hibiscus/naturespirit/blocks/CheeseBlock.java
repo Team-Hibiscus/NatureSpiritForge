@@ -1,7 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
-import net.hibiscus.naturespirit.NatureSpirit;
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSStatTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
@@ -35,7 +34,7 @@ public class CheeseBlock extends CakeBlock implements BucketPickup {
         world.levelEvent(2001, pos, Block.getId(state));
       }
 
-      return new ItemStack(NSMiscBlocks.CHEESE_BUCKET.get());
+      return new ItemStack(NSBlocks.CHEESE_BUCKET.get());
     }
     return  new ItemStack(Items.BUCKET);
   }

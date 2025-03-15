@@ -50,7 +50,7 @@ public class WisteriaTrunkPlacer extends TrunkPlacer {
   }
 
   protected TrunkPlacerType<?> type() {
-    return NSWorldGen.WISTERIA_TRUNK_PLACER;
+    return NSWorldGen.WISTERIA_TRUNK_PLACER.get();
   }
 
   public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos,

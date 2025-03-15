@@ -29,7 +29,7 @@ public class RedwoodBranchTreeDecorator extends TreeDecorator {
   }
 
   protected TreeDecoratorType<?> type() {
-    return NSWorldGen.REDWOOD_BRANCH_DECORATOR;
+    return NSWorldGen.REDWOOD_BRANCH_DECORATOR.get();
   }
 
   public void place(Context generator) {

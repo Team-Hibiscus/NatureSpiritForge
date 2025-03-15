@@ -14,12 +14,9 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static net.hibiscus.naturespirit.NatureSpirit.MOD_ID;
 
-@OnlyIn(Dist.CLIENT)
 public class PizzaBlockEntityRenderer implements BlockEntityRenderer<PizzaBlockEntity> {
   private final PizzaToppingModel pizzaToppingModel;
   public PizzaBlockEntityRenderer(BlockEntityRendererProvider.Context ctx) {

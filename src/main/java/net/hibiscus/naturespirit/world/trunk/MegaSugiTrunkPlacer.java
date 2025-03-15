@@ -27,7 +27,7 @@ public class MegaSugiTrunkPlacer extends TrunkPlacer {
   }
 
   protected TrunkPlacerType<?> type() {
-    return NSWorldGen.MEGA_SUGI_TRUNK_PLACER;
+    return NSWorldGen.MEGA_SUGI_TRUNK_PLACER.get();
   }
 
   public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos,

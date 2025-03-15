@@ -2,7 +2,7 @@ package net.hibiscus.naturespirit.world.feature;
 
 import com.mojang.serialization.Codec;
 import net.hibiscus.naturespirit.blocks.LotusStemBlock;
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
@@ -30,8 +30,8 @@ public class LotusPlantFeature extends Feature<NoneFeatureConfiguration> {
     int j = structureWorldAccess.getHeight(Heightmap.Types.OCEAN_FLOOR, blockPos.getX(), blockPos.getZ());
     BlockPos blockPos2 = new BlockPos(blockPos.getX(), j, blockPos.getZ());
     if (structureWorldAccess.getBlockState(blockPos2).is(Blocks.WATER) || structureWorldAccess.isEmptyBlock(blockPos2)) {
-      BlockState blockState = NSMiscBlocks.LOTUS_FLOWER.get().defaultBlockState();
-      BlockState blockState2 = NSMiscBlocks.LOTUS_STEM.get().defaultBlockState().setValue(LotusStemBlock.WATERLOGGED, structureWorldAccess.getFluidState(blockPos2).is(FluidTags.WATER));
+      BlockState blockState = NSBlocks.LOTUS_FLOWER.get().defaultBlockState();
+      BlockState blockState2 = NSBlocks.LOTUS_STEM.get().defaultBlockState().setValue(LotusStemBlock.WATERLOGGED, structureWorldAccess.getFluidState(blockPos2).is(FluidTags.WATER));
       Optional<BlockPos> optional = LotusStemBlock.getStemHeadWaterPos(structureWorldAccess, blockPos2, Blocks.AIR);
       int k = optional.map(pos -> pos.getY() - j - random.nextInt(3)).orElseGet(() -> 1 + random.nextInt(10));
 
@@ -57,7 +57,7 @@ public class LotusPlantFeature extends Feature<NoneFeatureConfiguration> {
           }
           break;
         } else if (structureWorldAccess.isEmptyBlock(blockPos2)) {
-          if (blockState.canSurvive(structureWorldAccess, blockPos2) && structureWorldAccess.getBlockState(blockPos2.below()).is(NSMiscBlocks.LOTUS_STEM.get())) {
+          if (blockState.canSurvive(structureWorldAccess, blockPos2) && structureWorldAccess.getBlockState(blockPos2.below()).is(NSBlocks.LOTUS_STEM.get())) {
             structureWorldAccess.setBlock(blockPos2, blockState, 2);
             ++i;
           }

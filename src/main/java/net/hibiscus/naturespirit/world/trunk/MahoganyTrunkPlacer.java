@@ -27,7 +27,7 @@ public class MahoganyTrunkPlacer extends TrunkPlacer {
   }
 
   protected TrunkPlacerType<?> type() {
-    return NSWorldGen.MAHOGANY_TRUNK_PLACER;
+    return NSWorldGen.MAHOGANY_TRUNK_PLACER.get();
   }
 
   public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, int height, BlockPos startPos,

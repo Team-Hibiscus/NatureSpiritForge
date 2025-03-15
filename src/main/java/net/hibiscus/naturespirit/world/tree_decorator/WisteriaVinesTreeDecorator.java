@@ -58,7 +58,7 @@ public class WisteriaVinesTreeDecorator extends TreeDecorator {
 
   @Override
   protected TreeDecoratorType<?> type() {
-    return NSWorldGen.WISTERIA_VINES_TREE_DECORATOR;
+    return NSWorldGen.WISTERIA_VINES_TREE_DECORATOR.get();
   }
 
   public void place(Context context) {

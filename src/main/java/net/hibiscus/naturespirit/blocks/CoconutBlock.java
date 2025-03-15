@@ -1,7 +1,7 @@
 package net.hibiscus.naturespirit.blocks;
 
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSCriteria;
-import net.hibiscus.naturespirit.registration.NSWoods;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -82,7 +82,7 @@ public class CoconutBlock extends FallingBlock implements BonemealableBlock, Sim
   public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
     Entity entity = projectile.getOwner();
     if (entity instanceof ServerPlayer serverPlayerEntity) {
-//      NSCriteria.COCONUT_HIT_CRITERION.trigger(serverPlayerEntity, projectile);
+      NSCriteria.COCONUT_HIT_CRITERION.trigger(serverPlayerEntity, projectile);
     }
     if (isFree(world.getBlockState(hit.getBlockPos().below())) && !state.getValue(WATERLOGGED)) {
       world.setBlockAndUpdate(hit.getBlockPos(), state.setValue(FACING, Direction.UP));
@@ -176,7 +176,7 @@ public class CoconutBlock extends FallingBlock implements BonemealableBlock, Sim
 
   @Override
   public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
-    world.setBlockAndUpdate(pos, NSWoods.COCONUT_SPROUT.get().defaultBlockState());
+    world.setBlockAndUpdate(pos, NSBlocks.COCONUT_SPROUT.get().defaultBlockState());
   }
 
   static {

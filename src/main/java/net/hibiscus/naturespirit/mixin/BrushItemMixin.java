@@ -1,7 +1,7 @@
 package net.hibiscus.naturespirit.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -32,7 +32,7 @@ public class BrushItemMixin {
   @Inject(method = "onUseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"))
   private void injectCalciteClusterBrushing(Level world, LivingEntity user, ItemStack stack, int remainingUseTicks, CallbackInfo ci, @Local BlockState blockState, @Local BlockPos blockPos, @Local BlockHitResult blockHitResult, @Local
       Player playerEntity) {
-    if (blockState.is(NSMiscBlocks.SMALL_CALCITE_BUD.get()) || blockState.is(NSMiscBlocks.LARGE_CALCITE_BUD.get()) || blockState.is(NSMiscBlocks.CALCITE_CLUSTER.get())) {
+    if (blockState.is(NSBlocks.SMALL_CALCITE_BUD.get()) || blockState.is(NSBlocks.LARGE_CALCITE_BUD.get()) || blockState.is(NSBlocks.CALCITE_CLUSTER.get())) {
 
       if (world.getGameTime() > naturespirit$nextDustTime) {
         naturespirit$nextDustTime = world.getGameTime() + 20L;
@@ -40,9 +40,9 @@ public class BrushItemMixin {
         itemEntity.setDeltaMovement(Vec3.ZERO);
         world.addFreshEntity(itemEntity);
         if (world.getRandom().nextFloat() < .3) {
-          if (blockState.is(NSMiscBlocks.SMALL_CALCITE_BUD.get())) world.setBlockAndUpdate(blockPos, blockState.getFluidState().createLegacyBlock());
-          if (blockState.is(NSMiscBlocks.LARGE_CALCITE_BUD.get())) world.setBlockAndUpdate(blockPos, NSMiscBlocks.SMALL_CALCITE_BUD.get().withPropertiesOf(blockState));
-          if (blockState.is(NSMiscBlocks.CALCITE_CLUSTER.get())) world.setBlockAndUpdate(blockPos, NSMiscBlocks.LARGE_CALCITE_BUD.get().withPropertiesOf(blockState));
+          if (blockState.is(NSBlocks.SMALL_CALCITE_BUD.get())) world.setBlockAndUpdate(blockPos, blockState.getFluidState().createLegacyBlock());
+          if (blockState.is(NSBlocks.LARGE_CALCITE_BUD.get())) world.setBlockAndUpdate(blockPos, NSBlocks.SMALL_CALCITE_BUD.get().withPropertiesOf(blockState));
+          if (blockState.is(NSBlocks.CALCITE_CLUSTER.get())) world.setBlockAndUpdate(blockPos, NSBlocks.LARGE_CALCITE_BUD.get().withPropertiesOf(blockState));
           EquipmentSlot equipmentSlot = stack.equals(playerEntity.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
           stack.hurtAndBreak(1, user, (livingEntity -> livingEntity.broadcastBreakEvent(equipmentSlot)));
         }
@@ -58,7 +58,7 @@ public class BrushItemMixin {
     double g = (double) blockPos.getX() + 0.5 * e + f;
     double h = (double) blockPos.getY() + 0.25 + (double)(EntityType.ITEM.getHeight() / 2.0F);
     double i = (double) blockPos.getZ() + 0.5 * e + f;
-    return new ItemEntity(world, g, h, i, new ItemStack(NSMiscBlocks.CHALK_POWDER.get(), world.getRandom().nextIntBetweenInclusive(1, 3)));
+    return new ItemEntity(world, g, h, i, new ItemStack(NSBlocks.CHALK_POWDER.get(), world.getRandom().nextIntBetweenInclusive(1, 3)));
   }
 
   @Inject(method = "useOn", at = @At("HEAD"))

@@ -1,7 +1,7 @@
 package net.hibiscus.naturespirit.mixin;
 
 import net.hibiscus.naturespirit.config.NSConfig;
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -49,20 +49,20 @@ public abstract class CoralBlockBlockMixin extends Block {
           if (random.nextInt(25) == 0) {
             if (world.getBlockState(pos.relative(direction, 1)).is(Blocks.WATER)) {
               world.setBlock(pos.relative(direction, 1),
-                  NSMiscBlocks.SMALL_CALCITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction).setValue(AmethystClusterBlock.WATERLOGGED, true),
+                  NSBlocks.SMALL_CALCITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction).setValue(AmethystClusterBlock.WATERLOGGED, true),
                   Block.UPDATE_CLIENTS
               );
-            } else if (world.getBlockState(pos.relative(direction, 1)).is(NSMiscBlocks.SMALL_CALCITE_BUD.get())) {
+            } else if (world.getBlockState(pos.relative(direction, 1)).is(NSBlocks.SMALL_CALCITE_BUD.get())) {
               world.setBlock(pos.relative(direction, 1),
-                  NSMiscBlocks.LARGE_CALCITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction)
+                  NSBlocks.LARGE_CALCITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction)
                       .setValue(AmethystClusterBlock.WATERLOGGED, world.getBlockState(pos.relative(direction,
                           1
                       )).getFluidState().is(Fluids.WATER)),
                   Block.UPDATE_CLIENTS
               );
-            } else if (world.getBlockState(pos.relative(direction, 1)).is(NSMiscBlocks.LARGE_CALCITE_BUD.get())) {
+            } else if (world.getBlockState(pos.relative(direction, 1)).is(NSBlocks.LARGE_CALCITE_BUD.get())) {
               world.setBlock(pos.relative(direction, 1),
-                  NSMiscBlocks.CALCITE_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction)
+                  NSBlocks.CALCITE_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction)
                       .setValue(AmethystClusterBlock.WATERLOGGED, world.getBlockState(pos.relative(direction,
                           1
                       )).getFluidState().is(Fluids.WATER)),

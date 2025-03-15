@@ -1,7 +1,7 @@
 package net.hibiscus.naturespirit.entity;
 
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSEntityTypes;
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
 import net.hibiscus.naturespirit.registration.NSParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
@@ -35,7 +35,7 @@ public class CheeseArrowEntity extends AbstractArrow {
 
   @Override
   protected ItemStack getPickupItem() {
-    return new ItemStack(NSMiscBlocks.CHEESE_ARROW.get());
+    return new ItemStack(NSBlocks.CHEESE_ARROW.get());
   }
 
   protected void doPostHurtEffects(LivingEntity target) {

@@ -9,25 +9,26 @@ import net.minecraft.world.level.block.GrowingPlantBodyBlock;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.RegistryObject;
 
 public class DownwardsVinePlantBlock extends GrowingPlantBodyBlock {
 
   public static final VoxelShape SHAPE = Block.box(1D, 0D, 1D, 15D, 16D, 15D);
-  public Block headBlock;
+  public RegistryObject<Block> headBlock;
 
-  public DownwardsVinePlantBlock(Properties properties, Block headBlock) {
+  public DownwardsVinePlantBlock(Properties properties, RegistryObject<Block> headBlock) {
     super(properties, Direction.DOWN, SHAPE, false);
     this.headBlock = headBlock;
   }
 
   @Override
   public String getDescriptionId() {
-    return headBlock.getDescriptionId();
+    return headBlock.get().getDescriptionId();
   }
 
   @Override
   protected GrowingPlantHeadBlock getHeadBlock() {
-    return (GrowingPlantHeadBlock) headBlock;
+    return (GrowingPlantHeadBlock) headBlock.get();
   }
 
   @Override

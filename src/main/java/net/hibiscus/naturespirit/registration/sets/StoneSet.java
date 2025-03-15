@@ -1,21 +1,13 @@
 package net.hibiscus.naturespirit.registration.sets;
 
 import com.google.common.base.Supplier;
-import net.hibiscus.naturespirit.blocks.PaperLanternBlock;
 import net.hibiscus.naturespirit.registration.NSRegistryHelper;
-import net.minecraft.data.BlockFamily;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.hibiscus.naturespirit.registration.NSRegistryHelper.registerTransparentBlock;
 
@@ -53,10 +45,8 @@ public class StoneSet {
   private RegistryObject<Block> mossyBricksSlab;
   private RegistryObject<Block> mossyBricksWall;
 
-  private final ResourceLocation name;
+  private final String name;
   private final MapColor mapColor;
-  private final Item itemBefore;
-  private final Item item2Before;
   private final boolean hasTiles;
   private final boolean hasCobbled;
   private final boolean hasCracked;
@@ -66,61 +56,59 @@ public class StoneSet {
 
   private void registerStone() {
 
-    base = isRotatable ? createRotatable(getName(), Blocks.ANDESITE) : createBasic(getName(), Blocks.ANDESITE);
-    baseStairs = createStairs(getName(), base.get());
-    baseSlab = createSlab(getName(), base.get());
-    chiseled = createBasic("chiseled_" + getName(), Blocks.CHISELED_STONE_BRICKS);
+    base = isRotatable ? createRotatable(getName(), () -> Blocks.ANDESITE) : createBasic(getName(),() -> Blocks.ANDESITE);
+    baseStairs = createStairs(getName(), base);
+    baseSlab = createSlab(getName(), base);
+    chiseled = createBasic("chiseled_" + getName(), () -> Blocks.CHISELED_STONE_BRICKS);
 
     if (hasCobbled()) {
-      cobbled = createBasic("cobbled_" + getName(), Blocks.COBBLESTONE);
-      cobbledStairs = createStairs("cobbled_" + getName(), cobbled.get());
-      cobbledSlab = createSlab("cobbled_" + getName(), cobbled.get());
-      cobbledWall = createWall("cobbled_" + getName(), cobbled.get());
+      cobbled = createBasic("cobbled_" + getName(), () -> Blocks.COBBLESTONE);
+      cobbledStairs = createStairs("cobbled_" + getName(), cobbled);
+      cobbledSlab = createSlab("cobbled_" + getName(), cobbled);
+      cobbledWall = createWall("cobbled_" + getName(), cobbled);
     }
     if (hasMossy() && hasCobbled()) {
-      mossyCobbled = createBasic("mossy_cobbled_" + getName(), Blocks.MOSSY_COBBLESTONE);
-      mossyCobbledStairs = createStairs("mossy_cobbled_" + getName(), mossyCobbled.get());
-      mossyCobbledSlab = createSlab("mossy_cobbled_" + getName(), mossyCobbled.get());
-      mossyCobbledWall = createWall("mossy_cobbled_" + getName(), mossyCobbled.get());
+      mossyCobbled = createBasic("mossy_cobbled_" + getName(), () -> Blocks.MOSSY_COBBLESTONE);
+      mossyCobbledStairs = createStairs("mossy_cobbled_" + getName(), mossyCobbled);
+      mossyCobbledSlab = createSlab("mossy_cobbled_" + getName(), mossyCobbled);
+      mossyCobbledWall = createWall("mossy_cobbled_" + getName(), mossyCobbled);
     }
 
-    polished = createBasic("polished_" + getName(), Blocks.POLISHED_ANDESITE);
-    polishedStairs = createStairs("polished_" + getName(), polished.get());
-    polishedSlab = createSlab("polished_" + getName(), polished.get());
-    polishedWall = createWall("polished_" + getName(), polished.get());
+    polished = createBasic("polished_" + getName(), () -> Blocks.POLISHED_ANDESITE);
+    polishedStairs = createStairs("polished_" + getName(), polished);
+    polishedSlab = createSlab("polished_" + getName(), polished);
+    polishedWall = createWall("polished_" + getName(), polished);
 
-    bricks = createBasic(getName() + "_bricks", Blocks.STONE_BRICKS);
-    bricksStairs = createStairs(getName() + "_brick", bricks.get());
-    bricksSlab = createSlab(getName() + "_brick", bricks.get());
-    bricksWall = createWall(getName() + "_brick", bricks.get());
+    bricks = createBasic(getName() + "_bricks", () -> Blocks.STONE_BRICKS);
+    bricksStairs = createStairs(getName() + "_brick", bricks);
+    bricksSlab = createSlab(getName() + "_brick", bricks);
+    bricksWall = createWall(getName() + "_brick", bricks);
 
     if (hasMossy()) {
-      mossyBricks = createBasic("mossy_" + getName() + "_bricks", Blocks.MOSSY_STONE_BRICKS);
-      mossyBricksStairs = createStairs("mossy_" + getName() + "_brick", bricks.get());
-      mossyBricksSlab = createSlab("mossy_" + getName() + "_brick", bricks.get());
-      mossyBricksWall = createWall("mossy_" + getName() + "_brick", bricks.get());
+      mossyBricks = createBasic("mossy_" + getName() + "_bricks", () -> Blocks.MOSSY_STONE_BRICKS);
+      mossyBricksStairs = createStairs("mossy_" + getName() + "_brick", bricks);
+      mossyBricksSlab = createSlab("mossy_" + getName() + "_brick", bricks);
+      mossyBricksWall = createWall("mossy_" + getName() + "_brick", bricks);
     }
     if (hasCracked()) {
-      crackedBricks = createBasic("cracked_" + getName() + "_bricks", Blocks.CRACKED_STONE_BRICKS);
+      crackedBricks = createBasic("cracked_" + getName() + "_bricks", () -> Blocks.CRACKED_STONE_BRICKS);
     }
     if (hasTiles()) {
-      tiles = createBasic(getName() + "_tiles", Blocks.COBBLESTONE);
-      tilesStairs = createStairs(getName() + "_tile", polished.get());
-      tilesSlab = createSlab(getName() + "_tile", polished.get());
-      tilesWall = createWall(getName() + "_tile", polished.get());
+      tiles = createBasic(getName() + "_tiles", () -> Blocks.COBBLESTONE);
+      tilesStairs = createStairs(getName() + "_tile", polished);
+      tilesSlab = createSlab(getName() + "_tile", polished);
+      tilesWall = createWall(getName() + "_tile", polished);
       if (hasCracked()) {
-        crackedTiles = createBasic("cracked_" + getName() + "_tiles", Blocks.CRACKED_STONE_BRICKS);
+        crackedTiles = createBasic("cracked_" + getName() + "_tiles", () -> Blocks.CRACKED_STONE_BRICKS);
       }
     }
 //    addToBuildingTab(itemBefore, item2Before, this);
   }
 
-  public StoneSet(ResourceLocation name, MapColor mapColor, Item itemBefore, Item item2Before, float hardness, boolean hasCobbled, boolean hasCracked, boolean hasMossy,
+  public StoneSet(String name, MapColor mapColor, float hardness, boolean hasCobbled, boolean hasCracked, boolean hasMossy,
       boolean hasTiles) {
     this.name = name;
     this.mapColor = mapColor;
-    this.itemBefore = itemBefore;
-    this.item2Before = item2Before;
     this.hardness = hardness;
     this.hasTiles = hasTiles;
     this.hasCobbled = hasCobbled;
@@ -129,12 +117,10 @@ public class StoneSet {
     registerStone();
   }
 
-  public StoneSet(ResourceLocation name, MapColor mapColor, Item itemBefore, Item item2Before, float hardness, boolean hasCobbled, boolean hasCracked, boolean hasMossy, boolean hasTiles,
+  public StoneSet(String name, MapColor mapColor, float hardness, boolean hasCobbled, boolean hasCracked, boolean hasMossy, boolean hasTiles,
       boolean isRotatable) {
     this.name = name;
     this.mapColor = mapColor;
-    this.itemBefore = itemBefore;
-    this.item2Before = item2Before;
     this.hardness = hardness;
     this.hasTiles = hasTiles;
     this.hasCobbled = hasCobbled;
@@ -149,27 +135,27 @@ public class StoneSet {
   }
 
   public String getName() {
-    return name.getPath();
+    return name;
   }
 
-  private RegistryObject<Block> createBasic(String name, Block template) {
-    return createBlockWithItem(name, () -> new Block(BlockBehaviour.Properties.copy(template).destroyTime(hardness).mapColor(getMapColor())));
+  private RegistryObject<Block> createBasic(String name, Supplier<Block> template) {
+    return createBlockWithItem(name, () -> new Block(BlockBehaviour.Properties.copy(template.get()).destroyTime(hardness).mapColor(getMapColor())));
   }
 
-  private RegistryObject<Block> createRotatable(String name, Block template) {
-    return createBlockWithItem(name, () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(template).destroyTime(hardness).mapColor(getMapColor())));
+  private RegistryObject<Block> createRotatable(String name, Supplier<Block> template) {
+    return createBlockWithItem(name, () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(template.get()).destroyTime(hardness).mapColor(getMapColor())));
   }
 
-  private RegistryObject<Block> createStairs(String name, Block template) {
-    return createBlockWithItem(name + "_stairs", () -> new StairBlock(template.defaultBlockState(), BlockBehaviour.Properties.copy(template)));
+  private RegistryObject<Block> createStairs(String name, RegistryObject<Block> template) {
+    return createBlockWithItem(name + "_stairs", () -> new StairBlock(() -> template.get().defaultBlockState(), BlockBehaviour.Properties.copy(template.get())));
   }
 
-  private RegistryObject<Block> createSlab(String name, Block template) {
-    return createBlockWithItem(name + "_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(template)));
+  private RegistryObject<Block> createSlab(String name, RegistryObject<Block> template) {
+    return createBlockWithItem(name + "_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(template.get())));
   }
 
-  private RegistryObject<Block> createWall(String name, Block template) {
-    return createBlockWithItem(name + "_wall", () -> new WallBlock(BlockBehaviour.Properties.copy(template).forceSolidOn()));
+  private RegistryObject<Block> createWall(String name, RegistryObject<Block> template) {
+    return createBlockWithItem(name + "_wall", () -> new WallBlock(BlockBehaviour.Properties.copy(template.get()).forceSolidOn()));
   }
 
   public boolean hasTiles() {

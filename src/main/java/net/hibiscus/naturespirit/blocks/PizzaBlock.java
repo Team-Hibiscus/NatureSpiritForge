@@ -1,8 +1,7 @@
 package net.hibiscus.naturespirit.blocks;
 
-import net.hibiscus.naturespirit.NatureSpirit;
 import net.hibiscus.naturespirit.blocks.block_entities.PizzaBlockEntity;
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSStatTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -58,7 +57,7 @@ public class PizzaBlock extends Block implements EntityBlock {
 
   protected static InteractionResult tryEat(LevelAccessor world, BlockPos pos, BlockState state, Player player) {
     if(player.canEat(false)) {
-      Optional<PizzaBlockEntity> optionalPizzaBlockEntity = world.getBlockEntity(pos, NSMiscBlocks.PIZZA_BLOCK_ENTITY_TYPE.get());
+      Optional<PizzaBlockEntity> optionalPizzaBlockEntity = world.getBlockEntity(pos, NSBlocks.PIZZA_BLOCK_ENTITY_TYPE.get());
       if(optionalPizzaBlockEntity.isPresent()) {
         PizzaBlockEntity pizzaBlockEntity = optionalPizzaBlockEntity.get();
         player.awardStat(NSStatTypes.EAT_PIZZA_SLICE.get());
@@ -96,11 +95,11 @@ public class PizzaBlock extends Block implements EntityBlock {
   }
 
   @Override public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
-    Optional<PizzaBlockEntity> optionalPizzaBlockEntity = world.getBlockEntity(pos, NSMiscBlocks.PIZZA_BLOCK_ENTITY_TYPE.get());
+    Optional<PizzaBlockEntity> optionalPizzaBlockEntity = world.getBlockEntity(pos, NSBlocks.PIZZA_BLOCK_ENTITY_TYPE.get());
     if (optionalPizzaBlockEntity.isPresent()) {
       PizzaBlockEntity pizzaBlockEntity = optionalPizzaBlockEntity.get();
       int BITE_STATE = pizzaBlockEntity.bites;
-      Item item = BITE_STATE == 0 ? NSMiscBlocks.WHOLE_PIZZA.get() : BITE_STATE == 1 ? NSMiscBlocks.THREE_QUARTERS_PIZZA.get() : BITE_STATE == 2 ? NSMiscBlocks.HALF_PIZZA.get() : NSMiscBlocks.QUARTER_PIZZA.get();
+      Item item = BITE_STATE == 0 ? NSBlocks.WHOLE_PIZZA.get() : BITE_STATE == 1 ? NSBlocks.THREE_QUARTERS_PIZZA.get() : BITE_STATE == 2 ? NSBlocks.HALF_PIZZA.get() : NSBlocks.QUARTER_PIZZA.get();
       ItemStack itemStack = new ItemStack(item);
 
       CompoundTag nbtCompound = itemStack.getOrCreateTagElement("BlockEntityTag");
@@ -113,7 +112,7 @@ public class PizzaBlock extends Block implements EntityBlock {
   }
 
   public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-    Optional<PizzaBlockEntity> optionalPizzaBlockEntity = world.getBlockEntity(pos, NSMiscBlocks.PIZZA_BLOCK_ENTITY_TYPE.get());
+    Optional<PizzaBlockEntity> optionalPizzaBlockEntity = world.getBlockEntity(pos, NSBlocks.PIZZA_BLOCK_ENTITY_TYPE.get());
     if (optionalPizzaBlockEntity.isPresent()) {
       PizzaBlockEntity pizzaBlockEntity = optionalPizzaBlockEntity.get();
       int BITE_STATE = pizzaBlockEntity.bites;
@@ -123,7 +122,7 @@ public class PizzaBlock extends Block implements EntityBlock {
   }
 
   public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-    Optional<PizzaBlockEntity> optionalPizzaBlockEntity = world.getBlockEntity(pos, NSMiscBlocks.PIZZA_BLOCK_ENTITY_TYPE.get());
+    Optional<PizzaBlockEntity> optionalPizzaBlockEntity = world.getBlockEntity(pos, NSBlocks.PIZZA_BLOCK_ENTITY_TYPE.get());
     if (optionalPizzaBlockEntity.isPresent()) {
       PizzaBlockEntity pizzaBlockEntity = optionalPizzaBlockEntity.get();
       ItemStack itemStack = player.getItemInHand(hand);
@@ -170,7 +169,7 @@ public class PizzaBlock extends Block implements EntityBlock {
   }
 
   public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
-    Optional<PizzaBlockEntity> optionalPizzaBlockEntity = world.getBlockEntity(pos, NSMiscBlocks.PIZZA_BLOCK_ENTITY_TYPE.get());
+    Optional<PizzaBlockEntity> optionalPizzaBlockEntity = world.getBlockEntity(pos, NSBlocks.PIZZA_BLOCK_ENTITY_TYPE.get());
     if (optionalPizzaBlockEntity.isPresent()) {
       PizzaBlockEntity pizzaBlockEntity = optionalPizzaBlockEntity.get();
       int BITE_STATE = pizzaBlockEntity.bites;

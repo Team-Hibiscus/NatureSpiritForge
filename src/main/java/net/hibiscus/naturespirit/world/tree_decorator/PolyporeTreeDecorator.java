@@ -40,7 +40,7 @@ public class PolyporeTreeDecorator extends TreeDecorator {
   }
 
   protected TreeDecoratorType<?> type() {
-    return NSWorldGen.POLYPORE_DECORATOR;
+    return NSWorldGen.POLYPORE_DECORATOR.get();
   }
 
   public void place(Context generator) {

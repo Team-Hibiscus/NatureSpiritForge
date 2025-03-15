@@ -1,6 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -39,7 +39,7 @@ public class LotusFlowerBlock extends BushBlock implements BonemealableBlock {
         world.destroyBlock(new BlockPos(pos), true, entity);
       }
       BlockState blockstate = world.getBlockState(pos.below());
-      if (blockstate.is(NSMiscBlocks.LOTUS_STEM.get()) && isEntityAbove(pos, entity) && !isPowered(world, pos)) {
+      if (blockstate.is(NSBlocks.LOTUS_STEM.get()) && isEntityAbove(pos, entity) && !isPowered(world, pos)) {
         world.scheduleTick(pos, this, 4);
       }
     }
@@ -57,7 +57,7 @@ public class LotusFlowerBlock extends BushBlock implements BonemealableBlock {
       if (world.hasNeighborSignal(mutable)) {
         return world.getBestNeighborSignal(mutable);
       }
-    } while (blockState.is(NSMiscBlocks.LOTUS_STEM.get()));
+    } while (blockState.is(NSBlocks.LOTUS_STEM.get()));
 
     return 0;
   }
@@ -82,7 +82,7 @@ public class LotusFlowerBlock extends BushBlock implements BonemealableBlock {
     super.tick(state, world, pos, random);
 
     BlockState blockstate = world.getBlockState(pos.below());
-    if (blockstate.is(NSMiscBlocks.LOTUS_STEM.get()) && isEntityAbove(pos, world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 1.25D, false)) && !isPowered(world, pos)) {
+    if (blockstate.is(NSBlocks.LOTUS_STEM.get()) && isEntityAbove(pos, world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 1.25D, false)) && !isPowered(world, pos)) {
       world.destroyBlock(pos, false);
       world.setBlockAndUpdate(pos.below(), this.defaultBlockState());
     }
@@ -97,7 +97,7 @@ public class LotusFlowerBlock extends BushBlock implements BonemealableBlock {
 
   @Override
   public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
-    return new ItemStack(NSMiscBlocks.LOTUS_FLOWER_ITEM.get());
+    return new ItemStack(NSBlocks.LOTUS_FLOWER_ITEM.get());
   }
 
   @Override
@@ -110,7 +110,7 @@ public class LotusFlowerBlock extends BushBlock implements BonemealableBlock {
     FluidState fluidState = world.getFluidState(pos);
     FluidState fluidState2 = world.getFluidState(pos.above());
     return ((fluidState.getType() == Fluids.WATER || floor.isFaceSturdy(world, pos, Direction.UP, SupportType.CENTER)) && fluidState2.getType() == Fluids.EMPTY) || floor.is(
-        NSMiscBlocks.LOTUS_STEM.get());
+        NSBlocks.LOTUS_STEM.get());
   }
 
   @Override
@@ -130,11 +130,11 @@ public class LotusFlowerBlock extends BushBlock implements BonemealableBlock {
       player.move(MoverType.SHULKER_BOX, new Vec3(0D, 1.01D, 0D));
     }
 
-    if (world.getBlockState(pos.below()).is(NSMiscBlocks.LOTUS_STEM.get())) {
+    if (world.getBlockState(pos.below()).is(NSBlocks.LOTUS_STEM.get())) {
       LotusStemBlock lotusStemBlock = (LotusStemBlock) world.getBlockState(pos.below()).getBlock();
       lotusStemBlock.grow(world, random, pos.below(), world.getBlockState(pos.below()));
     } else {
-      world.setBlockAndUpdate(pos, NSMiscBlocks.LOTUS_STEM.get().defaultBlockState().setValue(LotusStemBlock.WATERLOGGED, false));
+      world.setBlockAndUpdate(pos, NSBlocks.LOTUS_STEM.get().defaultBlockState().setValue(LotusStemBlock.WATERLOGGED, false));
       world.setBlockAndUpdate(pos.above(), this.defaultBlockState());
     }
 

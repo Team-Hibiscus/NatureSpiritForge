@@ -1,6 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -47,17 +47,17 @@ public class ShiitakeMushroomPlantBlock extends MushroomBlock {
   }
 
   public static boolean isMushroom(BlockPos pos, ServerLevel world) {
-    return world.getBlockState(pos).is(NSMiscBlocks.SHIITAKE_MUSHROOM.get());
+    return world.getBlockState(pos).is(NSBlocks.SHIITAKE_MUSHROOM.get());
   }
 
   public static boolean isPodzol(BlockPos pos, ServerLevel world) {
     return world.getBlockState(pos).is(Blocks.PODZOL) || world.getBlockState(pos).is(BlockTags.DIRT) && (!world.getBlockState(pos).is(Blocks.GRASS_BLOCK)
         && !world.getBlockState(pos).is(
-        NSMiscBlocks.SANDY_SOIL.get()));
+        NSBlocks.SANDY_SOIL.get()));
   }
 
   public static boolean isDirt(BlockPos pos, ServerLevel world) {
-    return world.getBlockState(pos).is(Blocks.COARSE_DIRT) || world.getBlockState(pos).is(NSMiscBlocks.SANDY_SOIL.get());
+    return world.getBlockState(pos).is(Blocks.COARSE_DIRT) || world.getBlockState(pos).is(NSBlocks.SANDY_SOIL.get());
   }
 
   @Override
@@ -118,7 +118,7 @@ public class ShiitakeMushroomPlantBlock extends MushroomBlock {
           }
           if (getCompletedCoarseDirt(world, pos)) {
             if (random.nextInt(25) == 0) {
-              world.setBlock(blockPos2, NSMiscBlocks.SANDY_SOIL.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+              world.setBlock(blockPos2, NSBlocks.SANDY_SOIL.get().defaultBlockState(), Block.UPDATE_CLIENTS);
             }
           }
         }

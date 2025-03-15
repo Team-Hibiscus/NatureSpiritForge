@@ -2,7 +2,7 @@ package net.hibiscus.naturespirit.world.carver;
 
 
 import com.mojang.serialization.Codec;
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -93,7 +93,7 @@ public class ReplaceableRavineCarver extends WorldCarver<ReplaceableRavineCarver
   protected boolean carveBlock(CarvingContext context, ReplaceableRavineCarverConfig config, ChunkAccess chunk, Function<BlockPos, Holder<Biome>> posToBiome, CarvingMask mask,
       BlockPos.MutableBlockPos pos, BlockPos.MutableBlockPos tmp, Aquifer aquiferSampler, MutableBoolean replacedGrassy) {
     BlockState blockState = chunk.getBlockState(pos);
-    if (blockState.is(Blocks.GRASS_BLOCK) || blockState.is(Blocks.MYCELIUM) || blockState.is(NSMiscBlocks.RED_MOSS_BLOCK.get())) {
+    if (blockState.is(Blocks.GRASS_BLOCK) || blockState.is(Blocks.MYCELIUM) || blockState.is(NSBlocks.RED_MOSS_BLOCK.get())) {
       replacedGrassy.setTrue();
     }
     if (!this.canReplaceBlock(config, blockState) && !isDebugEnabled(config)) {

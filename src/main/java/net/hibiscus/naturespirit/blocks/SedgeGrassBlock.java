@@ -1,6 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -41,7 +41,7 @@ public class SedgeGrassBlock extends TallGrassBlock implements SimpleWaterlogged
 
   @Override
   public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
-    return !useContext.getItemInHand().is(NSMiscBlocks.AZOLLA_ITEM.get());
+    return !useContext.getItemInHand().is(NSBlocks.AZOLLA_ITEM.get());
   }
 
   @Override
@@ -52,7 +52,7 @@ public class SedgeGrassBlock extends TallGrassBlock implements SimpleWaterlogged
 
   @Override
   public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
-    DoublePlantBlock tallPlantBlock = (DoublePlantBlock) NSMiscBlocks.TALL_SEDGE_GRASS.get();
+    DoublePlantBlock tallPlantBlock = (DoublePlantBlock) NSBlocks.TALL_SEDGE_GRASS.get();
     if (tallPlantBlock.defaultBlockState().canSurvive(world, pos) && world.isEmptyBlock(pos.above())) {
       DoublePlantBlock.placeAt(world, tallPlantBlock.defaultBlockState(), pos, 2);
     }

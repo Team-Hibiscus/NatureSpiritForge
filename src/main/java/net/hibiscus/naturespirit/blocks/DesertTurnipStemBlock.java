@@ -1,6 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,13 +44,13 @@ public class DesertTurnipStemBlock extends BushBlock implements BonemealableBloc
 
   private final Block rootBlock;
   private final DesertTurnipBlock vegetableBlock;
-  private final Item pickBlockItem;
+  private final Supplier<Item> pickBlockItem;
 
   public DesertTurnipStemBlock(DesertTurnipBlock vegetableBlock, Block rootBlock, Properties settings) {
     super(settings);
     this.rootBlock = rootBlock;
     this.vegetableBlock = vegetableBlock;
-    this.pickBlockItem = NSMiscBlocks.DESERT_TURNIP.get();
+    this.pickBlockItem = NSBlocks.DESERT_TURNIP;
     this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0));
   }
 
@@ -149,7 +149,7 @@ public class DesertTurnipStemBlock extends BushBlock implements BonemealableBloc
 
   @Override
   public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
-    return new ItemStack(this.pickBlockItem);
+    return new ItemStack(this.pickBlockItem.get());
   }
 
   @Override

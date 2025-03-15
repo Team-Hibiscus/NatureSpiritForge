@@ -1,9 +1,8 @@
 package net.hibiscus.naturespirit.blocks;
 
 
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSTags;
-import net.hibiscus.naturespirit.registration.NSWoods;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -140,8 +139,8 @@ public class BranchingTrunkBlock extends PipeBlock implements SimpleWaterloggedB
   @Override
   public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
     if(context.getItemInHand().getItem() instanceof AxeItem) {
-      if (state.is(NSMiscBlocks.ALLUAUDIA.get())) {
-        return NSMiscBlocks.STRIPPED_ALLUAUDIA.get().defaultBlockState().setValue(BranchingTrunkBlock.DOWN, state.getValue(BranchingTrunkBlock.DOWN)).setValue(
+      if (state.is(NSBlocks.ALLUAUDIA.get())) {
+        return NSBlocks.STRIPPED_ALLUAUDIA.get().defaultBlockState().setValue(BranchingTrunkBlock.DOWN, state.getValue(BranchingTrunkBlock.DOWN)).setValue(
                 BranchingTrunkBlock.UP,
                 state.getValue(BranchingTrunkBlock.UP)
         ).setValue(BranchingTrunkBlock.NORTH, state.getValue(BranchingTrunkBlock.NORTH)).setValue(
@@ -151,8 +150,8 @@ public class BranchingTrunkBlock extends PipeBlock implements SimpleWaterloggedB
                 BranchingTrunkBlock.WATERLOGGED,
                 state.getValue(BranchingTrunkBlock.WATERLOGGED)
         ).setValue(BranchingTrunkBlock.SHEARED, state.getValue(BranchingTrunkBlock.SHEARED));
-      } else if (state.is(NSWoods.JOSHUA.getLog().get())) {
-        return NSWoods.JOSHUA.getStrippedLog().get().defaultBlockState().setValue(BranchingTrunkBlock.DOWN, state.getValue(BranchingTrunkBlock.DOWN)).setValue(
+      } else if (state.is(NSBlocks.JOSHUA.getLog().get())) {
+        return NSBlocks.JOSHUA.getStrippedLog().get().defaultBlockState().setValue(BranchingTrunkBlock.DOWN, state.getValue(BranchingTrunkBlock.DOWN)).setValue(
                 BranchingTrunkBlock.UP,
                 state.getValue(BranchingTrunkBlock.UP)
         ).setValue(BranchingTrunkBlock.NORTH, state.getValue(BranchingTrunkBlock.NORTH)).setValue(

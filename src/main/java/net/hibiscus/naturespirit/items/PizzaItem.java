@@ -1,7 +1,6 @@
 package net.hibiscus.naturespirit.items;
 
-import net.hibiscus.naturespirit.NatureSpirit;
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSStatTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +26,7 @@ public class PizzaItem extends ItemNameBlockItem {
     CompoundTag nbtCompound = pizza.getOrCreateTagElement("BlockEntityTag");
     CompoundTag nbtCompound2 = pizza.getOrCreateTagElement("BlockStateTag");
     assert nbtCompound != null;
-    int pizzaSlice = this.asItem() == NSMiscBlocks.WHOLE_PIZZA.get() ? 0 : this.asItem() == NSMiscBlocks.THREE_QUARTERS_PIZZA.get() ? 1 : this.asItem() == NSMiscBlocks.HALF_PIZZA.get() ? 2 : 3;
+    int pizzaSlice = this.asItem() == NSBlocks.WHOLE_PIZZA.get() ? 0 : this.asItem() == NSBlocks.THREE_QUARTERS_PIZZA.get() ? 1 : this.asItem() == NSBlocks.HALF_PIZZA.get() ? 2 : 3;
     nbtCompound.putInt("pizza_bites", pizzaSlice);
     nbtCompound2.putInt("pizza_bites", pizzaSlice);
   }
@@ -65,7 +64,7 @@ public class PizzaItem extends ItemNameBlockItem {
 
   public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity user) {
     ItemStack itemStack = super.finishUsingItem(stack, world, user);
-    Item pizzaSlice = this.asItem() == NSMiscBlocks.WHOLE_PIZZA.get() ? NSMiscBlocks.THREE_QUARTERS_PIZZA.get() : this.asItem() == NSMiscBlocks.THREE_QUARTERS_PIZZA.get() ? NSMiscBlocks.HALF_PIZZA.get() : this.asItem() == NSMiscBlocks.HALF_PIZZA.get() ? NSMiscBlocks.QUARTER_PIZZA.get() : Items.AIR;
+    Item pizzaSlice = this.asItem() == NSBlocks.WHOLE_PIZZA.get() ? NSBlocks.THREE_QUARTERS_PIZZA.get() : this.asItem() == NSBlocks.THREE_QUARTERS_PIZZA.get() ? NSBlocks.HALF_PIZZA.get() : this.asItem() == NSBlocks.HALF_PIZZA.get() ? NSBlocks.QUARTER_PIZZA.get() : Items.AIR;
 
     Player holder = (Player) user;
     holder.awardStat(NSStatTypes.EAT_PIZZA_SLICE.get());

@@ -1,6 +1,6 @@
 package net.hibiscus.naturespirit.blocks.block_entities;
 
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -22,7 +22,7 @@ public class PizzaBlockEntity extends BlockEntity {
   public int topping_number = toppings != null ? toppings.size() : 0;
   public int bites = 0;
   public PizzaBlockEntity(BlockPos pos, BlockState state) {
-    super(NSMiscBlocks.PIZZA_BLOCK_ENTITY_TYPE.get(), pos, state);
+    super(NSBlocks.PIZZA_BLOCK_ENTITY_TYPE.get(), pos, state);
   }
   @Override
   public void saveAdditional(CompoundTag nbt) {

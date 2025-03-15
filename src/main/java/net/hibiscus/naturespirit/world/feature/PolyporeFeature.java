@@ -1,7 +1,7 @@
 package net.hibiscus.naturespirit.world.feature;
 
 import com.mojang.serialization.Codec;
-import net.hibiscus.naturespirit.registration.NSMiscBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -46,8 +46,8 @@ public class PolyporeFeature extends Feature<NoneFeatureConfiguration> {
     for (int j = 0; j <= radius; ++j) {
       for (int k = 0; k <= radius; ++k) {
         blockPos = mutable.relative(direction2, k).relative(direction1, j);
-        if (world.isEmptyBlock(blockPos) || world.getBlockState(blockPos).is(NSMiscBlocks.GRAY_POLYPORE.get())) {
-          world.setBlock(blockPos, NSMiscBlocks.GRAY_POLYPORE_BLOCK.get().defaultBlockState().setValue(HugeMushroomBlock.DOWN, false), 2);
+        if (world.isEmptyBlock(blockPos) || world.getBlockState(blockPos).is(NSBlocks.GRAY_POLYPORE.get())) {
+          world.setBlock(blockPos, NSBlocks.GRAY_POLYPORE_BLOCK.get().defaultBlockState().setValue(HugeMushroomBlock.DOWN, false), 2);
         }
       }
     }
