@@ -65,7 +65,7 @@ Details:
 Stacktrace:
 	at java.util.Objects.requireNonNull(Objects.java:360) ~[?:?] {re:mixin}
 	at net.minecraftforge.registries.RegistryObject.get(RegistryObject.java:204) ~[forge-1.20.1-47.3.33_mapped_official_1.20.1.jar%23190%23197!/:?] {re:mixin,re:classloading}
-	at net.hibiscus.naturespirit.registration.NSMiscBlocks.<clinit>(NSMiscBlocks.java:65) ~[%23196!/:?] {re:mixin,re:classloading}
+	at net.hibiscus.naturespirit.registration.NSBlocks.<clinit>(NSMiscBlocks.java:65) ~[%23196!/:?] {re:mixin,re:classloading}
 	at net.hibiscus.naturespirit.NatureSpirit.<init>(NatureSpirit.java:48) ~[%23196!/:?] {re:classloading}
 	at jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62) ~[?:?] {}
 	at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502) ~[?:?] {}

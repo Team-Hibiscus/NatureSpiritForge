@@ -34,7 +34,7 @@ gamma:0.5
 renderDistance:10
 simulationDistance:12
 entityDistanceScaling:1.0
-guiScale:3
+guiScale:4
 particles:0
 maxFps:120
 graphicsMode:1
