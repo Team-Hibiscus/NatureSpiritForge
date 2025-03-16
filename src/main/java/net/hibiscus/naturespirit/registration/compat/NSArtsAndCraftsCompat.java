@@ -27,28 +27,20 @@ public class NSArtsAndCraftsCompat {
 
     public static final RegistryObject<Block> BLEACHED_CHALK = registerBlock(
             "bleached_chalk",
-            () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F)),
-            NSBlocks.PINK_KAOLIN_BRICK_SLAB.get(),
-            CreativeModeTabs.COLORED_BLOCKS
+            () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F))
     );
     public static final RegistryObject<Block> BLEACHED_CHALK_STAIRS = registerBlock(
             "bleached_chalk_stairs",
-            () -> new StairBlock(BLEACHED_CHALK.get().defaultBlockState(),
-                    BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F)),
-            NSBlocks.PINK_CHALK.get(),
-            CreativeModeTabs.COLORED_BLOCKS
+            () -> new StairBlock(() -> BLEACHED_CHALK.get().defaultBlockState(),
+                    BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F))
     );
     public static final RegistryObject<Block> BLEACHED_CHALK_SLAB = registerBlock(
             "bleached_chalk_slab",
-            () -> new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F)),
-            NSBlocks.PINK_CHALK_STAIRS.get(),
-            CreativeModeTabs.COLORED_BLOCKS
+            () -> new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F))
     );
-    public static void registerBlocks() {}
-    public static RegistryObject<Block> registerBlock(String name, Supplier<Block> block, ItemLike blockBefore, ResourceKey<CreativeModeTab> secondaryTab) {
-
-        RegistryObject<Item> item1 = ANC_ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
-//    ItemGroupEvents.modifyEntriesEvent(secondaryTab).register(entries -> entries.addAfter(blockBefore, block1.asItem()));
-        return  ANC_BLOCKS.register(name, block);
+    public static RegistryObject<Block> registerBlock(String name, Supplier<Block> block) {
+        RegistryObject<Block> block1 =  ANC_BLOCKS.register(name, block);
+        RegistryObject<Item> item = ANC_ITEMS.register(name, () -> new BlockItem(block1.get(), new Item.Properties()));
+        return block1;
     }
 }

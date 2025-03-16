@@ -1,6 +1,5 @@
 package net.hibiscus.naturespirit.blocks;
 
-import net.hibiscus.naturespirit.util.NSCauldronBehavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;

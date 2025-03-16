@@ -2,24 +2,32 @@ package net.hibiscus.naturespirit;
 
 import net.hibiscus.naturespirit.config.NSConfig;
 import net.hibiscus.naturespirit.registration.*;
+import net.hibiscus.naturespirit.registration.compat.NSArtsAndCraftsCompat;
 import net.hibiscus.naturespirit.registration.sets.WoodSet;
 import net.hibiscus.naturespirit.terrablender.*;
-import net.hibiscus.naturespirit.util.NSCauldronBehavior;
+import net.hibiscus.naturespirit.blocks.NSCauldronBehavior;
+import net.hibiscus.naturespirit.registration.NSVillagers;
 import net.hibiscus.naturespirit.world.NSSurfaceRules;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -27,21 +35,28 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.MutableHashedLinkedMap;
+import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
+import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.resource.PathPackResources;
 import terrablender.api.Regions;
 import terrablender.api.SurfaceRuleManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.minecraft.world.entity.npc.VillagerType.DESERT;
+import static net.minecraft.world.entity.npc.VillagerType.registerBiomeType;
 
 
 @Mod(NatureSpirit.MOD_ID)
@@ -56,6 +71,7 @@ public class NatureSpirit {
         NSBlocks.ITEMS.register(modEventBus);
         NSBlocks.BLOCK_ENTITIES.register(modEventBus);
         NSEntityTypes.ENTITIES.register(modEventBus);
+        NSItemGroups.CREATIVE_MODE_TABS.register(modEventBus);
         NSParticleTypes.PARTICLES.register(modEventBus);
         NSStatTypes.CUSTOM_STATS.register(modEventBus);
         NSSounds.SOUND_EVENTS.register(modEventBus);
@@ -64,13 +80,19 @@ public class NatureSpirit {
         NSWorldGen.TRUNK_PLACERS.register(modEventBus);
         NSWorldGen.CARVERS.register(modEventBus);
         NSWorldGen.FEATURES.register(modEventBus);
-        NSItemGroups.CREATIVE_MODE_TABS.register(modEventBus);
+        NSVillagers.VILLAGER_TYPES.register(modEventBus);
         modEventBus.addListener(this::creativeInventory);
         NSCriteria.registerCriteria();
 
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.addListener(this::interactEvent);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, NSConfig.SPEC);
+        modEventBus.addListener(this::addPackFinders);
+
+
+        if(ModList.get().isLoaded("arts_and_crafts")) {
+            NSArtsAndCraftsCompat.ANC_BLOCKS.register(modEventBus);
+            NSArtsAndCraftsCompat.ANC_ITEMS.register(modEventBus);
+        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -137,164 +159,208 @@ public class NatureSpirit {
             ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(NSBlocks.LARCH.getSapling().getId(), NSBlocks.LARCH.getPottedSapling());
             ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(NSBlocks.MAHOGANY.getSapling().getId(), NSBlocks.MAHOGANY.getPottedSapling());
             ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(NSBlocks.SAXAUL.getSapling().getId(), NSBlocks.SAXAUL.getPottedSapling());
+
+            registerBiomeType(NSBiomes.WISTERIA_FOREST, NSVillagers.WISTERIA.get());
+            registerBiomeType(NSBiomes.CYPRESS_FIELDS, NSVillagers.CYPRESS.get());
+            registerBiomeType(NSBiomes.CARNATION_FIELDS, NSVillagers.CYPRESS.get());
+            registerBiomeType(NSBiomes.LAVENDER_FIELDS, NSVillagers.CYPRESS.get());
+            registerBiomeType(NSBiomes.STRATIFIED_DESERT, NSVillagers.ADOBE.get());
+            registerBiomeType(NSBiomes.LIVELY_DUNES, NSVillagers.ADOBE.get());
+            registerBiomeType(NSBiomes.BLOOMING_DUNES, NSVillagers.ADOBE.get());
+            registerBiomeType(NSBiomes.DRYLANDS, DESERT);
+            registerBiomeType(NSBiomes.WOODED_DRYLANDS, DESERT);
+            registerBiomeType(NSBiomes.TROPICAL_SHORES, NSVillagers.COCONUT.get());
+
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.RED_MOSS_BLOCK.get(), 0.65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.RED_MOSS_CARPET.get(), 0.3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.LOTUS_FLOWER_ITEM.get(), 0.65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.LOTUS_STEM.get(), 0.2F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.AZOLLA_ITEM.get(), 0.3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.HELVOLA_FLOWER_ITEM.get(), 0.3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.HELVOLA_PAD_ITEM.get(), 0.3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.DESERT_TURNIP.get(), 0.3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.DESERT_TURNIP_BLOCK.get(), 0.65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.DESERT_TURNIP_ROOT_BLOCK.get(), 0.5F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WHOLE_PIZZA.get(), 1.0F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.THREE_QUARTERS_PIZZA.get(), .85F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.HALF_PIZZA.get(), .5F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.QUARTER_PIZZA.get(), .35F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.AUREATE_SUCCULENT_ITEM.get(), .65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.DROWSY_SUCCULENT_ITEM.get(), .65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.FOAMY_SUCCULENT_ITEM.get(), .65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.SAGE_SUCCULENT_ITEM.get(), .65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.IMPERIAL_SUCCULENT_ITEM.get(), .65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.ORNATE_SUCCULENT_ITEM.get(), .65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.REGAL_SUCCULENT_ITEM.get(), .65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_THATCH.get(), 0.65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_THATCH_CARPET.get(), 0.1F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_THATCH_STAIRS.get(), 0.5F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_THATCH_SLAB.get(), 0.3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.XERIC_THATCH.get(), 0.65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.XERIC_THATCH_CARPET.get(), 0.1F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.XERIC_THATCH_STAIRS.get(), 0.5F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.XERIC_THATCH_SLAB.get(), 0.3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.EVERGREEN_THATCH.get(), 0.65F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.EVERGREEN_THATCH_CARPET.get(), 0.1F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.EVERGREEN_THATCH_STAIRS.get(), 0.5F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.EVERGREEN_THATCH_SLAB.get(), 0.3F);
+
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.REDWOOD.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.SUGI.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPurpleSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getWhiteSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getBlueSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPinkSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.FIR.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WILLOW.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.ASPEN.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getRedSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getOrangeSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getYellowSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.CYPRESS.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.OLIVE.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.JOSHUA.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.GHAF.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.PALO_VERDE.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.CEDAR.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.LARCH.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.MAHOGANY.getSapling().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.SAXAUL.getSapling().get(), .3F);
+
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.REDWOOD.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.REDWOOD.getFrostyLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.SUGI.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPurpleLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getWhiteLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getBlueLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPinkLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPartPurpleLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPartWhiteLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPartBlueLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPartPinkLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.FIR.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.FIR.getFrostyLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WILLOW.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.ASPEN.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.ASPEN.getYellowLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getRedLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getOrangeLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getYellowLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.CYPRESS.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.OLIVE.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.JOSHUA.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.GHAF.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.PALO_VERDE.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.CEDAR.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.LARCH.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.MAHOGANY.getLeaves().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.SAXAUL.getLeaves().get(), .3F);
+
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPurpleVines().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getWhiteVines().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getBlueVines().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPinkVines().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WILLOW.getVines().get(), .3F);
+
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.LAVENDER.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.BLEEDING_HEART.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.BLUE_BULBS.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.CARNATION.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.GARDENIA.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.SNAPDRAGON.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.FOXGLOVE.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.BEGONIA.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.MARIGOLD.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.BLUEBELL.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.TIGER_LILY.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.PURPLE_WILDFLOWER.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.YELLOW_WILDFLOWER.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.RED_HEATHER.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.WHITE_HEATHER.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.PURPLE_HEATHER.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.ANEMONE.getFlowerBlock().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.DWARF_BLOSSOMS.getFlowerBlock().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.PROTEA.getFlowerBlock().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.HIBISCUS.getFlowerBlock().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.BLUE_IRIS.getFlowerBlock().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.BLACK_IRIS.getFlowerBlock().get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.RUBY_BLOSSOMS.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.SILVERBUSH.getFlowerBlock().get(), .4F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.CATTAIL.get(), .4F);
+
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_FRIGID_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.FRIGID_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_SCORCHED_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.SCORCHED_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_BEACH_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.BEACH_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_SEDGE_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.SEDGE_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.LARGE_FLAXEN_FERN.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.FLAXEN_FERN.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_OAT_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.OAT_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.LARGE_LUSH_FERN.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.LUSH_FERN.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_MELIC_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.MELIC_GRASS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.GREEN_BEARBERRIES.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.RED_BEARBERRIES.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.PURPLE_BEARBERRIES.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.GREEN_BITTER_SPROUTS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.RED_BITTER_SPROUTS.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.PURPLE_BITTER_SPROUTS.get(), .3F);
+
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.OLIVES.get(), .3F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.OLIVE_BRANCH.get(), .5F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_BLOCK.get(), .2F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_SPROUT.get(), .2F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_SHELL.get(), .1F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_HALF.get(), .1F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.SHIITAKE_MUSHROOM.get(), .1F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.GRAY_POLYPORE.get(), .1F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.ALLUAUDIA.get(), .2F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.ALLUAUDIA_BUNDLE.get(), .2F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.STRIPPED_ALLUAUDIA.get(), .2F);
+            ComposterBlock.COMPOSTABLES.put(NSBlocks.STRIPPED_ALLUAUDIA_BUNDLE.get(), .2F);
+
+            NSCauldronBehavior.registerBehavior();
         });
-
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.RED_MOSS_BLOCK.get(), 0.65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.RED_MOSS_CARPET.get(), 0.3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.LOTUS_FLOWER_ITEM.get(), 0.65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.LOTUS_STEM.get(), 0.2F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.AZOLLA_ITEM.get(), 0.3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.HELVOLA_FLOWER_ITEM.get(), 0.3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.HELVOLA_PAD_ITEM.get(), 0.3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.DESERT_TURNIP.get(), 0.3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.DESERT_TURNIP_BLOCK.get(), 0.65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.DESERT_TURNIP_ROOT_BLOCK.get(), 0.5F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WHOLE_PIZZA.get(), 1.0F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.THREE_QUARTERS_PIZZA.get(), .85F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.HALF_PIZZA.get(), .5F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.QUARTER_PIZZA.get(), .35F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.AUREATE_SUCCULENT_ITEM.get(), .65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.DROWSY_SUCCULENT_ITEM.get(), .65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.FOAMY_SUCCULENT_ITEM.get(), .65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.SAGE_SUCCULENT_ITEM.get(), .65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.IMPERIAL_SUCCULENT_ITEM.get(), .65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.ORNATE_SUCCULENT_ITEM.get(), .65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.REGAL_SUCCULENT_ITEM.get(), .65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_THATCH.get(), 0.65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_THATCH_CARPET.get(), 0.1F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_THATCH_STAIRS.get(), 0.5F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_THATCH_SLAB.get(), 0.3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.XERIC_THATCH.get(), 0.65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.XERIC_THATCH_CARPET.get(), 0.1F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.XERIC_THATCH_STAIRS.get(), 0.5F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.XERIC_THATCH_SLAB.get(), 0.3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.EVERGREEN_THATCH.get(), 0.65F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.EVERGREEN_THATCH_CARPET.get(), 0.1F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.EVERGREEN_THATCH_STAIRS.get(), 0.5F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.EVERGREEN_THATCH_SLAB.get(), 0.3F);
-
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.REDWOOD.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.SUGI.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPurpleSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getWhiteSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getBlueSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPinkSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.FIR.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WILLOW.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.ASPEN.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getRedSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getOrangeSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getYellowSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.CYPRESS.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.OLIVE.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.JOSHUA.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.GHAF.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.PALO_VERDE.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.CEDAR.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.LARCH.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.MAHOGANY.getSapling().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.SAXAUL.getSapling().get(), .3F);
-
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.REDWOOD.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.REDWOOD.getFrostyLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.SUGI.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPurpleLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getWhiteLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getBlueLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPinkLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPartPurpleLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPartWhiteLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPartBlueLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPartPinkLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.FIR.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.FIR.getFrostyLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WILLOW.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.ASPEN.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.ASPEN.getYellowLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getRedLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getOrangeLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.MAPLE.getYellowLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.CYPRESS.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.OLIVE.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.JOSHUA.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.GHAF.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.PALO_VERDE.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.CEDAR.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.LARCH.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.MAHOGANY.getLeaves().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.SAXAUL.getLeaves().get(), .3F);
-
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPurpleVines().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getWhiteVines().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getBlueVines().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WISTERIA.getPinkVines().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WILLOW.getVines().get(), .3F);
-
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.LAVENDER.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.BLEEDING_HEART.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.BLUE_BULBS.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.CARNATION.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.GARDENIA.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.SNAPDRAGON.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.FOXGLOVE.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.BEGONIA.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.MARIGOLD.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.BLUEBELL.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.TIGER_LILY.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.PURPLE_WILDFLOWER.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.YELLOW_WILDFLOWER.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.RED_HEATHER.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.WHITE_HEATHER.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.PURPLE_HEATHER.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.ANEMONE.getFlowerBlock().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.DWARF_BLOSSOMS.getFlowerBlock().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.PROTEA.getFlowerBlock().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.HIBISCUS.getFlowerBlock().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.BLUE_IRIS.getFlowerBlock().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.BLACK_IRIS.getFlowerBlock().get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.RUBY_BLOSSOMS.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.SILVERBUSH.getFlowerBlock().get(), .4F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.CATTAIL.get(), .4F);
-
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_FRIGID_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.FRIGID_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_SCORCHED_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.SCORCHED_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_BEACH_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.BEACH_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_SEDGE_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.SEDGE_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.LARGE_FLAXEN_FERN.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.FLAXEN_FERN.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_OAT_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.OAT_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.LARGE_LUSH_FERN.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.LUSH_FERN.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.TALL_MELIC_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.MELIC_GRASS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.GREEN_BEARBERRIES.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.RED_BEARBERRIES.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.PURPLE_BEARBERRIES.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.GREEN_BITTER_SPROUTS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.RED_BITTER_SPROUTS.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.PURPLE_BITTER_SPROUTS.get(), .3F);
-
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.OLIVES.get(), .3F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.OLIVE_BRANCH.get(), .5F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_BLOCK.get(), .2F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_SPROUT.get(), .2F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_SHELL.get(), .1F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.COCONUT_HALF.get(), .1F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.SHIITAKE_MUSHROOM.get(), .1F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.GRAY_POLYPORE.get(), .1F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.ALLUAUDIA.get(), .2F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.ALLUAUDIA_BUNDLE.get(), .2F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.STRIPPED_ALLUAUDIA.get(), .2F);
-        ComposterBlock.COMPOSTABLES.put(NSBlocks.STRIPPED_ALLUAUDIA_BUNDLE.get(), .2F);
-
-        NSCauldronBehavior.registerBehavior();
     }
+
+    public void wandererTrades(WandererTradesEvent event) {
+        List<VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), new ItemStack(NSBlocks.RED_MOSS_BLOCK.get(), 2), 5, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), new ItemStack(NSBlocks.HIBISCUS.getFlowerBlock().get(), 2), 12, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), new ItemStack(NSBlocks.BLUE_IRIS.getFlowerBlock().get(), 2), 12, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), new ItemStack(NSBlocks.BLACK_IRIS.getFlowerBlock().get(), 2), 12, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), new ItemStack(NSBlocks.ANEMONE.getFlowerBlock().get(), 2), 12, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), new ItemStack(NSBlocks.LOTUS_FLOWER_ITEM.get(), 2), 12, 1, 0.5F));
+
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.REDWOOD.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.SUGI.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.WISTERIA.getPurpleSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.WISTERIA.getWhiteSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.WISTERIA.getBlueSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.WISTERIA.getPinkSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.FIR.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.WILLOW.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.ASPEN.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.MAPLE.getRedSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.MAPLE.getOrangeSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.MAPLE.getYellowSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.CYPRESS.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.OLIVE.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.JOSHUA.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.GHAF.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.PALO_VERDE.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.CEDAR.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.LARCH.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.MAHOGANY.getSapling().get(), 5), 8, 1, 0.5F));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(NSBlocks.SAXAUL.getSapling().get(), 5), 8, 1, 0.5F));
+    }
+
     public void creativeInventory(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             ArrayList<ItemLike> wood = new ArrayList<>();
@@ -354,11 +420,7 @@ public class NatureSpirit {
             event.getEntries().putAfter(NSBlocks.TRAVERTINE.getTilesWall().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getBase().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.CHERT.getBase().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getBaseStairs().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.CHERT.getBaseStairs().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getBaseSlab().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.getEntries().putAfter(NSBlocks.CHERT.getBaseSlab().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getCobbled().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.getEntries().putAfter(NSBlocks.CHERT.getCobbled().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getCobbledStairs().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.getEntries().putAfter(NSBlocks.CHERT.getCobbledStairs().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getCobbledSlab().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.getEntries().putAfter(NSBlocks.CHERT.getCobbledSlab().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getCobbledWall().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            event.getEntries().putAfter(NSBlocks.CHERT.getCobbledWall().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getChiseled().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.getEntries().putAfter(NSBlocks.CHERT.getBaseSlab().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getChiseled().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.CHERT.getChiseled().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getPolished().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.CHERT.getPolished().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getPolishedStairs().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.CHERT.getPolishedStairs().get().asItem().getDefaultInstance(), NSBlocks.CHERT.getPolishedSlab().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
@@ -821,6 +883,13 @@ public class NatureSpirit {
             event.getEntries().putAfter(NSBlocks.BLUE_PAPER_LANTERN.get().asItem().getDefaultInstance(), NSBlocks.PURPLE_PAPER_LANTERN.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.PURPLE_PAPER_LANTERN.get().asItem().getDefaultInstance(), NSBlocks.MAGENTA_PAPER_LANTERN.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.MAGENTA_PAPER_LANTERN.get().asItem().getDefaultInstance(), NSBlocks.PINK_PAPER_LANTERN.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+
+
+            if(ModList.get().isLoaded("arts_and_crafts")) {
+                event.getEntries().putBefore(NSBlocks.WHITE_CHALK.get().asItem().getDefaultInstance(), NSArtsAndCraftsCompat.BLEACHED_CHALK.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                event.getEntries().putBefore(NSBlocks.WHITE_CHALK_STAIRS.get().asItem().getDefaultInstance(), NSArtsAndCraftsCompat.BLEACHED_CHALK_STAIRS.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                event.getEntries().putBefore(NSBlocks.WHITE_CHALK_SLAB.get().asItem().getDefaultInstance(), NSArtsAndCraftsCompat.BLEACHED_CHALK_SLAB.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            }
         }
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.getEntries().putAfter(Items.AMETHYST_SHARD.getDefaultInstance(), NSBlocks.CALCITE_SHARD.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
@@ -835,45 +904,168 @@ public class NatureSpirit {
             event.getEntries().putAfter(Items.MILK_BUCKET.getDefaultInstance(), NSBlocks.CHEESE_BUCKET.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
     }
-
     public static void addAllAfterFirst(MutableHashedLinkedMap<ItemStack, CreativeModeTab.TabVisibility> entries, ArrayList<ItemLike> itemStacks, CreativeModeTab.TabVisibility tabVisibility) {
         for (int i = 1; i < itemStacks.size(); i++) {
             entries.putAfter(itemStacks.get(i-1).asItem().getDefaultInstance(), itemStacks.get(i).asItem().getDefaultInstance(), tabVisibility);
         }
     }
 
-    public void interactEvent(PlayerInteractEvent.RightClickBlock event) {
-        BlockPos blockPos = event.getPos();
-        BlockState blockState = event.getLevel().getBlockState(blockPos);
-        Level world = event.getLevel();
-        Player player = event.getEntity();
-        InteractionHand hand = event.getHand();
-        if (blockState.is(BlockTags.CAULDRONS) && event.getItemStack().is(Items.MILK_BUCKET) && !blockState.is(NSBlocks.MILK_CAULDRON.get())) {
-            event.setUseItem(Event.Result.DENY);
-            world.playSound(player, blockPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-            if (player instanceof ServerPlayer) {
-                CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer) player, blockPos, event.getItemStack());
-            }
-            world.setBlock(blockPos, NSBlocks.MILK_CAULDRON.get().defaultBlockState(), 11);
-            world.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(player, NSBlocks.MILK_CAULDRON.get().defaultBlockState()));
-            if (!player.isCreative() && !player.isSpectator()) {
-                player.setItemInHand(hand, new ItemStack(Items.BUCKET));
-            }
-            event.setCancellationResult(InteractionResult.sidedSuccess(world.isClientSide));
-            event.setCanceled(true);
+    public void addPackFinders(AddPackFindersEvent event) {
+        if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+            event.addRepositorySource((packConsumer) -> {
+                if(ModList.get().isLoaded("arts_and_crafts")) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/arts_and_crafts_res",
+                                    Component.translatable("pack.natures_spirit.arts_and_crafts"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/arts_and_crafts_res")),
+                                    PackType.CLIENT_RESOURCES, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                packConsumer.accept(
+                        Pack.readMetaAndCreate(
+                                "builtin/plank_consistency",
+                                Component.translatable("pack.natures_spirit.plank_consistency"),
+                                false,
+                                (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/plank_consistency")),
+                                PackType.CLIENT_RESOURCES, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                );
+                packConsumer.accept(
+                        Pack.readMetaAndCreate(
+                                "builtin/emissive_ores_compatibility",
+                                Component.translatable("pack.natures_spirit.emissive_ores_compatibility"),
+                                false,
+                                (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/emissive_ores_compatibility")),
+                                PackType.CLIENT_RESOURCES, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                );
+
+            });
         }
-        if (blockState.is(BlockTags.CAULDRONS) && event.getItemStack().is(NSBlocks.CHEESE_BUCKET.get()) && !blockState.is(NSBlocks.CHEESE_CAULDRON.get())) {
-            world.playSound(player, blockPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-            if (player instanceof ServerPlayer) {
-                CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer) player, blockPos, event.getItemStack());
-            }
-            world.setBlock(blockPos, NSBlocks.CHEESE_CAULDRON.get().defaultBlockState(), 11);
-            world.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(player, NSBlocks.CHEESE_CAULDRON.get().defaultBlockState()));
-            if (!player.isCreative() && !player.isSpectator()) {
-                player.setItemInHand(hand, new ItemStack(Items.BUCKET));
-            }
-            event.setCancellationResult(InteractionResult.sidedSuccess(world.isClientSide));
-            event.setCanceled(true);
+        if (event.getPackType() == PackType.SERVER_DATA) {
+            event.addRepositorySource((packConsumer) -> {
+                if(ModList.get().isLoaded("arts_and_crafts")) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/arts_and_crafts_dat",
+                                    Component.translatable("pack.natures_spirit.arts_and_crafts"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/arts_and_crafts_dat")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.badlandsToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_badlands",
+                                    Component.translatable("pack.natures_spirit.modified_badlands"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_badlands")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.birchForestToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_birch_forest",
+                                    Component.translatable("pack.natures_spirit.modified_birch_forest"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_birch_forest")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.darkForestToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_dark_forest",
+                                    Component.translatable("pack.natures_spirit.modified_dark_forest"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_dark_forest")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.desertToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_desert",
+                                    Component.translatable("pack.natures_spirit.modified_desert"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_desert")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.flowerForestToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_flower_forest",
+                                    Component.translatable("pack.natures_spirit.modified_flower_forest"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_flower_forest")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.jungleToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_jungle",
+                                    Component.translatable("pack.natures_spirit.modified_jungle"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_jungle")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.mountainBiomesToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_mountain_biomes",
+                                    Component.translatable("pack.natures_spirit.modified_mountain_biomes"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_mountain_biomes")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.savannaToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_savannas",
+                                    Component.translatable("pack.natures_spirit.modified_savannas"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_savannas")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.swampToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_swamp",
+                                    Component.translatable("pack.natures_spirit.modified_swamp"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_swamp")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.vanillaTreesToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_vanilla_trees",
+                                    Component.translatable("pack.natures_spirit.modified_vanilla_trees"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_vanilla_trees")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+                if (NSConfig.windsweptHillsToggle) {
+                    packConsumer.accept(
+                            Pack.readMetaAndCreate(
+                                    "builtin/modified_windswept_hills",
+                                    Component.translatable("pack.natures_spirit.modified_windswept_hills"),
+                                    true,
+                                    (path) -> new PathPackResources(path, false, ModList.get().getModFileById(MOD_ID).getFile().findResource("resourcepacks/modified_windswept_hills")),
+                                    PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.BUILT_IN)
+                    );
+                }
+
+            });
         }
     }
 

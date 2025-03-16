@@ -14,7 +14,7 @@
 [misc]
 	calcite_generator = true
 	deepslate_generator = true
-	creative_tab = true
+	creative_tab = false
 	sugi_and_stratified_pillars = true
 
 [datapack]

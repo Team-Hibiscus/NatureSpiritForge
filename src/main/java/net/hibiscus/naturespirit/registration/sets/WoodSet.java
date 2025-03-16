@@ -136,7 +136,6 @@ public class WoodSet {
       if (this.hasDefaultSapling()) {
         sapling = this.isSandy() ? createSandySapling(saplingGenerator) : createSapling(saplingGenerator);
         pottedSapling = createPottedSapling(sapling);
-//        TradeOfferHelper.registerWanderingTraderOffers(1, factories -> factories.add(new VillagerTrades.ItemsForEmeralds(sapling, 5, 1, 8, 1)));
       }
     }
 
@@ -145,7 +144,6 @@ public class WoodSet {
       leaves = createFrostableLeaves();
       sapling = createSapling(saplingGenerator);
       pottedSapling = createPottedSapling(sapling);
-//      TradeOfferHelper.registerWanderingTraderOffers(1, factories -> factories.add(new VillagerTrades.ItemsForEmeralds(sapling, 5, 1, 8, 1)));
 
     }
 
@@ -157,7 +155,6 @@ public class WoodSet {
 
       sapling = createSapling(saplingGenerator);
       pottedSapling = createPottedSapling(sapling);
-//      TradeOfferHelper.registerWanderingTraderOffers(1, factories -> factories.add(new VillagerTrades.ItemsForEmeralds(sapling, 5, 1, 8, 1)));
     }
     if (woodPreset == WoodPreset.WISTERIA) {
       whiteVines = createVines("white_", this::getWhiteVinesPlant);
@@ -184,12 +181,6 @@ public class WoodSet {
       pottedBlueSapling = createPottedSapling("blue_", blueSapling);
       pottedPinkSapling = createPottedSapling("pink_", pinkSapling);
       pottedPurpleSapling = createPottedSapling("purple_", purpleSapling);
-//      TradeOfferHelper.registerWanderingTraderOffers(1, factories -> {
-//        factories.add(new VillagerTrades.ItemsForEmeralds(whiteSapling, 5, 1, 8, 1));
-//        factories.add(new VillagerTrades.ItemsForEmeralds(blueSapling, 5, 1, 8, 1));
-//        factories.add(new VillagerTrades.ItemsForEmeralds(purpleSapling, 5, 1, 8, 1));
-//        factories.add(new VillagerTrades.ItemsForEmeralds(pinkSapling, 5, 1, 8, 1));
-//      });
     }
     if (woodPreset == WoodPreset.MAPLE) {
       redLeaves = createParticleLeaves("red_", NSParticleTypes.RED_MAPLE_LEAVES_PARTICLE, 100);
@@ -201,11 +192,6 @@ public class WoodSet {
       pottedRedSapling = createPottedSapling("red_", redSapling);
       pottedOrangeSapling = createPottedSapling("orange_", orangeSapling);
       pottedYellowSapling = createPottedSapling("yellow_", yellowSapling);
-//      TradeOfferHelper.registerWanderingTraderOffers(1, factories -> {
-//        factories.add(new VillagerTrades.ItemsForEmeralds(redSapling, 5, 1, 8, 1));
-//        factories.add(new VillagerTrades.ItemsForEmeralds(orangeSapling, 5, 1, 8, 1));
-//        factories.add(new VillagerTrades.ItemsForEmeralds(yellowSapling, 5, 1, 8, 1));
-//      });
     }
     if (woodPreset == WoodPreset.ASPEN) {
       yellowLeaves = createLeaves("yellow_");
@@ -232,7 +218,6 @@ public class WoodSet {
     hangingSignItem = createHangingSignItem();
     boatItem = createItem(getName() + "_boat", () -> new NSBoatItem(false, boatType.get(), new Item.Properties().stacksTo(1)));
     chestBoatItem = createItem(getName() + "_chest_boat", () -> new NSBoatItem(true, boatType.get(), new Item.Properties().stacksTo(1)));
-//    addToBuildingTab(buttonBefore, logBefore, signBefore, boatBefore, this);
   }
 
   public WoodSet(

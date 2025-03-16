@@ -3,7 +3,6 @@ package net.hibiscus.naturespirit.blocks;
 import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSParticleTypes;
 import net.hibiscus.naturespirit.registration.NSTags;
-import net.hibiscus.naturespirit.util.NSCauldronBehavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
