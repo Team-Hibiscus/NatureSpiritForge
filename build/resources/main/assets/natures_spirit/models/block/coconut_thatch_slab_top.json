@@ -1,8 +1,0 @@
-{
-	"credit": "Made with Blockbench",
-	"parent": "natures_spirit:block/thatch_slab_top",
-	"textures": {
-		"0": "natures_spirit:block/coconut_thatch",
-		"1": "natures_spirit:block/coconut_thatch_end"
-	}
-}

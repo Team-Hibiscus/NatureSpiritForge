@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "natures_spirit:block/pink_sandstone_top",
-    "side": "natures_spirit:block/cut_pink_sandstone",
-    "top": "natures_spirit:block/pink_sandstone_top"
-  }
-}
