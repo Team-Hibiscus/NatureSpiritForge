@@ -10,6 +10,7 @@ import net.hibiscus.naturespirit.terrablender.*;
 import net.hibiscus.naturespirit.blocks.NSCauldronBehavior;
 import net.hibiscus.naturespirit.registration.NSVillagers;
 import net.hibiscus.naturespirit.world.NSSurfaceRules;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -30,6 +31,7 @@ import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
@@ -38,6 +40,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.village.WandererTradesEvent;
 import terrablender.api.Regions;
@@ -73,6 +76,7 @@ public class NatureSpirit {
         NSVillagers.VILLAGER_TYPES.register(modEventBus);
         modEventBus.addListener(this::creativeInventory);
         modEventBus.addListener(this::addPackFinders);
+        modEventBus.addListener(this::blockTypes);
         NSCriteria.CRITERIA.register(modEventBus);
 
         NeoForge.EVENT_BUS.addListener(this::wandererTrades);
@@ -183,6 +187,85 @@ public class NatureSpirit {
         genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemCost(Items.EMERALD, 5), new ItemStack(NSBlocks.LARCH.getSapling().get(), 5), 8, 1, 0.5F));
         genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemCost(Items.EMERALD, 5), new ItemStack(NSBlocks.MAHOGANY.getSapling().get(), 5), 8, 1, 0.5F));
         genericTrades.add((pTrader, pRandom) -> new MerchantOffer(new ItemCost(Items.EMERALD, 5), new ItemStack(NSBlocks.SAXAUL.getSapling().get(), 5), 8, 1, 0.5F));
+    }
+
+    public void blockTypes(BlockEntityTypeAddBlocksEvent event) {
+        event.modify(BlockEntityType.SIGN,
+            NSBlocks.REDWOOD.getSign().get(),
+            NSBlocks.REDWOOD.getWallSign().get(),
+            NSBlocks.SUGI.getSign().get(),
+            NSBlocks.SUGI.getWallSign().get(),
+            NSBlocks.WISTERIA.getSign().get(),
+            NSBlocks.WISTERIA.getWallSign().get(),
+            NSBlocks.FIR.getSign().get(),
+            NSBlocks.FIR.getWallSign().get(),
+            NSBlocks.WILLOW.getSign().get(),
+            NSBlocks.WILLOW.getWallSign().get(),
+            NSBlocks.ASPEN.getSign().get(),
+            NSBlocks.ASPEN.getWallSign().get(),
+            NSBlocks.MAPLE.getSign().get(),
+            NSBlocks.MAPLE.getWallSign().get(),
+            NSBlocks.CYPRESS.getSign().get(),
+            NSBlocks.CYPRESS.getWallSign().get(),
+            NSBlocks.OLIVE.getSign().get(),
+            NSBlocks.OLIVE.getWallSign().get(),
+            NSBlocks.JOSHUA.getSign().get(),
+            NSBlocks.JOSHUA.getWallSign().get(),
+            NSBlocks.GHAF.getSign().get(),
+            NSBlocks.GHAF.getWallSign().get(),
+            NSBlocks.PALO_VERDE.getSign().get(),
+            NSBlocks.PALO_VERDE.getWallSign().get(),
+            NSBlocks.COCONUT.getSign().get(),
+            NSBlocks.COCONUT.getWallSign().get(),
+            NSBlocks.CEDAR.getSign().get(),
+            NSBlocks.CEDAR.getWallSign().get(),
+            NSBlocks.LARCH.getSign().get(),
+            NSBlocks.LARCH.getWallSign().get(),
+            NSBlocks.MAHOGANY.getSign().get(),
+            NSBlocks.MAHOGANY.getWallSign().get(),
+            NSBlocks.SAXAUL.getSign().get(),
+            NSBlocks.SAXAUL.getWallSign().get(),
+            NSBlocks.PAPER_SIGN.get(),
+            NSBlocks.PAPER_WALL_SIGN.get()
+        );
+        event.modify(BlockEntityType.HANGING_SIGN,
+                NSBlocks.REDWOOD.getHangingSign().get(),
+                NSBlocks.REDWOOD.getHangingWallSign().get(),
+                NSBlocks.SUGI.getHangingSign().get(),
+                NSBlocks.SUGI.getHangingWallSign().get(),
+                NSBlocks.WISTERIA.getHangingSign().get(),
+                NSBlocks.WISTERIA.getHangingWallSign().get(),
+                NSBlocks.FIR.getHangingSign().get(),
+                NSBlocks.FIR.getHangingWallSign().get(),
+                NSBlocks.WILLOW.getHangingSign().get(),
+                NSBlocks.WILLOW.getHangingWallSign().get(),
+                NSBlocks.ASPEN.getHangingSign().get(),
+                NSBlocks.ASPEN.getHangingWallSign().get(),
+                NSBlocks.MAPLE.getHangingSign().get(),
+                NSBlocks.MAPLE.getHangingWallSign().get(),
+                NSBlocks.CYPRESS.getHangingSign().get(),
+                NSBlocks.CYPRESS.getHangingWallSign().get(),
+                NSBlocks.OLIVE.getHangingSign().get(),
+                NSBlocks.OLIVE.getHangingWallSign().get(),
+                NSBlocks.JOSHUA.getHangingSign().get(),
+                NSBlocks.JOSHUA.getHangingWallSign().get(),
+                NSBlocks.GHAF.getHangingSign().get(),
+                NSBlocks.GHAF.getHangingWallSign().get(),
+                NSBlocks.PALO_VERDE.getHangingSign().get(),
+                NSBlocks.PALO_VERDE.getHangingWallSign().get(),
+                NSBlocks.COCONUT.getHangingSign().get(),
+                NSBlocks.COCONUT.getHangingWallSign().get(),
+                NSBlocks.CEDAR.getHangingSign().get(),
+                NSBlocks.CEDAR.getHangingWallSign().get(),
+                NSBlocks.LARCH.getHangingSign().get(),
+                NSBlocks.LARCH.getHangingWallSign().get(),
+                NSBlocks.MAHOGANY.getHangingSign().get(),
+                NSBlocks.MAHOGANY.getHangingWallSign().get(),
+                NSBlocks.SAXAUL.getHangingSign().get(),
+                NSBlocks.SAXAUL.getHangingWallSign().get(),
+                NSBlocks.PAPER_HANGING_SIGN.get(),
+                NSBlocks.PAPER_WALL_HANGING_SIGN.get()
+        );
     }
 
     public void creativeInventory(BuildCreativeModeTabContentsEvent event) {
@@ -733,6 +816,7 @@ public class NatureSpirit {
             event.insertAfter(itemStacks.get(i-1).asItem().getDefaultInstance(), itemStacks.get(i).asItem().getDefaultInstance(), tabVisibility);
         }
     }
+
     public void addPackFinders(AddPackFindersEvent event) {
         if(ModList.get().isLoaded("arts_and_crafts")) {
             event.addPackFinders(

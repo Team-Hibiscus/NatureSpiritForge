@@ -120,7 +120,7 @@ public class WoodSet {
 
   private void registerWood() {
     blockSetType = createBlockSetType();
-    woodType = Suppliers.memoize(() -> new WoodType(MOD_ID + ":" + getName(), blockSetType.get()));
+    woodType = Suppliers.memoize(() -> WoodType.register(new WoodType(MOD_ID + ":" + getName(), blockSetType.get())));
 
     log = woodPreset == WoodPreset.JOSHUA ? createJoshuaLog() : createLog();
     strippedLog = woodPreset == WoodPreset.JOSHUA ? createStrippedJoshuaLog() : createStrippedLog();
