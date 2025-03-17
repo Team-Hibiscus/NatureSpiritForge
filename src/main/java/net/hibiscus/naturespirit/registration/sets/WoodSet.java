@@ -663,12 +663,11 @@ public class WoodSet {
   }
 
   private RegistryObject<Block> createWood() {
-    return createBlockWithItem(getWoodName(), () -> new RotatedPillarBlock(
-        Properties.of().mapColor(sideColor).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava()));
+    return createBlockWithItem(getWoodName(), () -> log(sideColor, sideColor, strippedWood));
   }
 
   private RegistryObject<Block> createStrippedWood() {
-    return createBlockWithItem("stripped_" + getWoodName(), () -> new RotatedPillarBlock(Properties.of().mapColor(topColor).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava()));
+    return createBlockWithItem("stripped_" + getWoodName(), () -> strippedLog(topColor, topColor));
   }
 
   private RegistryObject<Block> createLeaves() {
@@ -1147,7 +1146,7 @@ public class WoodSet {
 
   public RegistryObject<Block> createPottedSapling(RegistryObject<Block> sapling) {
     return registerTransparentBlockWithoutItem("potted_" + getName() + "_sapling",
-            () -> new FlowerPotBlock(sapling.get(), Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY)));
+            () -> new FlowerPotBlock(() -> ((FlowerPotBlock) Blocks.FLOWER_POT).getEmptyPot(), sapling, Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY)));
   }
 
   public RegistryObject<Block> createSapling(String prefix, AbstractTreeGrower saplingGenerator) {
@@ -1164,7 +1163,7 @@ public class WoodSet {
 
   public RegistryObject<Block> createPottedSapling(String prefix, RegistryObject<Block> sapling) {
     return registerTransparentBlockWithoutItem("potted_" + prefix + getName() + "_sapling",
-            () -> new FlowerPotBlock(sapling.get(), Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY)));
+            () -> new FlowerPotBlock(() -> ((FlowerPotBlock) Blocks.FLOWER_POT).getEmptyPot(), sapling, Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY)));
   }
 
   private RegistryObject<Item> createSignItem() {

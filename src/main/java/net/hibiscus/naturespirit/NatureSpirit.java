@@ -85,6 +85,7 @@ public class NatureSpirit {
         NSCriteria.registerCriteria();
 
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.addListener(this::wandererTrades);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, NSConfig.SPEC);
         modEventBus.addListener(this::addPackFinders);
 
@@ -626,7 +627,7 @@ public class NatureSpirit {
             event.getEntries().putAfter(NSBlocks.MAHOGANY.getSapling().get().asItem().getDefaultInstance(), NSBlocks.SAXAUL.getSapling().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
-            event.getEntries().putAfter(Items.BAMBOO_HANGING_SIGN.getDefaultInstance(), NSBlocks.REDWOOD.getSignItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_TAB_ONLY);
+            event.getEntries().putAfter(Items.BAMBOO_HANGING_SIGN.getDefaultInstance(), NSBlocks.REDWOOD.getSignItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.REDWOOD.getSignItem().get().getDefaultInstance(), NSBlocks.REDWOOD.getHangingSignItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.REDWOOD.getHangingSignItem().get().getDefaultInstance(), NSBlocks.SUGI.getSignItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.SUGI.getSignItem().get().getDefaultInstance(), NSBlocks.SUGI.getHangingSignItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
@@ -680,7 +681,7 @@ public class NatureSpirit {
 
         }
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.getEntries().putAfter(Items.BAMBOO_CHEST_RAFT.getDefaultInstance(), NSBlocks.REDWOOD.getBoatItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_TAB_ONLY);
+            event.getEntries().putAfter(Items.BAMBOO_CHEST_RAFT.getDefaultInstance(), NSBlocks.REDWOOD.getBoatItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.REDWOOD.getBoatItem().get().getDefaultInstance(), NSBlocks.REDWOOD.getChestBoatItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.REDWOOD.getChestBoatItem().get().getDefaultInstance(), NSBlocks.SUGI.getBoatItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.getEntries().putAfter(NSBlocks.SUGI.getBoatItem().get().getDefaultInstance(), NSBlocks.SUGI.getChestBoatItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
