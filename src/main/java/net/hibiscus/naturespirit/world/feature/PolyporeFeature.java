@@ -46,7 +46,7 @@ public class PolyporeFeature extends Feature<NoneFeatureConfiguration> {
     for (int j = 0; j <= radius; ++j) {
       for (int k = 0; k <= radius; ++k) {
         blockPos = mutable.relative(direction2, k).relative(direction1, j);
-        if (world.isEmptyBlock(blockPos) || world.getBlockState(blockPos).is(NSBlocks.GRAY_POLYPORE.get())) {
+        if (world.isEmptyBlock(blockPos) || world.getBlockState(blockPos).is(NSBlocks.GRAY_POLYPORE)) {
           world.setBlock(blockPos, NSBlocks.GRAY_POLYPORE_BLOCK.get().defaultBlockState().setValue(HugeMushroomBlock.DOWN, false), 2);
         }
       }

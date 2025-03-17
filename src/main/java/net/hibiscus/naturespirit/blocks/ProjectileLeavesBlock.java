@@ -10,13 +10,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class ProjectileLeavesBlock extends LeavesBlock {
 
-  private final RegistryObject<Block> END_BLOCK;
+  private final DeferredBlock<? extends Block> END_BLOCK;
 
-  public ProjectileLeavesBlock(Properties settings, RegistryObject<Block> block) {
+  public ProjectileLeavesBlock(Properties settings, DeferredBlock<? extends Block> block) {
     super(settings);
     this.END_BLOCK = block;
   }

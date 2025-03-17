@@ -41,7 +41,7 @@ public class NSConfiguredFeatures {
   public static final ResourceKey<ConfiguredFeature<?, ?>> GRAY_POLYPORE = registerKey("gray_polypore");
 
   public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
-    return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(NatureSpirit.MOD_ID, name));
+    return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(NatureSpirit.MOD_ID, name));
   }
 }
 

@@ -1,6 +1,6 @@
 package net.hibiscus.naturespirit.world.foliage_placer;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
 import net.minecraft.core.BlockPos;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerTy
 
 public class SugiFoliagePlacer extends FoliagePlacer {
 
-  public static final Codec<SugiFoliagePlacer> CODEC = RecordCodecBuilder.create((instance) -> {
+  public static final MapCodec<SugiFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
     return foliagePlacerParts(instance).apply(instance, SugiFoliagePlacer::new);
   });
 

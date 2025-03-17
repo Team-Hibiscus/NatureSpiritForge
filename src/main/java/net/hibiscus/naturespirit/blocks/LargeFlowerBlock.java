@@ -2,7 +2,9 @@ package net.hibiscus.naturespirit.blocks;
 
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerBlock;
@@ -19,7 +21,7 @@ public class LargeFlowerBlock extends FlowerBlock {
     return SHAPE;
   }
 
-  public LargeFlowerBlock(MobEffect mobEffect, int i, Properties properties) {
+  public LargeFlowerBlock(Holder<MobEffect> mobEffect, int i, Properties properties) {
     super(mobEffect, i, properties);
   }
 }

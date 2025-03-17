@@ -7,15 +7,13 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BucketPickup;
-import net.minecraft.world.level.block.CakeBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
@@ -27,33 +25,37 @@ public class CheeseBlock extends CakeBlock implements BucketPickup {
     super(settings);
   }
 
-  @Override public ItemStack pickupBlock(LevelAccessor world, BlockPos pos, BlockState state) {
+  @Override
+  public ItemStack pickupBlock(Player player, LevelAccessor world, BlockPos pos, BlockState state) {
     if (world.getBlockState(pos).getValue(BITES) == 0) {
-      world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
+      world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE);
       if (!world.isClientSide()) {
-        world.levelEvent(2001, pos, Block.getId(state));
+        world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
       }
 
       return new ItemStack(NSBlocks.CHEESE_BUCKET.get());
     }
-    return  new ItemStack(Items.BUCKET);
+    return new ItemStack(Items.BUCKET);
   }
 
-  @Override public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-    ItemStack itemStack = player.getItemInHand(hand);
-
+  protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    return stack.is(Items.BUCKET) && state.getValue(BITES) == 0 ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION : super.useItemOn(stack, state, world, pos, player, hand, hit);
+  }
+  @Override
+  public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
     if (world.isClientSide) {
       if (eat(world, pos, state, player).consumesAction()) {
         return InteractionResult.SUCCESS;
       }
 
-      if (itemStack.isEmpty()) {
+      if (player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
         return InteractionResult.CONSUME;
       }
     }
 
     return eat(world, pos, state, player);
   }
+
   protected static InteractionResult eat(LevelAccessor world, BlockPos pos, BlockState state, Player player) {
     if (!player.canEat(false)) {
       return InteractionResult.PASS;

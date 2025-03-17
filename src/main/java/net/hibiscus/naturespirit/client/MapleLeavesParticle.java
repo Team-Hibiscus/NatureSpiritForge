@@ -8,8 +8,6 @@ package net.hibiscus.naturespirit.client;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.CherryParticle;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class MapleLeavesParticle extends CherryParticle {
 

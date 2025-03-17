@@ -47,7 +47,7 @@ public class AlluaudiaFeature extends Feature<NoneFeatureConfiguration> {
   }
 
   private static void generate2(LevelAccessor world, BlockPos pos, RandomSource random, BlockPos rootPos, int size, int layer) {
-    GrowingBranchingTrunkBlock branchingTrunkBlock = (GrowingBranchingTrunkBlock) NSBlocks.ALLUAUDIA.get();
+    GrowingBranchingTrunkBlock branchingTrunkBlock = NSBlocks.ALLUAUDIA.get();
     int i = random.nextInt(1) + 2;
     if (layer == 0) {
       ++i;

@@ -1,6 +1,10 @@
 package net.hibiscus.naturespirit.world.feature;
 
 import com.mojang.serialization.Codec;
+import java.util.BitSet;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.function.Function;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.util.Mth;
@@ -13,11 +17,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-
-import java.util.BitSet;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.function.Function;
 
 
 public class PumpkinPatchFeature extends Feature<OreConfiguration> {
@@ -39,7 +38,6 @@ public class PumpkinPatchFeature extends Feature<OreConfiguration> {
     double h = (double) blockPos.getZ() + Math.cos(f) * (double) g;
     double j = (double) blockPos.getZ() - Math.cos(f) * (double) g;
     double l = blockPos.getY();
-    //      double m = (double)(blockPos.getY() + random.nextInt(3) - 2);
     int n = blockPos.getX() - Mth.ceil(g) - i;
     int o = blockPos.getY() - 2 - i;
     int p = blockPos.getZ() - Mth.ceil(g) - i;

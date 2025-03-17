@@ -1,5 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,6 +41,11 @@ public class WaterFlowerbedBlock extends BushBlock implements BonemealableBlock 
   }
 
   @Override
+  protected MapCodec<? extends BushBlock> codec() {
+    return null;
+  }
+
+  @Override
   public BlockState rotate(BlockState state, Rotation rotation) {
     return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
   }
@@ -60,15 +66,16 @@ public class WaterFlowerbedBlock extends BushBlock implements BonemealableBlock 
   }
 
   @Override
-  public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-    boolean bl = player.getItemInHand(hand).is(NSBlocks.HELVOLA_FLOWER_ITEM.get()) && state.getValue(FLOWER_AMOUNT) < 4;
+  public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+    InteractionHand hand = player.getUsedItemHand();
+    boolean bl = player.getItemInHand(hand).is(NSBlocks.HELVOLA_FLOWER_ITEM) && state.getValue(FLOWER_AMOUNT) < 4;
     if (bl) {
       world.setBlockAndUpdate(pos, state.setValue(FLOWER_AMOUNT, Math.min(4, state.getValue(FLOWER_AMOUNT) + 1)));
       if (!player.isCreative() && !player.isSpectator()) {
         player.getItemInHand(hand).shrink(1);
       }
     }
-    return bl ? InteractionResult.SUCCESS : super.use(state, world, pos, player, hand, hit);
+    return bl ? InteractionResult.SUCCESS : super.useWithoutItem(state, world, pos, player, hit);
   }
 
   @Override
@@ -97,9 +104,10 @@ public class WaterFlowerbedBlock extends BushBlock implements BonemealableBlock 
   }
 
   @Override
-  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean bl) {
+  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
     return true;
   }
+
 
   @Override
   public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state) {

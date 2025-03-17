@@ -13,7 +13,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-
 import java.util.Optional;
 
 public class LotusPlantFeature extends Feature<NoneFeatureConfiguration> {
@@ -57,7 +56,7 @@ public class LotusPlantFeature extends Feature<NoneFeatureConfiguration> {
           }
           break;
         } else if (structureWorldAccess.isEmptyBlock(blockPos2)) {
-          if (blockState.canSurvive(structureWorldAccess, blockPos2) && structureWorldAccess.getBlockState(blockPos2.below()).is(NSBlocks.LOTUS_STEM.get())) {
+          if (blockState.canSurvive(structureWorldAccess, blockPos2) && structureWorldAccess.getBlockState(blockPos2.below()).is(NSBlocks.LOTUS_STEM)) {
             structureWorldAccess.setBlock(blockPos2, blockState, 2);
             ++i;
           }

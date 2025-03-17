@@ -2,13 +2,15 @@ package net.hibiscus.naturespirit.registration.sets;
 
 import net.hibiscus.naturespirit.blocks.LargeFlowerBlock;
 import net.hibiscus.naturespirit.blocks.MidFlowerBlock;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 import static net.hibiscus.naturespirit.registration.NSRegistryHelper.*;
 
@@ -16,12 +18,12 @@ public class FlowerSet {
 
   private final String name;
   private final Item dyeColor;
-  private final MobEffect statusEffect;
+  private final Holder<MobEffect> statusEffect;
   private final FlowerPreset preset;
-  private RegistryObject<Block> flowerBlock;
-  private RegistryObject<Block> pottedFlowerBlock;
+  private DeferredBlock<?> flowerBlock;
+  private DeferredBlock<FlowerPotBlock> pottedFlowerBlock;
 
-  public FlowerSet(String name, Item dyeColor, MobEffect statusEffect, FlowerPreset preset) {
+  public FlowerSet(String name, Item dyeColor, Holder<MobEffect> statusEffect, FlowerPreset preset) {
     this.name = name;
     this.dyeColor = dyeColor;
     this.statusEffect = statusEffect;
@@ -37,7 +39,7 @@ public class FlowerSet {
     this.registerFlower();
   }
 
-  public FlowerSet(String name, MobEffect statusEffect, FlowerPreset preset) {
+  public FlowerSet(String name, Holder<MobEffect> statusEffect, FlowerPreset preset) {
     this.name = name;
     this.dyeColor = null;
     this.statusEffect = statusEffect;
@@ -127,11 +129,11 @@ public class FlowerSet {
     return dyeColor;
   }
 
-  public RegistryObject<Block> getFlowerBlock() {
+  public DeferredBlock<?> getFlowerBlock() {
     return flowerBlock;
   }
 
-  public RegistryObject<Block> getPottedFlowerBlock() {
+  public DeferredBlock<?> getPottedFlowerBlock() {
     return pottedFlowerBlock;
   }
 

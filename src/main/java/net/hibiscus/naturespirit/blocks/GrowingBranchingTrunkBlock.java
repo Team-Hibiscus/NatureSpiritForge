@@ -13,6 +13,8 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -51,7 +53,7 @@ public class GrowingBranchingTrunkBlock extends BranchingTrunkBlock implements B
   }
 
   @Override
-  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean bl) {
+  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
     boolean isAnythingButDown = PipeBlock.PROPERTY_BY_DIRECTION.values().stream()
         .anyMatch(booleanProperty -> booleanProperty != DOWN && state.getValue(booleanProperty));
     return !isAnythingButDown && (world.getBlockState(pos.above()).isAir() || world.getBlockState(pos.east()).isAir() || world.getBlockState(pos.west()).isAir()
@@ -68,9 +70,8 @@ public class GrowingBranchingTrunkBlock extends BranchingTrunkBlock implements B
   }
 
   @Override
-  public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-    if (player.getItemInHand(hand).getItem() == Items.SHEARS && !state.getValue(SHEARED)) {
-      ItemStack itemStack = player.getItemInHand(hand);
+  public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    if (itemStack.is(Items.SHEARS) && !state.getValue(SHEARED)) {
       if (player instanceof ServerPlayer) {
         CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer) player, pos, itemStack);
       }
@@ -79,13 +80,11 @@ public class GrowingBranchingTrunkBlock extends BranchingTrunkBlock implements B
       BlockState blockState2 = state.setValue(SHEARED, true);
       world.setBlockAndUpdate(pos, blockState2);
       world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockState2));
-      itemStack.hurtAndBreak(1, player, (playerEntity) -> {
-        playerEntity.broadcastBreakEvent(hand);
-      });
+      player.getItemInHand(hand).hurtAndBreak(1, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
 
-      return InteractionResult.sidedSuccess(world.isClientSide);
+      return ItemInteractionResult.sidedSuccess(world.isClientSide);
     }
-    return super.use(state, world, pos, player, hand, hit);
+    return super.useItemOn(itemStack, state, world, pos, player, hand, hit);
   }
 
   @Override

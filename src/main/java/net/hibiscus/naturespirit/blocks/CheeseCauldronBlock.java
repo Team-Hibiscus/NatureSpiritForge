@@ -1,9 +1,11 @@
 package net.hibiscus.naturespirit.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.AbstractCauldronBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,6 +20,11 @@ public class CheeseCauldronBlock extends AbstractCauldronBlock {
   }
 
   @Override
+  protected MapCodec<? extends AbstractCauldronBlock> codec() {
+    return null;
+  }
+
+  @Override
   public boolean isFull(BlockState state) {
     return true;
   }
@@ -26,8 +33,8 @@ public class CheeseCauldronBlock extends AbstractCauldronBlock {
   public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
     return Shapes.block();
   }
-
-  @Override public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
+  @Override
+  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
     return new ItemStack(Blocks.CAULDRON);
   }
 

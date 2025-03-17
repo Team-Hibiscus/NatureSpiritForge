@@ -66,11 +66,8 @@ public class NSBiomes {
 
   private static ResourceKey<Biome> register(String name) {
     System.out.println("Registered Resource Key for biome: " + name);
-    ResourceKey<Biome> registryKey = ResourceKey.create(Registries.BIOME, new ResourceLocation(NatureSpirit.MOD_ID, name));
+    ResourceKey<Biome> registryKey = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(NatureSpirit.MOD_ID, name));
     BiomesHashMap.put(name, registryKey);
     return registryKey;
-  }
-
-  public static void registerBiomes() {
   }
 }

@@ -1,0 +1,37 @@
+{
+  "parent": "minecraft:adventure/sleep_in_bed",
+  "criteria": {
+    "desert_turnip":  {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "natures_spirit:desert_turnip"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.adventure.sandy_forage.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "id": "natures_spirit:desert_turnip_block",
+      "count":  1
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.adventure.sandy_forage.title"
+    }
+  },
+  "requirements": [
+    ["desert_turnip"]
+  ],
+  "sends_telemetry_event": true
+}

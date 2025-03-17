@@ -1,5 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -9,14 +10,14 @@ import net.minecraft.world.level.block.GrowingPlantBodyBlock;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class DownwardsVinePlantBlock extends GrowingPlantBodyBlock {
 
   public static final VoxelShape SHAPE = Block.box(1D, 0D, 1D, 15D, 16D, 15D);
-  public RegistryObject<Block> headBlock;
+  public DeferredBlock<DownwardVineBlock> headBlock;
 
-  public DownwardsVinePlantBlock(Properties properties, RegistryObject<Block> headBlock) {
+  public DownwardsVinePlantBlock(Properties properties, DeferredBlock<DownwardVineBlock> headBlock) {
     super(properties, Direction.DOWN, SHAPE, false);
     this.headBlock = headBlock;
   }
@@ -43,5 +44,10 @@ public class DownwardsVinePlantBlock extends GrowingPlantBodyBlock {
           this.growthDirection
       ) || blockState.is(BlockTags.LEAVES);
     }
+  }
+
+  @Override
+  protected MapCodec<? extends GrowingPlantBodyBlock> codec() {
+    return null;
   }
 }

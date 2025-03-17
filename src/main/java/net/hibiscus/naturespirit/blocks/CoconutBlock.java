@@ -1,5 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSCriteria;
 import net.minecraft.core.BlockPos;
@@ -58,6 +59,11 @@ public class CoconutBlock extends FallingBlock implements BonemealableBlock, Sim
   }
 
   @Override
+  protected MapCodec<? extends FallingBlock> codec() {
+    return null;
+  }
+
+  @Override
   public BlockState getStateForPlacement(BlockPlaceContext ctx) {
     Direction direction = ctx.getClickedFace();
     FluidState fluidState = ctx.getLevel().getFluidState(ctx.getClickedPos());
@@ -82,7 +88,7 @@ public class CoconutBlock extends FallingBlock implements BonemealableBlock, Sim
   public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
     Entity entity = projectile.getOwner();
     if (entity instanceof ServerPlayer serverPlayerEntity) {
-      NSCriteria.COCONUT_HIT_CRITERION.trigger(serverPlayerEntity, projectile);
+      NSCriteria.COCONUT_HIT_CRITERION.get().trigger(serverPlayerEntity, projectile);
     }
     if (isFree(world.getBlockState(hit.getBlockPos().below())) && !state.getValue(WATERLOGGED)) {
       world.setBlockAndUpdate(hit.getBlockPos(), state.setValue(FACING, Direction.UP));
@@ -92,15 +98,15 @@ public class CoconutBlock extends FallingBlock implements BonemealableBlock, Sim
   }
 
   @Override
-  public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-    ItemStack itemStack = player.getItemInHand(hand);
+  public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+    ItemStack itemStack = player.getItemInHand(player.getUsedItemHand());
     boolean bl = state.getValue(FILLED);
     Item item = itemStack.getItem();
     if (itemStack.is(Items.BUCKET) && bl) {
       itemStack.shrink(1);
       world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.COW_MILK, SoundSource.BLOCKS, 1.0F, 1.0F);
       if (itemStack.isEmpty()) {
-        player.setItemInHand(hand, new ItemStack(Items.MILK_BUCKET));
+        player.setItemInHand(player.getUsedItemHand(), new ItemStack(Items.MILK_BUCKET));
       } else if (!player.getInventory().add(new ItemStack(Items.MILK_BUCKET))) {
         player.drop(new ItemStack(Items.MILK_BUCKET), false);
       }
@@ -111,7 +117,7 @@ public class CoconutBlock extends FallingBlock implements BonemealableBlock, Sim
     if (!world.isClientSide() && bl) {
       player.awardStat(Stats.ITEM_USED.get(item));
     }
-    return super.use(state, world, pos, player, hand, hit);
+    return super.useWithoutItem(state, world, pos, player, hit);
 
   }
 
@@ -165,7 +171,7 @@ public class CoconutBlock extends FallingBlock implements BonemealableBlock, Sim
 
 
   @Override
-  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean bl) {
+  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
     return state.getValue(FACING) == Direction.UP;
   }
 

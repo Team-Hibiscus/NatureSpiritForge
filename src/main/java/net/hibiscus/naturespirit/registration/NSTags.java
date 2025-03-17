@@ -34,7 +34,7 @@ public class NSTags {
     public static final TagKey<Item> OLIVES = createTag("olives");
 
     private static TagKey<Item> createTag(String name) {
-      return TagKey.create(Registries.ITEM, new ResourceLocation(NatureSpirit.MOD_ID, name));
+      return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(NatureSpirit.MOD_ID, name));
     }
   }
 
@@ -44,7 +44,7 @@ public class NSTags {
     public static final TagKey<EntityType<?>> IMPERMEABLE_TO_AZOLLA = createTag("impermeable_to_azolla");
 
     private static TagKey<EntityType<?>> createTag(String name) {
-      return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(NatureSpirit.MOD_ID, name));
+      return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(NatureSpirit.MOD_ID, name));
     }
   }
 
@@ -69,7 +69,7 @@ public class NSTags {
     public static final TagKey<Block> SUCCULENT_HORIZONTAL_PLACEMENT_OVERRIDE = createTag("succulent_horizontal_placement_override");
 
     private static TagKey<Block> createTag(String name) {
-      return TagKey.create(Registries.BLOCK, new ResourceLocation(NatureSpirit.MOD_ID, name));
+      return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(NatureSpirit.MOD_ID, name));
     }
   }
 }

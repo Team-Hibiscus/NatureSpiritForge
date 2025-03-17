@@ -45,7 +45,7 @@ public class CattailBlock extends DoublePlantBlock implements SimpleWaterloggedB
     return false;
   }
 
-  public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
+  public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
     return true;
   }
 

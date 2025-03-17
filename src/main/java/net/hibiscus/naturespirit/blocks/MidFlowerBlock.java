@@ -1,6 +1,7 @@
 package net.hibiscus.naturespirit.blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -14,7 +15,7 @@ public class MidFlowerBlock extends FlowerBlock {
 
   protected static final VoxelShape SHAPE = Block.box(5D, 0D, 5D, 11D, 16D, 11D);
 
-  public MidFlowerBlock(MobEffect mobEffect, int i, Properties properties) {
+  public MidFlowerBlock(Holder<MobEffect> mobEffect, int i, Properties properties) {
     super(mobEffect, i, properties);
   }
 

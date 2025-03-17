@@ -1,6 +1,6 @@
 package net.hibiscus.naturespirit.world.foliage_placer;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
 import net.minecraft.core.BlockPos;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerTy
 
 public class CypressFoliagePlacer extends FoliagePlacer {
 
-  public static final Codec<CypressFoliagePlacer> CODEC = RecordCodecBuilder.create((instance) -> {
+  public static final MapCodec<CypressFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
     return foliagePlacerParts(instance).and(IntProvider.codec(0, 24).fieldOf("trunk_height").forGetter((placer) -> {
       return placer.trunkHeight;
     })).apply(instance, CypressFoliagePlacer::new);

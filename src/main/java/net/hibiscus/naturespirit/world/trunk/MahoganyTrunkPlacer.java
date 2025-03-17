@@ -1,7 +1,7 @@
 package net.hibiscus.naturespirit.world.trunk;
 
 import com.google.common.collect.Lists;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
 import net.minecraft.core.BlockPos;
@@ -14,13 +14,12 @@ import net.minecraft.world.level.levelgen.feature.configurations.TreeConfigurati
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
-
 import java.util.List;
 import java.util.function.BiConsumer;
 
 public class MahoganyTrunkPlacer extends TrunkPlacer {
 
-  public static final Codec<MahoganyTrunkPlacer> CODEC = RecordCodecBuilder.create((instance) -> trunkPlacerParts(instance).apply(instance, MahoganyTrunkPlacer::new));
+  public static final MapCodec<MahoganyTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> trunkPlacerParts(instance).apply(instance, MahoganyTrunkPlacer::new));
 
   public MahoganyTrunkPlacer(int i, int j, int k) {
     super(i, j, k);

@@ -8,13 +8,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.Supplier;
 
 public class NSFernBlock extends TallGrassBlock {
 
-  RegistryObject<Block> tallPlantBlock;
+  Supplier<? extends Block> tallPlantBlock;
 
-  public NSFernBlock(Properties properties, RegistryObject<Block> tallPlantBlock) {
+  public NSFernBlock(Properties properties, Supplier<? extends Block> tallPlantBlock) {
     super(properties);
     this.tallPlantBlock = tallPlantBlock;
   }

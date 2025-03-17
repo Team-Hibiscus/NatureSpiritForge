@@ -65,6 +65,7 @@
       "natures_spirit:ores/ore_redstone",
       "natures_spirit:ores/ore_redstone_lower",
       "natures_spirit:ores/ore_diamond",
+      "natures_spirit:ores/ore_diamond_medium",
       "natures_spirit:ores/ore_diamond_large",
       "natures_spirit:ores/ore_diamond_buried",
       "natures_spirit:ores/ore_lapis",
@@ -109,7 +110,14 @@
       }
     ],
     "axolotls": [],
-    "creature": [],
+    "creature": [
+      {
+        "type": "minecraft:armadillo",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 6
+      }
+    ],
     "misc": [],
     "monster": [
       {

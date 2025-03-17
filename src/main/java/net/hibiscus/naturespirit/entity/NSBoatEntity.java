@@ -62,9 +62,9 @@ public class NSBoatEntity extends Boat {
         return Type.byId(this.entityData.get(DATA_ID_TYPE));
     }
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_ID_TYPE, Type.REDWOOD.ordinal());
+    protected void defineSynchedData(SynchedEntityData.Builder p_326198_) {
+        super.defineSynchedData(p_326198_);
+        p_326198_.define(DATA_ID_TYPE, Type.REDWOOD.ordinal());
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {

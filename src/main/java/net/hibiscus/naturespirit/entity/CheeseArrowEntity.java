@@ -10,19 +10,22 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
+
 public class CheeseArrowEntity extends AbstractArrow {
+
 
 
   public CheeseArrowEntity(EntityType<? extends CheeseArrowEntity> entityType, Level world) {
     super(entityType, world);
   }
 
-  public CheeseArrowEntity(Level world, LivingEntity owner) {
-    super(NSEntityTypes.CHEESE_ARROW.get(), owner, world);
+  public CheeseArrowEntity(Level world, LivingEntity owner, ItemStack stack, @Nullable ItemStack weapon) {
+    super(NSEntityTypes.CHEESE_ARROW.get(), owner, world, stack, weapon);
   }
 
-  public CheeseArrowEntity(Level world, double x, double y, double z) {
-    super(NSEntityTypes.CHEESE_ARROW.get(), x, y, z, world);
+  public CheeseArrowEntity(double x, double y, double z, Level world, ItemStack stack, @Nullable ItemStack weapon) {
+    super(NSEntityTypes.CHEESE_ARROW.get(), x, y, z, world, stack, weapon);
   }
 
   public void tick() {
@@ -34,7 +37,7 @@ public class CheeseArrowEntity extends AbstractArrow {
   }
 
   @Override
-  protected ItemStack getPickupItem() {
+  protected ItemStack getDefaultPickupItem() {
     return new ItemStack(NSBlocks.CHEESE_ARROW.get());
   }
 

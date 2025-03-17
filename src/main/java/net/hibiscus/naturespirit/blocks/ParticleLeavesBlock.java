@@ -6,17 +6,17 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.ParticleUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.Supplier;
 
 public class ParticleLeavesBlock extends LeavesBlock {
 
-  RegistryObject<? extends ParticleOptions> particle;
+  Supplier<? extends ParticleOptions> particle;
   int chance;
 
-  public ParticleLeavesBlock(Properties settings, RegistryObject<? extends ParticleOptions> particle, int chance) {
+  public ParticleLeavesBlock(Properties settings, Supplier<? extends ParticleOptions> particle, int chance) {
     super(settings);
     this.particle = particle;
     this.chance = chance;

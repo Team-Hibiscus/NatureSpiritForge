@@ -1,23 +1,24 @@
 package net.hibiscus.naturespirit.registration.sets;
 
-import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
+import net.hibiscus.naturespirit.NatureSpirit;
 import net.hibiscus.naturespirit.blocks.*;
+import net.hibiscus.naturespirit.datagen.NSConfiguredFeatures;
 import net.hibiscus.naturespirit.entity.NSBoatEntity;
 import net.hibiscus.naturespirit.items.NSBoatItem;
 import net.hibiscus.naturespirit.registration.NSParticleTypes;
 import net.hibiscus.naturespirit.registration.NSRegistryHelper;
-import net.hibiscus.naturespirit.world.tree.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -25,92 +26,96 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import static net.hibiscus.naturespirit.NatureSpirit.MOD_ID;
 import static net.hibiscus.naturespirit.registration.NSRegistryHelper.*;
 
 public class WoodSet {
 
-  private final List<RegistryObject<Block>> registeredBlocksList = new ArrayList<>();
-  private final List<RegistryObject<Item>> registeredItemsList = new ArrayList<>();
+  private final List<DeferredBlock<? extends Block>> registeredBlocksList = new ArrayList<>();
+  private final List<DeferredItem<? extends Item>> registeredItemsList = new ArrayList<>();
   private final String name;
   private final MapColor sideColor;
   private final MapColor topColor;
   private final WoodPreset woodPreset;
   private Supplier<BlockSetType> blockSetType;
   private Supplier<WoodType> woodType;
-  private RegistryObject<Block> log;
-  private RegistryObject<Block> strippedLog;
-  private RegistryObject<Block> bundle;
-  private RegistryObject<Block> strippedBundle;
-  private RegistryObject<Block> wood;
-  private RegistryObject<Block> strippedWood;
-  private RegistryObject<Block> leaves;
-  private RegistryObject<Block> frostyLeaves;
-  private RegistryObject<Block> sapling;
-  private RegistryObject<Block> pottedSapling;
-  private RegistryObject<Block> redLeaves;
-  private RegistryObject<Block> redSapling;
-  private RegistryObject<Block> pottedRedSapling;
-  private RegistryObject<Block> orangeLeaves;
-  private RegistryObject<Block> orangeSapling;
-  private RegistryObject<Block> pottedOrangeSapling;
-  private RegistryObject<Block> yellowLeaves;
-  private RegistryObject<Block> yellowSapling;
-  private RegistryObject<Block> pottedYellowSapling;
-  private RegistryObject<Block> blueLeaves;
-  private RegistryObject<Block> partBlueLeaves;
-  private RegistryObject<Block> blueSapling;
-  private RegistryObject<Block> pottedBlueSapling;
-  private RegistryObject<Block> purpleLeaves;
-  private RegistryObject<Block> partPurpleLeaves;
-  private RegistryObject<Block> purpleSapling;
-  private RegistryObject<Block> pottedPurpleSapling;
-  private RegistryObject<Block> pinkLeaves;
-  private RegistryObject<Block> partPinkLeaves;
-  private RegistryObject<Block> pinkSapling;
-  private RegistryObject<Block> pottedPinkSapling;
-  private RegistryObject<Block> whiteLeaves;
-  private RegistryObject<Block> partWhiteLeaves;
-  private RegistryObject<Block> whiteSapling;
-  private RegistryObject<Block> pottedWhiteSapling;
-  private RegistryObject<Block> vines;
-  private RegistryObject<Block> vinesPlant;
-  private RegistryObject<Block> blueVines;
-  private RegistryObject<Block> purpleVines;
-  private RegistryObject<Block> pinkVines;
-  private RegistryObject<Block> whiteVines;
-  private RegistryObject<Block> blueVinesPlant;
-  private RegistryObject<Block> purpleVinesPlant;
-  private RegistryObject<Block> pinkVinesPlant;
-  private RegistryObject<Block> whiteVinesPlant;
-  private RegistryObject<Block> planks;
-  private RegistryObject<Block> stairs;
-  private RegistryObject<Block> slab;
-  private RegistryObject<Block> mosaic;
-  private RegistryObject<Block> mosaicStairs;
-  private RegistryObject<Block> mosaicSlab;
-  private RegistryObject<Block> fence;
-  private RegistryObject<Block> fenceGate;
-  private RegistryObject<Block> pressurePlate;
-  private RegistryObject<Block> button;
-  private RegistryObject<Block> door;
-  private RegistryObject<Block> trapDoor;
-  private RegistryObject<Block> sign;
-  private RegistryObject<Block> wallSign;
-  private RegistryObject<Block> hangingSign;
-  private RegistryObject<Block> hangingWallSign;
-  private RegistryObject<Item> signItem;
-  private RegistryObject<Item> hangingSignItem;
-  private RegistryObject<Item> boatItem;
-  private RegistryObject<Item> chestBoatItem;
+  private DeferredBlock<? extends Block> log;
+  private DeferredBlock<? extends Block> strippedLog;
+  private DeferredBlock<StrippableLogBlock> bundle;
+  private DeferredBlock<RotatedPillarBlock> strippedBundle;
+  private DeferredBlock<StrippableLogBlock> wood;
+  private DeferredBlock<RotatedPillarBlock> strippedWood;
+  private DeferredBlock<? extends LeavesBlock> leaves;
+  private DeferredBlock<? extends LeavesBlock> frostyLeaves;
+  private DeferredBlock<? extends SaplingBlock> sapling;
+  private DeferredBlock<FlowerPotBlock> pottedSapling;
+  private DeferredBlock<? extends LeavesBlock> redLeaves;
+  private DeferredBlock<? extends SaplingBlock> redSapling;
+  private DeferredBlock<FlowerPotBlock> pottedRedSapling;
+  private DeferredBlock<? extends LeavesBlock> orangeLeaves;
+  private DeferredBlock<? extends SaplingBlock> orangeSapling;
+  private DeferredBlock<FlowerPotBlock> pottedOrangeSapling;
+  private DeferredBlock<? extends LeavesBlock> yellowLeaves;
+  private DeferredBlock<? extends SaplingBlock> yellowSapling;
+  private DeferredBlock<FlowerPotBlock> pottedYellowSapling;
+  private DeferredBlock<? extends LeavesBlock> blueLeaves;
+  private DeferredBlock<? extends LeavesBlock> partBlueLeaves;
+  private DeferredBlock<? extends SaplingBlock> blueSapling;
+  private DeferredBlock<FlowerPotBlock> pottedBlueSapling;
+  private DeferredBlock<? extends LeavesBlock> purpleLeaves;
+  private DeferredBlock<? extends LeavesBlock> partPurpleLeaves;
+  private DeferredBlock<? extends SaplingBlock> purpleSapling;
+  private DeferredBlock<FlowerPotBlock> pottedPurpleSapling;
+  private DeferredBlock<? extends LeavesBlock> pinkLeaves;
+  private DeferredBlock<? extends LeavesBlock> partPinkLeaves;
+  private DeferredBlock<? extends SaplingBlock> pinkSapling;
+  private DeferredBlock<FlowerPotBlock> pottedPinkSapling;
+  private DeferredBlock<? extends LeavesBlock> whiteLeaves;
+  private DeferredBlock<? extends LeavesBlock> partWhiteLeaves;
+  private DeferredBlock<? extends SaplingBlock> whiteSapling;
+  private DeferredBlock<FlowerPotBlock> pottedWhiteSapling;
+  private DeferredBlock<DownwardVineBlock> vines;
+  private DeferredBlock<DownwardsVinePlantBlock> vinesPlant;
+  private DeferredBlock<DownwardVineBlock> blueVines;
+  private DeferredBlock<DownwardVineBlock> purpleVines;
+  private DeferredBlock<DownwardVineBlock> pinkVines;
+  private DeferredBlock<DownwardVineBlock> whiteVines;
+  private DeferredBlock<DownwardsVinePlantBlock> blueVinesPlant;
+  private DeferredBlock<DownwardsVinePlantBlock> purpleVinesPlant;
+  private DeferredBlock<DownwardsVinePlantBlock> pinkVinesPlant;
+  private DeferredBlock<DownwardsVinePlantBlock> whiteVinesPlant;
+  private DeferredBlock<Block> planks;
+  private DeferredBlock<StairBlock> stairs;
+  private DeferredBlock<SlabBlock> slab;
+  private DeferredBlock<Block> mosaic;
+  private DeferredBlock<StairBlock> mosaicStairs;
+  private DeferredBlock<SlabBlock> mosaicSlab;
+  private DeferredBlock<FenceBlock> fence;
+  private DeferredBlock<FenceGateBlock> fenceGate;
+  private DeferredBlock<PressurePlateBlock> pressurePlate;
+  private DeferredBlock<ButtonBlock> button;
+  private DeferredBlock<DoorBlock> door;
+  private DeferredBlock<TrapDoorBlock> trapDoor;
+  private DeferredBlock<StandingSignBlock> sign;
+  private DeferredBlock<WallSignBlock> wallSign;
+  private DeferredBlock<CeilingHangingSignBlock> hangingSign;
+  private DeferredBlock<WallHangingSignBlock> hangingWallSign;
+  private DeferredItem<SignItem> signItem;
+  private DeferredItem<HangingSignItem> hangingSignItem;
+  private DeferredItem<NSBoatItem> boatItem;
+  private DeferredItem<NSBoatItem> chestBoatItem;
   private final Supplier<NSBoatEntity.Type> boatType;
-  private final AbstractTreeGrower saplingGenerator;
+  private final TreeGrower saplingGenerator;
   private final boolean hasMosaic;
 
   private void registerWood() {
@@ -173,10 +178,14 @@ public class WoodSet {
       partPinkLeaves = createVinesLeavesBlock("part_pink_", pinkVinesPlant, pinkVines);
       purpleLeaves = createVinesLeavesBlock("purple_", purpleVinesPlant, purpleVines);
       partPurpleLeaves = createVinesLeavesBlock("part_purple_", purpleVinesPlant, purpleVines);
-      whiteSapling = createSapling("white_", new WhiteWisteriaSaplingGenerator());
-      blueSapling = createSapling("blue_", new BlueWisteriaSaplingGenerator());
-      pinkSapling = createSapling("pink_", new PinkWisteriaSaplingGenerator());
-      purpleSapling = createSapling("purple_", new PurpleWisteriaSaplingGenerator());
+      whiteSapling = createSapling("white_",
+              new TreeGrower(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.WHITE_WISTERIA_TREE), Optional.empty()));
+      blueSapling = createSapling("blue_",
+              new TreeGrower(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.BLUE_WISTERIA_TREE), Optional.empty()));
+      pinkSapling = createSapling("pink_",
+              new TreeGrower(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.PINK_WISTERIA_TREE), Optional.empty()));
+      purpleSapling = createSapling("purple_",
+              new TreeGrower(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.PURPLE_WISTERIA_TREE), Optional.empty()));
       pottedWhiteSapling = createPottedSapling("white_", whiteSapling);
       pottedBlueSapling = createPottedSapling("blue_", blueSapling);
       pottedPinkSapling = createPottedSapling("pink_", pinkSapling);
@@ -186,9 +195,12 @@ public class WoodSet {
       redLeaves = createParticleLeaves("red_", NSParticleTypes.RED_MAPLE_LEAVES_PARTICLE, 100);
       orangeLeaves = createParticleLeaves("orange_", NSParticleTypes.ORANGE_MAPLE_LEAVES_PARTICLE, 100);
       yellowLeaves = createParticleLeaves("yellow_", NSParticleTypes.YELLOW_MAPLE_LEAVES_PARTICLE, 100);
-      redSapling = createSapling("red_", new RedMapleSaplingGenerator());
-      orangeSapling = createSapling("orange_", new OrangeMapleSaplingGenerator());
-      yellowSapling = createSapling("yellow_", new YellowMapleSaplingGenerator());
+      redSapling = createSapling("red_",
+              new TreeGrower(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.RED_MAPLE_TREE), Optional.empty()));
+      orangeSapling = createSapling("orange_",
+              new TreeGrower(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.ORANGE_MAPLE_TREE), Optional.empty()));
+      yellowSapling = createSapling("yellow_",
+              new TreeGrower(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.YELLOW_MAPLE_TREE), Optional.empty()));
       pottedRedSapling = createPottedSapling("red_", redSapling);
       pottedOrangeSapling = createPottedSapling("orange_", orangeSapling);
       pottedYellowSapling = createPottedSapling("yellow_", yellowSapling);
@@ -227,7 +239,7 @@ public class WoodSet {
           Supplier<NSBoatEntity.Type> boatType,
           WoodPreset woodPreset,
           boolean hasMosaic,
-          AbstractTreeGrower saplingGenerator
+          TreeGrower saplingGenerator
           ) {
     this.woodPreset = woodPreset;
     this.name = name;
@@ -259,263 +271,263 @@ public class WoodSet {
     return woodType;
   }
 
-  public RegistryObject<Block> getButton() {
+  public DeferredBlock<ButtonBlock> getButton() {
     return button;
   }
 
-  public RegistryObject<Block> getFence() {
+  public DeferredBlock<FenceBlock> getFence() {
     return fence;
   }
 
-  public RegistryObject<Block> getPlanks() {
+  public DeferredBlock<Block> getPlanks() {
     return planks;
   }
 
-  public RegistryObject<Block> getSlab() {
+  public DeferredBlock<SlabBlock> getSlab() {
     return slab;
   }
 
-  public RegistryObject<Block> getFenceGate() {
+  public DeferredBlock<FenceGateBlock> getFenceGate() {
     return fenceGate;
   }
 
-  public RegistryObject<Block> getStairs() {
+  public DeferredBlock<StairBlock> getStairs() {
     return stairs;
   }
 
-  public RegistryObject<Block> getDoor() {
+  public DeferredBlock<DoorBlock> getDoor() {
     return door;
   }
 
-  public RegistryObject<Block> getHangingSign() {
+  public DeferredBlock<CeilingHangingSignBlock> getHangingSign() {
     return hangingSign;
   }
 
-  public RegistryObject<Block> getHangingWallSign() {
+  public DeferredBlock<WallHangingSignBlock> getHangingWallSign() {
     return hangingWallSign;
   }
 
-  public RegistryObject<Block> getPressurePlate() {
+  public DeferredBlock<PressurePlateBlock> getPressurePlate() {
     return pressurePlate;
   }
 
-  public RegistryObject<Block> getSign() {
+  public DeferredBlock<StandingSignBlock> getSign() {
     return sign;
   }
 
-  public RegistryObject<Block> getTrapDoor() {
+  public DeferredBlock<TrapDoorBlock> getTrapDoor() {
     return trapDoor;
   }
 
-  public RegistryObject<Block> getWallSign() {
+  public DeferredBlock<WallSignBlock> getWallSign() {
     return wallSign;
   }
 
-  public RegistryObject<Item> getHangingSignItem() {
+  public DeferredItem<HangingSignItem> getHangingSignItem() {
     return hangingSignItem;
   }
 
-  public RegistryObject<Item> getSignItem() {
+  public DeferredItem<SignItem> getSignItem() {
     return signItem;
   }
 
-  public RegistryObject<Item> getBoatItem() {
+  public DeferredItem<NSBoatItem> getBoatItem() {
     return boatItem;
   }
 
-  public RegistryObject<Item> getChestBoatItem() {
+  public DeferredItem<NSBoatItem> getChestBoatItem() {
     return chestBoatItem;
   }
 
-  public RegistryObject<Block> getLog() {
+  public DeferredBlock<? extends Block> getLog() {
     return log;
   }
 
-  public RegistryObject<Block> getStrippedLog() {
+  public DeferredBlock<? extends Block> getStrippedLog() {
     return strippedLog;
   }
 
-  public RegistryObject<Block> getBundle() {
+  public DeferredBlock<StrippableLogBlock> getBundle() {
     return bundle;
   }
 
-  public RegistryObject<Block> getStrippedBundle() {
+  public DeferredBlock<RotatedPillarBlock> getStrippedBundle() {
     return strippedBundle;
   }
 
-  public RegistryObject<Block> getWood() {
+  public DeferredBlock<StrippableLogBlock> getWood() {
     return wood;
   }
 
-  public RegistryObject<Block> getStrippedWood() {
+  public DeferredBlock<RotatedPillarBlock> getStrippedWood() {
     return strippedWood;
   }
 
-  public RegistryObject<Block> getMosaic() {
+  public DeferredBlock<Block> getMosaic() {
     return mosaic;
   }
 
-  public RegistryObject<Block> getMosaicStairs() {
+  public DeferredBlock<StairBlock> getMosaicStairs() {
     return mosaicStairs;
   }
 
-  public RegistryObject<Block> getMosaicSlab() {
+  public DeferredBlock<SlabBlock> getMosaicSlab() {
     return mosaicSlab;
   }
 
-  public RegistryObject<Block> getLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getLeaves() {
     return leaves;
   }
 
-  public RegistryObject<Block> getFrostyLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getFrostyLeaves() {
     return frostyLeaves;
   }
 
-  public RegistryObject<Block> getSapling() {
+  public DeferredBlock<? extends SaplingBlock> getSapling() {
     return sapling;
   }
 
-  public RegistryObject<Block> getPottedSapling() {
+  public DeferredBlock<FlowerPotBlock> getPottedSapling() {
     return pottedSapling;
   }
 
-  public RegistryObject<Block> getVines() {
+  public DeferredBlock<DownwardVineBlock> getVines() {
     return vines;
   }
 
-  public RegistryObject<Block> getVinesPlant() {
+  public DeferredBlock<DownwardsVinePlantBlock> getVinesPlant() {
     return vinesPlant;
   }
 
-  public RegistryObject<Block> getRedLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getRedLeaves() {
     return redLeaves;
   }
 
-  public RegistryObject<Block> getOrangeLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getOrangeLeaves() {
     return orangeLeaves;
   }
 
-  public RegistryObject<Block> getYellowLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getYellowLeaves() {
     return yellowLeaves;
   }
 
-  public RegistryObject<Block> getBlueLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getBlueLeaves() {
     return blueLeaves;
   }
 
-  public RegistryObject<Block> getPurpleLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getPurpleLeaves() {
     return purpleLeaves;
   }
 
-  public RegistryObject<Block> getPinkLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getPinkLeaves() {
     return pinkLeaves;
   }
 
-  public RegistryObject<Block> getWhiteLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getWhiteLeaves() {
     return whiteLeaves;
   }
 
-  public RegistryObject<Block> getPottedRedSapling() {
+  public DeferredBlock<FlowerPotBlock> getPottedRedSapling() {
     return pottedRedSapling;
   }
 
-  public RegistryObject<Block> getPottedOrangeSapling() {
+  public DeferredBlock<FlowerPotBlock> getPottedOrangeSapling() {
     return pottedOrangeSapling;
   }
 
-  public RegistryObject<Block> getPottedYellowSapling() {
+  public DeferredBlock<FlowerPotBlock> getPottedYellowSapling() {
     return pottedYellowSapling;
   }
 
-  public RegistryObject<Block> getPottedBlueSapling() {
+  public DeferredBlock<FlowerPotBlock> getPottedBlueSapling() {
     return pottedBlueSapling;
   }
 
-  public RegistryObject<Block> getPottedPurpleSapling() {
+  public DeferredBlock<FlowerPotBlock> getPottedPurpleSapling() {
     return pottedPurpleSapling;
   }
 
-  public RegistryObject<Block> getPottedPinkSapling() {
+  public DeferredBlock<FlowerPotBlock> getPottedPinkSapling() {
     return pottedPinkSapling;
   }
 
-  public RegistryObject<Block> getPottedWhiteSapling() {
+  public DeferredBlock<FlowerPotBlock> getPottedWhiteSapling() {
     return pottedWhiteSapling;
   }
 
-  public RegistryObject<Block> getRedSapling() {
+  public DeferredBlock<? extends SaplingBlock> getRedSapling() {
     return redSapling;
   }
 
-  public RegistryObject<Block> getOrangeSapling() {
+  public DeferredBlock<? extends SaplingBlock> getOrangeSapling() {
     return orangeSapling;
   }
 
-  public RegistryObject<Block> getYellowSapling() {
+  public DeferredBlock<? extends SaplingBlock> getYellowSapling() {
     return yellowSapling;
   }
 
-  public RegistryObject<Block> getBlueSapling() {
+  public DeferredBlock<? extends SaplingBlock> getBlueSapling() {
     return blueSapling;
   }
 
-  public RegistryObject<Block> getPurpleSapling() {
+  public DeferredBlock<? extends SaplingBlock> getPurpleSapling() {
     return purpleSapling;
   }
 
-  public RegistryObject<Block> getPinkSapling() {
+  public DeferredBlock<? extends SaplingBlock> getPinkSapling() {
     return pinkSapling;
   }
 
-  public RegistryObject<Block> getWhiteSapling() {
+  public DeferredBlock<? extends SaplingBlock> getWhiteSapling() {
     return whiteSapling;
   }
 
-  public RegistryObject<Block> getBlueVines() {
+  public DeferredBlock<DownwardVineBlock> getBlueVines() {
     return blueVines;
   }
 
-  public RegistryObject<Block> getPurpleVines() {
+  public DeferredBlock<DownwardVineBlock> getPurpleVines() {
     return purpleVines;
   }
 
-  public RegistryObject<Block> getPinkVines() {
+  public DeferredBlock<DownwardVineBlock> getPinkVines() {
     return pinkVines;
   }
 
-  public RegistryObject<Block> getWhiteVines() {
+  public DeferredBlock<DownwardVineBlock> getWhiteVines() {
     return whiteVines;
   }
 
-  public RegistryObject<Block> getBlueVinesPlant() {
+  public DeferredBlock<DownwardsVinePlantBlock> getBlueVinesPlant() {
     return blueVinesPlant;
   }
 
-  public RegistryObject<Block> getPurpleVinesPlant() {
+  public DeferredBlock<DownwardsVinePlantBlock> getPurpleVinesPlant() {
     return purpleVinesPlant;
   }
 
-  public RegistryObject<Block> getPinkVinesPlant() {
+  public DeferredBlock<DownwardsVinePlantBlock> getPinkVinesPlant() {
     return pinkVinesPlant;
   }
 
-  public RegistryObject<Block> getWhiteVinesPlant() {
+  public DeferredBlock<DownwardsVinePlantBlock> getWhiteVinesPlant() {
     return whiteVinesPlant;
   }
 
-  public RegistryObject<Block> getPartBlueLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getPartBlueLeaves() {
     return partBlueLeaves;
   }
 
-  public RegistryObject<Block> getPartPurpleLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getPartPurpleLeaves() {
     return partPurpleLeaves;
   }
 
-  public RegistryObject<Block> getPartPinkLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getPartPinkLeaves() {
     return partPinkLeaves;
   }
 
-  public RegistryObject<Block> getPartWhiteLeaves() {
+  public DeferredBlock<? extends LeavesBlock> getPartWhiteLeaves() {
     return partWhiteLeaves;
   }
 
@@ -588,49 +600,49 @@ public class WoodSet {
     return boatType;
   }
 
-  public List<RegistryObject<Block>> getRegisteredBlocksList() {
+  public List<DeferredBlock<? extends Block>> getRegisteredBlocksList() {
     return ImmutableList.copyOf(registeredBlocksList);
   }
 
-  public List<RegistryObject<Item>> getRegisteredItemsList() {
+  public List<DeferredItem<? extends Item>> getRegisteredItemsList() {
     return ImmutableList.copyOf(registeredItemsList);
   }
 
-  private RegistryObject<Block> createBlockWithItem(String blockID, Supplier<Block> block) {
-    RegistryObject<Block> listBlock = registerBlock(blockID, block);
+  private <T extends Block> DeferredBlock<T> createBlockWithItem(String blockID, Supplier<T> block) {
+    DeferredBlock<T> listBlock = registerBlock(blockID, block);
     registeredBlocksList.add(listBlock);
     return listBlock;
   }
 
-  private RegistryObject<Block> createBlockWithoutItem(String blockID, Supplier<Block> block) {
-    RegistryObject<Block> listBlock = registerBlockWithoutItem(blockID, block);
+  private <T extends Block> DeferredBlock<T> createBlockWithoutItem(String blockID, Supplier<T> block) {
+    DeferredBlock<T> listBlock = registerBlockWithoutItem(blockID, block);
     registeredBlocksList.add(listBlock);
     return listBlock;
   }
 
-  public RegistryObject<Item> createItem(String blockID, Supplier<Item> item) {
-    RegistryObject<Item> listItem = registerItem(blockID, item);
+  public <T extends Item> DeferredItem<T> createItem(String blockID, Supplier<T> item) {
+    DeferredItem<T> listItem = registerItem(blockID, item);
     registeredItemsList.add(listItem);
     return listItem;
   }
 
-  private RegistryObject<Block> createLog() {
+  private DeferredBlock<StrippableLogBlock> createLog() {
     return createBlockWithItem(getLogName(), () -> log(topColor, sideColor, strippedLog));
   }
 
-  private RegistryObject<Block> createStrippedLog() {
+  private DeferredBlock<RotatedPillarBlock> createStrippedLog() {
     return createBlockWithItem("stripped_" + getLogName(), () -> strippedLog(topColor, sideColor));
   }
 
-  private RegistryObject<Block> createBundle() {
+  private DeferredBlock<StrippableLogBlock> createBundle() {
     return createBlockWithItem(getName() + "_bundle", () -> log(topColor, sideColor, strippedBundle));
   }
 
-  private RegistryObject<Block> createStrippedBundle() {
+  private DeferredBlock<RotatedPillarBlock> createStrippedBundle() {
     return createBlockWithItem("stripped_" + getName() + "_bundle", () -> strippedLog(topColor, sideColor));
   }
   
-  private static RotatedPillarBlock log(MapColor p_285370_, MapColor p_285126_, RegistryObject<Block> strippedLog) {
+  private static StrippableLogBlock log(MapColor p_285370_, MapColor p_285126_, DeferredBlock<? extends Block> strippedLog) {
     return new StrippableLogBlock(Properties.of().mapColor((p_152624_) -> p_152624_.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? p_285370_ : p_285126_).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava(), strippedLog);
   }
   private static RotatedPillarBlock strippedLog(MapColor p_285370_, MapColor p_285126_) {
@@ -652,27 +664,26 @@ public class WoodSet {
     };
   }
   
-  private RegistryObject<Block> createJoshuaLog() {
+  private DeferredBlock<BranchingTrunkBlock> createJoshuaLog() {
     return createBlockWithItem(getLogName(), () -> new BranchingTrunkBlock(
         Properties.of().ignitedByLava().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
   }
 
-  private RegistryObject<Block> createStrippedJoshuaLog() {
+  private DeferredBlock<BranchingTrunkBlock> createStrippedJoshuaLog() {
     return createBlockWithItem("stripped_" + getLogName(), () -> new BranchingTrunkBlock(
         Properties.of().ignitedByLava().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
   }
 
-  private RegistryObject<Block> createWood() {
-    return createBlockWithItem(getWoodName(), () -> new RotatedPillarBlock(
-        Properties.of().mapColor(sideColor).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava()));
+  private DeferredBlock<StrippableLogBlock> createWood() {
+    return createBlockWithItem(getWoodName(), () -> log(sideColor, sideColor, strippedWood));
   }
 
-  private RegistryObject<Block> createStrippedWood() {
-    return createBlockWithItem("stripped_" + getWoodName(), () -> new RotatedPillarBlock(Properties.of().mapColor(topColor).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava()));
+  private DeferredBlock<RotatedPillarBlock> createStrippedWood() {
+    return createBlockWithItem("stripped_" + getWoodName(), () -> strippedLog(topColor, topColor));
   }
 
-  private RegistryObject<Block> createLeaves() {
-    RegistryObject<Block> block = createBlockWithItem(getName() + "_leaves", () -> new LeavesBlock(
+  private DeferredBlock<LeavesBlock> createLeaves() {
+    DeferredBlock<LeavesBlock> block = createBlockWithItem(getName() + "_leaves", () -> new LeavesBlock(
         Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()
             .isValidSpawn(NSRegistryHelper::ocelotOrParrot).isSuffocating(NSRegistryHelper::never).isViewBlocking(NSRegistryHelper::never).ignitedByLava().pushReaction(PushReaction.DESTROY)
             .isRedstoneConductor(NSRegistryHelper::never)){
@@ -695,8 +706,8 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createLeaves(String prefix) {
-    RegistryObject<Block> block = createBlockWithItem(prefix + getName() + "_leaves", () -> new LeavesBlock(
+  private DeferredBlock<LeavesBlock> createLeaves(String prefix) {
+    DeferredBlock<LeavesBlock> block = createBlockWithItem(prefix + getName() + "_leaves", () -> new LeavesBlock(
         Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()
             .isValidSpawn(NSRegistryHelper::ocelotOrParrot).isSuffocating(NSRegistryHelper::never).isViewBlocking(NSRegistryHelper::never).ignitedByLava().pushReaction(PushReaction.DESTROY)
             .isRedstoneConductor(NSRegistryHelper::never)){
@@ -719,8 +730,8 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createFrostableLeaves() {
-    RegistryObject<Block> block = createBlockWithItem(getName() + "_leaves",
+  private DeferredBlock<ProjectileLeavesBlock> createFrostableLeaves() {
+    DeferredBlock<ProjectileLeavesBlock> block = createBlockWithItem(getName() + "_leaves",
             () -> new ProjectileLeavesBlock(Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()
             .isValidSpawn(NSRegistryHelper::ocelotOrParrot).isSuffocating(NSRegistryHelper::never).isViewBlocking(NSRegistryHelper::never).ignitedByLava().pushReaction(PushReaction.DESTROY)
             .isRedstoneConductor(NSRegistryHelper::never), frostyLeaves){
@@ -743,8 +754,8 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createFrostableLeaves(String prefix) {
-    RegistryObject<Block> block = createBlockWithItem(prefix + getName() + "_leaves",
+  private DeferredBlock<ProjectileLeavesBlock> createFrostableLeaves(String prefix) {
+    DeferredBlock<ProjectileLeavesBlock> block = createBlockWithItem(prefix + getName() + "_leaves",
             () -> new ProjectileLeavesBlock(Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()
             .isValidSpawn(NSRegistryHelper::ocelotOrParrot).isSuffocating(NSRegistryHelper::never).isViewBlocking(NSRegistryHelper::never).ignitedByLava().pushReaction(PushReaction.DESTROY)
             .isRedstoneConductor(NSRegistryHelper::never), frostyLeaves){
@@ -767,8 +778,8 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createParticleLeaves(RegistryObject<? extends ParticleOptions> particle, int chance) {
-    RegistryObject<Block> block = createBlockWithItem(getName() + "_leaves", () -> new ParticleLeavesBlock(
+  private DeferredBlock<ParticleLeavesBlock> createParticleLeaves(Supplier<? extends ParticleOptions> particle, int chance) {
+    DeferredBlock<ParticleLeavesBlock> block = createBlockWithItem(getName() + "_leaves", () -> new ParticleLeavesBlock(
         Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()
             .isValidSpawn(NSRegistryHelper::ocelotOrParrot).isSuffocating(NSRegistryHelper::never).isViewBlocking(NSRegistryHelper::never).ignitedByLava().pushReaction(PushReaction.DESTROY)
             .isRedstoneConductor(NSRegistryHelper::never), particle, chance){
@@ -791,8 +802,8 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createParticleLeaves(String prefix, RegistryObject<? extends ParticleOptions> particle, int chance) {
-    RegistryObject<Block> block = createBlockWithItem(prefix + getName() + "_leaves", () -> new ParticleLeavesBlock(
+  private DeferredBlock<ParticleLeavesBlock> createParticleLeaves(String prefix, Supplier<? extends ParticleOptions> particle, int chance) {
+    DeferredBlock<ParticleLeavesBlock> block = createBlockWithItem(prefix + getName() + "_leaves", () -> new ParticleLeavesBlock(
         Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()
             .isValidSpawn(NSRegistryHelper::ocelotOrParrot).isSuffocating(NSRegistryHelper::never).isViewBlocking(NSRegistryHelper::never).ignitedByLava().pushReaction(PushReaction.DESTROY)
             .isRedstoneConductor(NSRegistryHelper::never), particle, chance){
@@ -815,8 +826,8 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createVinesLeavesBlock(RegistryObject<Block> vinesPlantBlock, RegistryObject<Block> vinesTipBlock) {
-    RegistryObject<Block> block = createBlockWithItem(getName() + "_leaves",
+  private DeferredBlock<VinesLeavesBlock> createVinesLeavesBlock(DeferredBlock<DownwardsVinePlantBlock> vinesPlantBlock, DeferredBlock<DownwardVineBlock> vinesTipBlock) {
+    DeferredBlock<VinesLeavesBlock> block = createBlockWithItem(getName() + "_leaves",
             () -> new VinesLeavesBlock(Properties.of().strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()
             .isValidSpawn(NSRegistryHelper::ocelotOrParrot).isSuffocating(NSRegistryHelper::never).isViewBlocking(NSRegistryHelper::never).ignitedByLava().pushReaction(PushReaction.DESTROY)
             .isRedstoneConductor(NSRegistryHelper::never), vinesPlantBlock, vinesTipBlock){
@@ -839,8 +850,8 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createVinesLeavesBlock(String prefix, RegistryObject<Block> vinesPlantBlock, RegistryObject<Block> vinesTipBlock) {
-    RegistryObject<Block> block = createBlockWithItem(prefix + getName() + "_leaves",
+  private DeferredBlock<VinesLeavesBlock> createVinesLeavesBlock(String prefix, DeferredBlock<DownwardsVinePlantBlock> vinesPlantBlock, DeferredBlock<DownwardVineBlock> vinesTipBlock) {
+    DeferredBlock<VinesLeavesBlock> block = createBlockWithItem(prefix + getName() + "_leaves",
             () -> new VinesLeavesBlock(Properties.of().strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()
             .isValidSpawn(NSRegistryHelper::ocelotOrParrot).isSuffocating(NSRegistryHelper::never).isViewBlocking(NSRegistryHelper::never).ignitedByLava()
             .pushReaction(PushReaction.DESTROY).isRedstoneConductor(NSRegistryHelper::never), vinesPlantBlock, vinesTipBlock){
@@ -863,8 +874,8 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createVines(Supplier<RegistryObject<Block>> vinesPlantBlock) {
-    RegistryObject<Block> vinesBlock = createBlockWithItem(getName() + "_vines",
+  private DeferredBlock<DownwardVineBlock> createVines(Supplier<DeferredBlock<DownwardsVinePlantBlock>> vinesPlantBlock) {
+    DeferredBlock<DownwardVineBlock> vinesBlock = createBlockWithItem(getName() + "_vines",
             () -> new DownwardVineBlock(Properties
             .of()
             .pushReaction(PushReaction.DESTROY)
@@ -877,8 +888,8 @@ public class WoodSet {
     return vinesBlock;
   }
 
-  private RegistryObject<Block> createVines(String prefix, Supplier<RegistryObject<Block>> vinesPlantBlock) {
-    RegistryObject<Block> vinesBlock = createBlockWithItem(prefix + getName() + "_vines",
+  private DeferredBlock<DownwardVineBlock> createVines(String prefix, Supplier<DeferredBlock<DownwardsVinePlantBlock>> vinesPlantBlock) {
+    DeferredBlock<DownwardVineBlock> vinesBlock = createBlockWithItem(prefix + getName() + "_vines",
             () -> new DownwardVineBlock(Properties
             .of()
             .pushReaction(PushReaction.DESTROY)
@@ -891,8 +902,8 @@ public class WoodSet {
     return vinesBlock;
   }
 
-  private RegistryObject<Block> createVinesPlant(RegistryObject<Block> vines) {
-    RegistryObject<Block> vinesPlant = registerBlockWithoutItem(getName() + "_vines_plant", () -> new DownwardsVinePlantBlock(Properties
+  private DeferredBlock<DownwardsVinePlantBlock> createVinesPlant(DeferredBlock<DownwardVineBlock> vines) {
+    DeferredBlock<DownwardsVinePlantBlock> vinesPlant = registerBlockWithoutItem(getName() + "_vines_plant", () -> new DownwardsVinePlantBlock(Properties
         .of()
         .pushReaction(PushReaction.DESTROY)
         .noCollission()
@@ -904,8 +915,8 @@ public class WoodSet {
     return vinesPlant;
   }
 
-  private RegistryObject<Block> createVinesPlant(String prefix, RegistryObject<Block> vines) {
-    RegistryObject<Block> vinesPlant = registerBlockWithoutItem(prefix + getName() + "_vines_plant", () -> new DownwardsVinePlantBlock(Properties
+  private DeferredBlock<DownwardsVinePlantBlock> createVinesPlant(String prefix, DeferredBlock<DownwardVineBlock> vines) {
+    DeferredBlock<DownwardsVinePlantBlock> vinesPlant = registerBlockWithoutItem(prefix + getName() + "_vines_plant", () -> new DownwardsVinePlantBlock(Properties
         .of()
         .pushReaction(PushReaction.DESTROY)
         .noCollission()
@@ -917,8 +928,8 @@ public class WoodSet {
     return vinesPlant;
   }
 
-  private RegistryObject<Block> createPlanks() {
-    return createBlockWithItem(getName() + "_planks", () -> new Block(Properties.copy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
+  private DeferredBlock<Block> createPlanks() {
+    return createBlockWithItem(getName() + "_planks", () -> new Block(Properties.ofFullCopy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
       @Override
       public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return true;
@@ -936,9 +947,9 @@ public class WoodSet {
     });
   }
 
-  private RegistryObject<Block> createStairs() {
+  private DeferredBlock<StairBlock> createStairs() {
     return createBlockWithItem(getName() + "_stairs",
-            () -> new StairBlock(() -> getBase().defaultBlockState(), Properties.copy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
+            () -> new StairBlock(getBase().defaultBlockState(), Properties.ofFullCopy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
               @Override
               public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                 return true;
@@ -956,8 +967,8 @@ public class WoodSet {
             });
   }
 
-  private RegistryObject<Block> createSlab() {
-    return createBlockWithItem(getName() + "_slab", () -> new SlabBlock(Properties.copy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
+  private DeferredBlock<SlabBlock> createSlab() {
+    return createBlockWithItem(getName() + "_slab", () -> new SlabBlock(Properties.ofFullCopy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
       @Override
       public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return true;
@@ -975,8 +986,8 @@ public class WoodSet {
     });
   }
 
-  private RegistryObject<Block> createMosaic() {
-    RegistryObject<Block> block = createBlockWithoutItem(getName() + "_mosaic", () -> new Block(Properties.copy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
+  private DeferredBlock<Block> createMosaic() {
+    DeferredBlock<Block> block = createBlockWithoutItem(getName() + "_mosaic", () -> new Block(Properties.ofFullCopy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
       @Override
       public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return true;
@@ -1001,9 +1012,9 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createMosaicStairs() {
-    RegistryObject<Block> block = createBlockWithoutItem(getName() + "_mosaic_stairs",
-            () -> new StairBlock( () -> getBase().defaultBlockState(), Properties.copy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
+  private DeferredBlock<StairBlock> createMosaicStairs() {
+    DeferredBlock<StairBlock> block = createBlockWithoutItem(getName() + "_mosaic_stairs",
+            () -> new StairBlock(getBase().defaultBlockState(), Properties.ofFullCopy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
               @Override
               public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                 return true;
@@ -1028,8 +1039,8 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createMosaicSlab() {
-    RegistryObject<Block> block = createBlockWithoutItem(getName() + "_mosaic_slab", () -> new SlabBlock(Properties.copy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
+  private DeferredBlock<SlabBlock> createMosaicSlab() {
+    DeferredBlock<SlabBlock> block = createBlockWithoutItem(getName() + "_mosaic_slab", () -> new SlabBlock(Properties.ofFullCopy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
       @Override
       public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return true;
@@ -1054,8 +1065,8 @@ public class WoodSet {
     return block;
   }
 
-  private RegistryObject<Block> createFence() {
-    return createBlockWithItem(getName() + "_fence", () -> new FenceBlock(Properties.copy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
+  private DeferredBlock<FenceBlock> createFence() {
+    return createBlockWithItem(getName() + "_fence", () -> new FenceBlock(Properties.ofFullCopy(getBase()).sound(getBlockSetType().get().soundType()).mapColor(getTopColor())){
       @Override
       public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return true;
@@ -1073,9 +1084,9 @@ public class WoodSet {
     });
   }
 
-  private RegistryObject<Block> createFenceGate() {
-    return createBlockWithItem(getName() + "_fence_gate", () -> new FenceGateBlock(
-        Properties.of().mapColor(getBase().defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).ignitedByLava(), getWoodType().get()){
+  private DeferredBlock<FenceGateBlock> createFenceGate() {
+    return createBlockWithItem(getName() + "_fence_gate", () -> new FenceGateBlock(getWoodType().get(),
+            Properties.of().mapColor(getBase().defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).ignitedByLava()){
       @Override
       public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return true;
@@ -1093,95 +1104,95 @@ public class WoodSet {
     });
   }
 
-  private RegistryObject<Block> createPressurePlate() {
-    return createBlockWithItem(getName() + "_pressure_plate", () -> new PressurePlateBlock( PressurePlateBlock.Sensitivity.EVERYTHING,
-        Properties.of().mapColor(this.getBase().defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollission().strength(0.5F).ignitedByLava()
-            .pushReaction(PushReaction.DESTROY), getBlockSetType().get()));
+  private DeferredBlock<PressurePlateBlock> createPressurePlate() {
+    return createBlockWithItem(getName() + "_pressure_plate", () -> new PressurePlateBlock(getBlockSetType().get(),
+            Properties.of().mapColor(this.getBase().defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollission().strength(0.5F).ignitedByLava()
+                    .pushReaction(PushReaction.DESTROY)));
   }
 
-  private RegistryObject<Block> createButton() {
+  private DeferredBlock<ButtonBlock> createButton() {
     return createBlockWithItem(getName() + "_button",
-            () -> new ButtonBlock(Properties.of().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY), getBlockSetType().get(), 30, true));
+            () -> new ButtonBlock(getBlockSetType().get(), 30, Properties.of().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY)));
   }
 
-  private RegistryObject<Block> createDoor() {
-    RegistryObject<Block> block = createBlockWithItem(getName() + "_door", () -> new DoorBlock(Properties.copy(getBase()).sound(getBlockSetType().get().soundType()).noOcclusion().mapColor(getTopColor()), getBlockSetType().get()));
+  private DeferredBlock<DoorBlock> createDoor() {
+    DeferredBlock<DoorBlock> block = createBlockWithItem(getName() + "_door", () -> new DoorBlock(getBlockSetType().get(), Properties.ofFullCopy(getBase()).sound(getBlockSetType().get().soundType()).noOcclusion().mapColor(getTopColor())));
     RenderLayerHashMap.put(getName() + "_door", block);
     return block;
   }
 
-  private RegistryObject<Block> createTrapDoor() {
-    RegistryObject<Block> block = createBlockWithItem(getName() + "_trapdoor", () -> new TrapDoorBlock(Properties.copy(getBase()).sound(getBlockSetType().get().soundType()).noOcclusion().mapColor(getTopColor()), getBlockSetType().get()));
+  private DeferredBlock<TrapDoorBlock> createTrapDoor() {
+    DeferredBlock<TrapDoorBlock> block = createBlockWithItem(getName() + "_trapdoor", () -> new TrapDoorBlock(getBlockSetType().get(), Properties.ofFullCopy(getBase()).sound(getBlockSetType().get().soundType()).noOcclusion().mapColor(getTopColor())));
     RenderLayerHashMap.put(getName() + "_trapdoor", block);
     return block;
   }
 
-  private RegistryObject<Block> createSign() {
-    return registerBlockWithoutItem(getName() + "_sign", () -> new StandingSignBlock(Properties.copy(getSignBase()).mapColor(this.getTopColor()), getWoodType().get()));
+  private DeferredBlock<StandingSignBlock> createSign() {
+    return registerBlockWithoutItem(getName() + "_sign", () -> new StandingSignBlock(getWoodType().get(), Properties.ofFullCopy(getSignBase()).mapColor(this.getTopColor())));
   }
 
-  private RegistryObject<Block> createWallSign() {
-    return registerBlockWithoutItem(getName() + "_wall_sign", () -> new WallSignBlock(Properties.copy(getSignBase()).mapColor(this.getTopColor()).dropsLike(sign.get()), getWoodType().get()));
+  private DeferredBlock<WallSignBlock> createWallSign() {
+    return registerBlockWithoutItem(getName() + "_wall_sign", () -> new WallSignBlock(getWoodType().get(), Properties.ofFullCopy(getSignBase()).mapColor(this.getTopColor()).dropsLike(sign.get())));
   }
 
-  private RegistryObject<Block> createHangingSign() {
-    return registerBlockWithoutItem(getName() + "_hanging_sign", () -> new CeilingHangingSignBlock(Properties.copy(getHangingSignBase()).mapColor(this.getTopColor()), getWoodType().get()));
+  private DeferredBlock<CeilingHangingSignBlock> createHangingSign() {
+    return registerBlockWithoutItem(getName() + "_hanging_sign", () -> new CeilingHangingSignBlock(getWoodType().get(), Properties.ofFullCopy(getHangingSignBase()).mapColor(this.getTopColor())));
   }
 
-  private RegistryObject<Block> createWallHangingSign() {
+  private DeferredBlock<WallHangingSignBlock> createWallHangingSign() {
     return registerBlockWithoutItem(getName() + "_wall_hanging_sign",
-            () -> new WallHangingSignBlock(Properties.copy(getHangingSignBase()).mapColor(this.getTopColor()).dropsLike(hangingSign.get()), getWoodType().get()));
+            () -> new WallHangingSignBlock(getWoodType().get(), Properties.ofFullCopy(getHangingSignBase()).mapColor(this.getTopColor()).dropsLike(hangingSign.get())));
   }
 
-  public RegistryObject<Block> createSapling(AbstractTreeGrower saplingGenerator) {
-    RegistryObject<Block> block = createBlockWithItem(getName() + "_sapling", () -> new SaplingBlock(saplingGenerator, Properties.copy(Blocks.SPRUCE_SAPLING)));
+  public DeferredBlock<SaplingBlock> createSapling(TreeGrower saplingGenerator) {
+    DeferredBlock<SaplingBlock> block = createBlockWithItem(getName() + "_sapling", () -> new SaplingBlock(saplingGenerator, Properties.ofFullCopy(Blocks.SPRUCE_SAPLING)));
     RenderLayerHashMap.put(getName() + "_sapling", block);
     return block;
   }
 
-  public RegistryObject<Block> createSandySapling(AbstractTreeGrower saplingGenerator) {
-    RegistryObject<Block> block = createBlockWithItem(getName() + "_sapling", () -> new SandySaplingBlock(saplingGenerator, Properties.copy(Blocks.SPRUCE_SAPLING)));
+  public DeferredBlock<SandySaplingBlock> createSandySapling(TreeGrower saplingGenerator) {
+    DeferredBlock<SandySaplingBlock> block = createBlockWithItem(getName() + "_sapling", () -> new SandySaplingBlock(saplingGenerator, Properties.ofFullCopy(Blocks.SPRUCE_SAPLING)));
     RenderLayerHashMap.put(getName() + "_sapling", block);
     return block;
   }
 
-  public RegistryObject<Block> createPottedSapling(RegistryObject<Block> sapling) {
+  public DeferredBlock<FlowerPotBlock> createPottedSapling(DeferredBlock<? extends SaplingBlock> sapling) {
     return registerTransparentBlockWithoutItem("potted_" + getName() + "_sapling",
-            () -> new FlowerPotBlock(sapling.get(), Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY)));
+            () -> new FlowerPotBlock(() -> ((FlowerPotBlock) Blocks.FLOWER_POT).getEmptyPot(), sapling, Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY)));
   }
 
-  public RegistryObject<Block> createSapling(String prefix, AbstractTreeGrower saplingGenerator) {
-    RegistryObject<Block> block = createBlockWithItem(prefix + getName() + "_sapling", () -> new SaplingBlock(saplingGenerator, Properties.copy(Blocks.SPRUCE_SAPLING)));
+  public DeferredBlock<SaplingBlock> createSapling(String prefix, TreeGrower saplingGenerator) {
+    DeferredBlock<SaplingBlock> block = createBlockWithItem(prefix + getName() + "_sapling", () -> new SaplingBlock(saplingGenerator, Properties.ofFullCopy(Blocks.SPRUCE_SAPLING)));
     RenderLayerHashMap.put(prefix + getName() + "_sapling", block);
     return block;
   }
 
-  public RegistryObject<Block> createSandySapling(String prefix, AbstractTreeGrower saplingGenerator) {
-    RegistryObject<Block> block = createBlockWithItem(prefix + getName() + "_sapling", () -> new SandySaplingBlock(saplingGenerator, Properties.copy(Blocks.SPRUCE_SAPLING)));
+  public DeferredBlock<SandySaplingBlock> createSandySapling(String prefix, TreeGrower saplingGenerator) {
+    DeferredBlock<SandySaplingBlock> block = createBlockWithItem(prefix + getName() + "_sapling", () -> new SandySaplingBlock(saplingGenerator, Properties.ofFullCopy(Blocks.SPRUCE_SAPLING)));
     RenderLayerHashMap.put(prefix + getName() + "_sapling", block);
     return block;
   }
 
-  public RegistryObject<Block> createPottedSapling(String prefix, RegistryObject<Block> sapling) {
+  public DeferredBlock<FlowerPotBlock> createPottedSapling(String prefix, DeferredBlock<? extends SaplingBlock> sapling) {
     return registerTransparentBlockWithoutItem("potted_" + prefix + getName() + "_sapling",
-            () -> new FlowerPotBlock(sapling.get(), Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY)));
+            () -> new FlowerPotBlock(() -> ((FlowerPotBlock) Blocks.FLOWER_POT).getEmptyPot(), sapling, Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY)));
   }
 
-  private RegistryObject<Item> createSignItem() {
+  private DeferredItem<SignItem> createSignItem() {
     return createItem(getName() + "_sign", () -> new SignItem(new Item.Properties().stacksTo(16), sign.get(), wallSign.get()));
   }
 
-  private RegistryObject<Item> createHangingSignItem() {
+  private DeferredItem<HangingSignItem> createHangingSignItem() {
     return createItem(getName() + "_hanging_sign", () -> new HangingSignItem(hangingSign.get(), hangingWallSign.get(), new Item.Properties().stacksTo(16)));
   }
 
   private Supplier<BlockSetType> createBlockSetType() {
     if (this.woodPreset == WoodPreset.BAMBOO) {
-      return Suppliers.memoize(() -> BlockSetType.register(new BlockSetType(MOD_ID + ":" + getName(), true, SoundType.BAMBOO_WOOD, SoundEvents.BAMBOO_WOOD_DOOR_CLOSE, SoundEvents.BAMBOO_WOOD_DOOR_OPEN, SoundEvents.BAMBOO_WOOD_TRAPDOOR_CLOSE, SoundEvents.BAMBOO_WOOD_TRAPDOOR_OPEN, SoundEvents.BAMBOO_WOOD_PRESSURE_PLATE_CLICK_OFF, SoundEvents.BAMBOO_WOOD_PRESSURE_PLATE_CLICK_ON, SoundEvents.BAMBOO_WOOD_BUTTON_CLICK_OFF, SoundEvents.BAMBOO_WOOD_BUTTON_CLICK_ON)));
+      return Suppliers.memoize(() -> BlockSetType.register(new BlockSetType(MOD_ID + ":" + getName(), true,true, true, BlockSetType.PressurePlateSensitivity.EVERYTHING, SoundType.BAMBOO_WOOD, SoundEvents.BAMBOO_WOOD_DOOR_CLOSE, SoundEvents.BAMBOO_WOOD_DOOR_OPEN, SoundEvents.BAMBOO_WOOD_TRAPDOOR_CLOSE, SoundEvents.BAMBOO_WOOD_TRAPDOOR_OPEN, SoundEvents.BAMBOO_WOOD_PRESSURE_PLATE_CLICK_OFF, SoundEvents.BAMBOO_WOOD_PRESSURE_PLATE_CLICK_ON, SoundEvents.BAMBOO_WOOD_BUTTON_CLICK_OFF, SoundEvents.BAMBOO_WOOD_BUTTON_CLICK_ON)));
     } else if (woodPreset == WoodPreset.FANCY) {
-      return Suppliers.memoize(() -> BlockSetType.register(new BlockSetType(MOD_ID + ":" + getName(), true, SoundType.CHERRY_WOOD, SoundEvents.CHERRY_WOOD_DOOR_CLOSE, SoundEvents.CHERRY_WOOD_DOOR_OPEN, SoundEvents.CHERRY_WOOD_TRAPDOOR_CLOSE, SoundEvents.CHERRY_WOOD_TRAPDOOR_OPEN, SoundEvents.CHERRY_WOOD_PRESSURE_PLATE_CLICK_OFF, SoundEvents.CHERRY_WOOD_PRESSURE_PLATE_CLICK_ON, SoundEvents.CHERRY_WOOD_BUTTON_CLICK_OFF, SoundEvents.CHERRY_WOOD_BUTTON_CLICK_ON)));
+      return Suppliers.memoize(() -> BlockSetType.register(new BlockSetType(MOD_ID + ":" + getName(), true,true, true, BlockSetType.PressurePlateSensitivity.EVERYTHING, SoundType.CHERRY_WOOD, SoundEvents.CHERRY_WOOD_DOOR_CLOSE, SoundEvents.CHERRY_WOOD_DOOR_OPEN, SoundEvents.CHERRY_WOOD_TRAPDOOR_CLOSE, SoundEvents.CHERRY_WOOD_TRAPDOOR_OPEN, SoundEvents.CHERRY_WOOD_PRESSURE_PLATE_CLICK_OFF, SoundEvents.CHERRY_WOOD_PRESSURE_PLATE_CLICK_ON, SoundEvents.CHERRY_WOOD_BUTTON_CLICK_OFF, SoundEvents.CHERRY_WOOD_BUTTON_CLICK_ON)));
     } else if (this.woodPreset == WoodPreset.NETHER) {
-      return Suppliers.memoize(() -> BlockSetType.register(new BlockSetType(MOD_ID + ":" + getName(), true, SoundType.NETHER_WOOD, SoundEvents.NETHER_WOOD_DOOR_CLOSE, SoundEvents.NETHER_WOOD_DOOR_OPEN, SoundEvents.NETHER_WOOD_TRAPDOOR_CLOSE, SoundEvents.NETHER_WOOD_TRAPDOOR_OPEN, SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF, SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_ON, SoundEvents.NETHER_WOOD_BUTTON_CLICK_OFF, SoundEvents.NETHER_WOOD_BUTTON_CLICK_ON)));
+      return Suppliers.memoize(() -> BlockSetType.register(new BlockSetType(MOD_ID + ":" + getName(), true,true, true, BlockSetType.PressurePlateSensitivity.EVERYTHING, SoundType.NETHER_WOOD, SoundEvents.NETHER_WOOD_DOOR_CLOSE, SoundEvents.NETHER_WOOD_DOOR_OPEN, SoundEvents.NETHER_WOOD_TRAPDOOR_CLOSE, SoundEvents.NETHER_WOOD_TRAPDOOR_OPEN, SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF, SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_ON, SoundEvents.NETHER_WOOD_BUTTON_CLICK_OFF, SoundEvents.NETHER_WOOD_BUTTON_CLICK_ON)));
     } else {
       return Suppliers.memoize(() -> BlockSetType.register(new BlockSetType(MOD_ID + ":" + getName())));
     }

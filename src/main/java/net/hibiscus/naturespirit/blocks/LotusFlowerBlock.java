@@ -1,5 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,6 +29,11 @@ public class LotusFlowerBlock extends BushBlock implements BonemealableBlock {
 
   public LotusFlowerBlock(Properties properties) {
     super(properties);
+  }
+
+  @Override
+  protected MapCodec<? extends BushBlock> codec() {
+    return null;
   }
 
   @Override
@@ -96,7 +102,7 @@ public class LotusFlowerBlock extends BushBlock implements BonemealableBlock {
   }
 
   @Override
-  public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
+  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
     return new ItemStack(NSBlocks.LOTUS_FLOWER_ITEM.get());
   }
 
@@ -114,7 +120,7 @@ public class LotusFlowerBlock extends BushBlock implements BonemealableBlock {
   }
 
   @Override
-  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean bl) {
+  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
     return world.getBlockState(pos.above()).isAir() && !world.getBlockState(pos.below()).is(Blocks.WATER) && !isPowered(world, pos);
   }
 

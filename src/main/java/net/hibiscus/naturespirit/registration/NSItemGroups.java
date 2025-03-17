@@ -3,26 +3,13 @@ package net.hibiscus.naturespirit.registration;
 import net.hibiscus.naturespirit.NatureSpirit;
 import net.hibiscus.naturespirit.config.NSConfig;
 import net.hibiscus.naturespirit.registration.compat.NSArtsAndCraftsCompat;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static net.hibiscus.naturespirit.NatureSpirit.MOD_ID;
 
 public class NSItemGroups {
 public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =

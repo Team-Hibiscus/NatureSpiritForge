@@ -1,5 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,6 +10,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -44,7 +46,12 @@ public class OliveBranchBlock extends RodBlock implements BonemealableBlock {
   }
 
   @Override
-  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean bl) {
+  protected MapCodec<? extends RodBlock> codec() {
+    return null;
+  }
+
+  @Override
+  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
     return state.getValue(AGE) < 3 || ((world.getBlockState(pos.relative(state.getValue(FACING), 1)).is(Blocks.AIR) || world.getBlockState(pos.relative(state.getValue(FACING).getOpposite(), 1)).is(Blocks.AIR)) && state.getValue(AGE) == 3);
   }
 
@@ -52,19 +59,18 @@ public class OliveBranchBlock extends RodBlock implements BonemealableBlock {
   public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state) {
     return true;
   }
-
-  @Override
-  public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
+  protected boolean isPathfindable(BlockState state, PathComputationType type) {
     return type == PathComputationType.AIR;
   }
 
+  protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    return stack.is(Items.BONE_MEAL) ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION : super.useItemOn(stack, state, world, pos, player, hand, hit);
+  }
+
   @Override
-  public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+  public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
     int i = state.getValue(AGE);
     boolean bl = i == 3;
-    if (player.getItemInHand(hand).is(Items.BONE_MEAL)) {
-      return InteractionResult.PASS;
-    }
     if (i > 1) {
       int j = 1 + world.random.nextInt(2);
       popResource(world, pos, new ItemStack(NSBlocks.OLIVES.get(), j + (bl ? 1 : 0)));
@@ -73,7 +79,7 @@ public class OliveBranchBlock extends RodBlock implements BonemealableBlock {
       world.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
       return InteractionResult.sidedSuccess(world.isClientSide());
     }
-    return super.use(state, world, pos, player, hand, hit);
+    return super.useWithoutItem(state, world, pos, player, hit);
 
   }
 
@@ -82,9 +88,9 @@ public class OliveBranchBlock extends RodBlock implements BonemealableBlock {
     int i = state.getValue(AGE);
     if (world.getRawBrightness(pos, 0) >= 9 && i < 3) {
       if (random.nextInt(5) == 0) {
-          state = state.setValue(AGE, i + 1);
-          world.setBlock(pos, state, Block.UPDATE_CLIENTS);
-          world.gameEvent(GameEvent.BLOCK_CHANGE, pos, Context.of(state));
+        state = state.setValue(AGE, i + 1);
+        world.setBlock(pos, state, Block.UPDATE_CLIENTS);
+        world.gameEvent(GameEvent.BLOCK_CHANGE, pos, Context.of(state));
       }
     }
   }
@@ -103,7 +109,7 @@ public class OliveBranchBlock extends RodBlock implements BonemealableBlock {
         world.setBlock(adjacentPos2, state.setValue(AGE, 0), Block.UPDATE_CLIENTS);
       }
     } else {
-        world.setBlockAndUpdate(pos, state.setValue(AGE, state.getValue(AGE) + 1));
+      world.setBlockAndUpdate(pos, state.setValue(AGE, state.getValue(AGE) + 1));
     }
   }
   @Override
@@ -111,3 +117,4 @@ public class OliveBranchBlock extends RodBlock implements BonemealableBlock {
     builder.add(AGE, FACING);
   }
 }
+

@@ -17,7 +17,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 public class ShiitakeMushroomPlantBlock extends MushroomBlock {
 
   public ShiitakeMushroomPlantBlock(Properties settings, ResourceKey<ConfiguredFeature<?, ?>> featureKey) {
-    super(settings, featureKey);
+    super(featureKey, settings);
   }
 
   public static boolean getCompletdCircle(ServerLevel world, BlockPos pos) {

@@ -4,6 +4,7 @@ package net.hibiscus.naturespirit.world.feature;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import net.hibiscus.naturespirit.registration.NSBlocks;
+import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.DeltaFeatureConfiguration;
 import net.minecraft.world.level.material.Fluids;
-
 import java.util.Iterator;
 
 public class NSDeltaFeature extends Feature<DeltaFeatureConfiguration> {

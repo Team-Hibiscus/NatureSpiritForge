@@ -1,5 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,6 +31,11 @@ public class SucculentBlock extends BaseCoralPlantTypeBlock implements Bonemeala
   }
 
   @Override
+  protected MapCodec<? extends BaseCoralPlantTypeBlock> codec() {
+    return null;
+  }
+
+  @Override
   public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
     return SHAPE;
   }
@@ -50,7 +56,7 @@ public class SucculentBlock extends BaseCoralPlantTypeBlock implements Bonemeala
   }
 
   @Override
-  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean bl) {
+  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
     return true;
   }
 

@@ -13,7 +13,7 @@ public class BearberryBlock extends TallGrassBlock {
   public BearberryBlock(Properties properties) {
     super(properties);
   }
-  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
+  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
     return false;
   }
 

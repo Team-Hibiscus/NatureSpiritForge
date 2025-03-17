@@ -1,6 +1,7 @@
 package net.hibiscus.naturespirit.world.tree_decorator;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.blocks.PolyporeBlock;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
@@ -11,12 +12,11 @@ import net.minecraft.world.level.block.HugeMushroomBlock;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
-
 import java.util.List;
 
 public class PolyporeTreeDecorator extends TreeDecorator {
 
-  public static final Codec<PolyporeTreeDecorator> CODEC = RecordCodecBuilder.create((instance) -> {
+  public static final MapCodec<PolyporeTreeDecorator> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
     return instance.group(
         Codec.floatRange(0.0F, 1.0F).fieldOf("big_probability").forGetter((treeDecorator) -> treeDecorator.big_probability),
         Codec.floatRange(0.0F, 1.0F).fieldOf("small_probability").forGetter((treeDecorator) -> treeDecorator.small_probability),

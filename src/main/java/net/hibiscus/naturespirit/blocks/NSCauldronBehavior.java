@@ -13,29 +13,29 @@ import static net.minecraft.core.cauldron.CauldronInteraction.*;
 
 public interface NSCauldronBehavior {
 
-  Map<Item, CauldronInteraction> MILK_CAULDRON_BEHAVIOR = newInteractionMap();
+  InteractionMap MILK_CAULDRON_BEHAVIOR = newInteractionMap("milk");
   CauldronInteraction FILL_WITH_MILK = (state, world, pos, player, hand, stack) -> emptyBucket(
-      world,
-      pos,
-      player,
-      hand,
-      stack,
+          world,
+          pos,
+          player,
+          hand,
+          stack,
           NSBlocks.MILK_CAULDRON.get().defaultBlockState(),
-      SoundEvents.BUCKET_EMPTY
+          SoundEvents.BUCKET_EMPTY
   );
-  Map<Item, CauldronInteraction> CHEESE_CAULDRON_BEHAVIOR = newInteractionMap();
+  InteractionMap CHEESE_CAULDRON_BEHAVIOR = newInteractionMap("cheese");
   CauldronInteraction FILL_WITH_CHEESE = (state, world, pos, player, hand, stack) -> emptyBucket(
-      world,
-      pos,
-      player,
-      hand,
-      stack,
-      NSBlocks.CHEESE_CAULDRON.get().defaultBlockState(),
-      SoundEvents.BUCKET_EMPTY
+          world,
+          pos,
+          player,
+          hand,
+          stack,
+          NSBlocks.CHEESE_CAULDRON.get().defaultBlockState(),
+          SoundEvents.BUCKET_EMPTY
   );
 
   static void registerBehavior() {
-    MILK_CAULDRON_BEHAVIOR.put(
+    MILK_CAULDRON_BEHAVIOR.map().put(
             Items.BUCKET,
             (state, world, pos, player, hand, stack) -> fillBucket(state,
                     world,
@@ -44,12 +44,12 @@ public interface NSCauldronBehavior {
                     hand,
                     stack,
                     new ItemStack(Items.MILK_BUCKET),
-                    (statex) -> {return true;},
+                    (statex) -> true,
                     SoundEvents.COW_MILK
             )
     );
-    addDefaultInteractions(MILK_CAULDRON_BEHAVIOR);
-    CHEESE_CAULDRON_BEHAVIOR.put(
+    addDefaultInteractions(MILK_CAULDRON_BEHAVIOR.map());
+    CHEESE_CAULDRON_BEHAVIOR.map().put(
             Items.BUCKET,
             (state, world, pos, player, hand, stack) -> fillBucket(state,
                     world,
@@ -58,12 +58,13 @@ public interface NSCauldronBehavior {
                     hand,
                     stack,
                     new ItemStack(NSBlocks.CHEESE_BUCKET.get()),
-                    (statex) -> { return true;},
+                    (statex) -> true,
                     SoundEvents.BUCKET_FILL
             )
     );
-    addDefaultInteractions(CHEESE_CAULDRON_BEHAVIOR);
+    addDefaultInteractions(CHEESE_CAULDRON_BEHAVIOR.map());
   }
 
 
 }
+

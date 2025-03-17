@@ -28,7 +28,7 @@ public class PolyporeBlock extends MushroomBlock {
           Direction.WEST, Block.box(10.0, 4.0, 0.0, 16.0, 12.0, 16.0), Direction.EAST, Block.box(0.0, 4.0, 0.0, 6.0, 12.0, 16.0)));
 
   public PolyporeBlock(Properties settings, ResourceKey<ConfiguredFeature<?, ?>> featureKey) {
-    super(settings, featureKey);
+    super(featureKey, settings);
     this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
   }
 

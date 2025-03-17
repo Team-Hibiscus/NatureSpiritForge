@@ -6,6 +6,7 @@
 package net.hibiscus.naturespirit.world.feature;
 
 import com.mojang.serialization.Codec;
+import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
@@ -16,8 +17,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-
-import java.util.function.Predicate;
 
 public class TurnipRootFeature extends Feature<TurnipRootFeatureConfig> {
 

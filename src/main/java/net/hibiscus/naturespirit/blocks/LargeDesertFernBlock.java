@@ -12,14 +12,15 @@ import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.Supplier;
 
 public class LargeDesertFernBlock extends TallGrassBlock {
 
   protected static final VoxelShape SHAPE = Block.box(2D, 0D, 2D, 14D, 16D, 14D);
-  private final RegistryObject<Block> tallBlock;
+  private final Supplier<? extends Block> tallBlock;
 
-  public LargeDesertFernBlock(Properties properties, RegistryObject<Block> tallBlock) {
+  public LargeDesertFernBlock(Properties properties, Supplier<? extends Block> tallBlock) {
     super(properties);
     this.tallBlock = tallBlock;
   }

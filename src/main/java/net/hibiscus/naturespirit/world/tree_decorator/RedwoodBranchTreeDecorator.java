@@ -1,6 +1,7 @@
 package net.hibiscus.naturespirit.world.tree_decorator;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
 import net.minecraft.core.BlockPos;
@@ -9,12 +10,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
-
 import java.util.List;
 
 public class RedwoodBranchTreeDecorator extends TreeDecorator {
 
-  public static final Codec<RedwoodBranchTreeDecorator> CODEC = RecordCodecBuilder.create((instance) -> {
+  public static final MapCodec<RedwoodBranchTreeDecorator> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
     return instance.group(
         Codec.floatRange(0.0F, 1.0F).fieldOf("probability").forGetter((treeDecorator) -> treeDecorator.probability),
         BlockStateProvider.CODEC.fieldOf("leaf_provider").forGetter((treeDecorator) -> treeDecorator.leaf_provider)

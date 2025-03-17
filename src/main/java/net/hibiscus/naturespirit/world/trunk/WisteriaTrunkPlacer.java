@@ -2,6 +2,7 @@ package net.hibiscus.naturespirit.world.trunk;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
 import net.minecraft.core.BlockPos;
@@ -18,13 +19,12 @@ import net.minecraft.world.level.levelgen.feature.configurations.TreeConfigurati
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
-
 import java.util.List;
 import java.util.function.BiConsumer;
 
 public class WisteriaTrunkPlacer extends TrunkPlacer {
 
-  public static final Codec<WisteriaTrunkPlacer> CODEC = RecordCodecBuilder.create((instance) -> {
+  public static final MapCodec<WisteriaTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
     return trunkPlacerParts(instance).and(instance.group(IntProvider.POSITIVE_CODEC.fieldOf("extra_branch_steps").forGetter((WisteriaTrunkPlacer) -> {
       return WisteriaTrunkPlacer.extraBranchSteps;
     }), Codec.floatRange(0.0F, 1.0F).fieldOf("place_branch_per_log_probability").forGetter((WisteriaTrunkPlacer) -> {

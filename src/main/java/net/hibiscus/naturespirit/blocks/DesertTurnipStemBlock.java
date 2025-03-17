@@ -1,5 +1,7 @@
 package net.hibiscus.naturespirit.blocks;
 
+import com.mojang.serialization.MapCodec;
+import net.hibiscus.naturespirit.items.DesertTurnipItem;
 import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.core.BlockPos;
@@ -44,7 +46,7 @@ public class DesertTurnipStemBlock extends BushBlock implements BonemealableBloc
 
   private final Block rootBlock;
   private final DesertTurnipBlock vegetableBlock;
-  private final Supplier<Item> pickBlockItem;
+  private final Supplier<DesertTurnipItem> pickBlockItem;
 
   public DesertTurnipStemBlock(DesertTurnipBlock vegetableBlock, Block rootBlock, Properties settings) {
     super(settings);
@@ -99,6 +101,11 @@ public class DesertTurnipStemBlock extends BushBlock implements BonemealableBloc
   }
 
   @Override
+  protected MapCodec<? extends BushBlock> codec() {
+    return null;
+  }
+
+  @Override
   protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
     return floor.is(Blocks.FARMLAND) || floor.is(NSTags.Blocks.TURNIP_STEM_GROWS_ON);
   }
@@ -148,12 +155,12 @@ public class DesertTurnipStemBlock extends BushBlock implements BonemealableBloc
   }
 
   @Override
-  public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
+  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
     return new ItemStack(this.pickBlockItem.get());
   }
 
   @Override
-  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean bl) {
+  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
     return state.getValue(AGE) < MAX_AGE;
   }
 

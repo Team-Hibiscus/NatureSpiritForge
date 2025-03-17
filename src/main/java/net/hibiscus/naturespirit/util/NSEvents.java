@@ -16,12 +16,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@Mod.EventBusSubscriber(modid = NatureSpirit.MOD_ID)
+@EventBusSubscriber(modid = NatureSpirit.MOD_ID)
 public class NSEvents {
     @SubscribeEvent
     public static void interactEvent(PlayerInteractEvent.RightClickBlock event) {
@@ -31,7 +31,7 @@ public class NSEvents {
         Player player = event.getEntity();
         InteractionHand hand = event.getHand();
         if (blockState.is(BlockTags.CAULDRONS) && event.getItemStack().is(Items.MILK_BUCKET) && !blockState.is(NSBlocks.MILK_CAULDRON.get())) {
-            event.setUseItem(Event.Result.DENY);
+            event.setUseItem(TriState.FALSE);
             world.playSound(player, blockPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (player instanceof ServerPlayer) {
                 CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer) player, blockPos, event.getItemStack());

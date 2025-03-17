@@ -1,16 +1,23 @@
 package net.hibiscus.naturespirit.blocks.block_entities;
 
+import net.hibiscus.naturespirit.NatureSpirit;
+import net.hibiscus.naturespirit.blocks.PizzaBlock;
 import net.hibiscus.naturespirit.registration.NSBlocks;
+import net.hibiscus.naturespirit.registration.NSDataComponents;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -18,60 +25,73 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 public class PizzaBlockEntity extends BlockEntity {
-  public ArrayList<String> toppings = new ArrayList<String>();
-  public int topping_number = toppings != null ? toppings.size() : 0;
-  public int bites = 0;
+
+  public ArrayList<PizzaToppingVariant> toppings = new ArrayList<>();
+  public int toppingCount = 0;
+
   public PizzaBlockEntity(BlockPos pos, BlockState state) {
     super(NSBlocks.PIZZA_BLOCK_ENTITY_TYPE.get(), pos, state);
   }
-  @Override
-  public void saveAdditional(CompoundTag nbt) {
-    ListTag nbtElement = new ListTag();
-    for(String string : toppings) {
-      nbtElement.add(StringTag.valueOf(string));
-    }
-    nbt.put("topping_types", nbtElement);
-    nbt.putInt("toppings_number", this.topping_number);
-    nbt.putInt("pizza_bites", this.bites);
-    this.setChanged();
 
-    super.saveAdditional(nbt);
-  }
   @Override
-  public void load(CompoundTag nbt) {
-    ListTag nbt2 = ((ListTag)nbt.get("topping_types"));
-    if (nbt2 != null) {
-      toppings.clear();
-      for(int i = 0; i < nbt2.size(); i++) {
-        toppings.add(i, nbt2.getString(i));
-      }
+  protected void applyImplicitComponents(BlockEntity.DataComponentInput components) {
+    super.applyImplicitComponents(components);
+    if (components.get(NSDataComponents.TOPPINGS) != null) {
+      toppings = new ArrayList<>(components.get(NSDataComponents.TOPPINGS.get()));
     }
-    this.topping_number = nbt.getInt("toppings_number");
-    this.bites = nbt.getInt("pizza_bites");
+    this.toppingCount = toppings != null ? toppings.size() : 0;
+  }
 
-    super.load(nbt);
+  @Override
+  protected void collectImplicitComponents(DataComponentMap.Builder componentMapBuilder) {
+    super.collectImplicitComponents(componentMapBuilder);
+    componentMapBuilder.set(NSDataComponents.TOPPINGS.get(), toppings);
   }
-  public boolean checkTopping(ItemStack itemStack) {
-    return itemStack.is(NSTags.Items.PIZZA_TOPPINGS);
+
+  @Override
+  public void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+    super.saveAdditional(nbt, registryLookup);
+    nbt.put("toppings", (Tag)NSDataComponents.TOPPINGS.get().codec().encodeStart(NbtOps.INSTANCE, this.toppings).getOrThrow());
   }
-  public boolean canPlaceTopping(ItemStack itemStack, PizzaBlockEntity pizzaBlockEntity) {
-    boolean pizzaTopping = checkTopping(itemStack);
-    String itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString();
-    boolean bl = pizzaBlockEntity.bites == 0 && pizzaBlockEntity.topping_number < 4 && !(itemStack.is(NSTags.Items.DISABLED_PIZZA_TOPPINGS)) && pizzaTopping && !toppings.contains(itemId);
+
+  @Override
+  public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+    super.loadAdditional(nbt, registryLookup);
+    this.toppings.clear();
+    if (nbt.contains("toppings")) {
+      NSDataComponents.TOPPINGS.get().codec().parse(NbtOps.INSTANCE, nbt.get("toppings")).resultOrPartial().ifPresent((list) -> toppings.addAll(list));
+    }
+  }
+
+  public boolean canPlaceTopping(ItemStack itemStack, Level world, PizzaBlockEntity pizzaBlockEntity) {
+    ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
+    PizzaToppingVariant toppingVariant = getVariantFromItem(itemId, world);
+    boolean bl = pizzaBlockEntity.getBlockState().getValue(PizzaBlock.BITES) == 0 && pizzaBlockEntity.toppingCount < 4 && !(itemStack.is(NSTags.Items.DISABLED_PIZZA_TOPPINGS))
+            && toppingVariant != null && !toppings.contains(toppingVariant);
     if (bl) {
-      toppings.add(itemId);
+      toppings.add(toppingVariant);
     }
-    this.setChanged();
     return bl;
   }
+
+  @Nullable
+  public static PizzaToppingVariant getVariantFromItem(ResourceLocation itemId, Level world) {
+    for (PizzaToppingVariant pizzaToppingVariant : world.registryAccess().registryOrThrow(NatureSpirit.PIZZA_TOPPING_VARIANT)) {
+      if (pizzaToppingVariant.itemId().equals(itemId)) {
+        return pizzaToppingVariant;
+      }
+    }
+    return null;
+  }
+
   @Nullable
   @Override
-  public Packet <ClientGamePacketListener> getUpdatePacket() {
+  public Packet<ClientGamePacketListener> getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this);
   }
 
   @Override
-  public CompoundTag getUpdateTag() {
-    return saveWithoutMetadata();
+  public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
+    return saveWithoutMetadata(registryLookup);
   }
 }

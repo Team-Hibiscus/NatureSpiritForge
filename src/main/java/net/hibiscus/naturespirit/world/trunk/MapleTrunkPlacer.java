@@ -7,13 +7,13 @@ package net.hibiscus.naturespirit.world.trunk;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Plane;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -24,7 +24,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.TreeConfigurati
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer.FoliageAttachment;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -33,7 +32,7 @@ import java.util.function.Function;
 public class MapleTrunkPlacer extends TrunkPlacer {
 
   private static final Codec<UniformInt> BRANCH_START_OFFSET_FROM_TOP_CODEC;
-  public static final Codec<MapleTrunkPlacer> CODEC;
+  public static final MapCodec<MapleTrunkPlacer> CODEC;
   private final IntProvider branchCount;
   private final IntProvider branchHorizontalLength;
   private final UniformInt branchStartOffsetFromTop;
@@ -137,17 +136,17 @@ public class MapleTrunkPlacer extends TrunkPlacer {
   }
 
   static {
-    BRANCH_START_OFFSET_FROM_TOP_CODEC = ExtraCodecs.validate(UniformInt.CODEC, (branchStartOffsetFromTop) -> {
+    BRANCH_START_OFFSET_FROM_TOP_CODEC = UniformInt.CODEC.codec().validate((branchStartOffsetFromTop) -> {
       return branchStartOffsetFromTop.getMaxValue() - branchStartOffsetFromTop.getMinValue() < 1 ? DataResult.error(() -> {
         return "Need at least 2 blocks variation for the branch starts to fit both branches";
       }) : DataResult.success(branchStartOffsetFromTop);
     });
-    CODEC = RecordCodecBuilder.create((instance) -> {
+    CODEC = RecordCodecBuilder.mapCodec((instance) -> {
       return trunkPlacerParts(instance).and(instance.group(IntProvider.codec(1, 5).fieldOf("branch_count").forGetter((trunkPlacer) -> {
         return trunkPlacer.branchCount;
       }), IntProvider.codec(1, 16).fieldOf("branch_horizontal_length").forGetter((trunkPlacer) -> {
         return trunkPlacer.branchHorizontalLength;
-      }), IntProvider.codec(-16, 0, BRANCH_START_OFFSET_FROM_TOP_CODEC).fieldOf("branch_start_offset_from_top").forGetter((trunkPlacer) -> {
+      }), IntProvider.validateCodec(-16, 0, BRANCH_START_OFFSET_FROM_TOP_CODEC).fieldOf("branch_start_offset_from_top").forGetter((trunkPlacer) -> {
         return trunkPlacer.branchStartOffsetFromTop;
       }), IntProvider.codec(-16, 16).fieldOf("branch_end_offset_from_top").forGetter((trunkPlacer) -> {
         return trunkPlacer.branchEndOffsetFromTop;

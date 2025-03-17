@@ -25,7 +25,7 @@ public class NSBoatRenderer extends BoatRenderer {
     public NSBoatRenderer(EntityRendererProvider.Context pContext, boolean pChestBoat) {
         super(pContext, pChestBoat);
         this.boatResources = Stream.of(NSBoatEntity.Type.values()).collect(ImmutableMap.toImmutableMap(type -> type,
-                type -> Pair.of(new ResourceLocation(MOD_ID, getTextureLocation(type, pChestBoat)), this.createBoatModel(pContext, type, pChestBoat))));
+                type -> Pair.of(ResourceLocation.fromNamespaceAndPath(MOD_ID, getTextureLocation(type, pChestBoat)), this.createBoatModel(pContext, type, pChestBoat))));
     }
 
     private static String getTextureLocation(NSBoatEntity.Type pType, boolean pChestBoat) {
@@ -47,7 +47,7 @@ public class NSBoatRenderer extends BoatRenderer {
     }
 
     private static ModelLayerLocation createLocation(String pPath, String pModel) {
-        return new ModelLayerLocation(new ResourceLocation(MOD_ID, pPath), pModel);
+        return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MOD_ID, pPath), pModel);
     }
 
     public Pair<ResourceLocation, ListModel<Boat>> getModelWithLocation(Boat boat) {

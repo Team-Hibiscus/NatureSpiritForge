@@ -25,19 +25,19 @@ import net.minecraft.world.level.GrassColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
-@Mod.EventBusSubscriber(modid = NatureSpirit.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = NatureSpirit.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class NSClient {
 
-  public static final ModelLayerLocation PIZZA_TOPPING = new ModelLayerLocation(new ResourceLocation(NatureSpirit.MOD_ID, "pizza"), "toppings");
+  public static final ModelLayerLocation PIZZA_TOPPING = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(NatureSpirit.MOD_ID, "pizza"), "toppings");
 
   @SubscribeEvent
   public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
@@ -121,10 +121,10 @@ public class NSClient {
     ItemBlockRenderTypes.setRenderLayer(NSBlocks.SMALL_CALCITE_BUD.get(), RenderType.cutout());
     ItemBlockRenderTypes.setRenderLayer(NSBlocks.CALCITE_CLUSTER.get(), RenderType.cutout());
 
-    for (RegistryObject<Block> block : NSRegistryHelper.RenderLayerHashMap.values()) {
+    for (DeferredBlock<? extends Block> block : NSRegistryHelper.RenderLayerHashMap.values()) {
       ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutout());
     }
-    for (RegistryObject<Block> block : NSRegistryHelper.LeavesHashMap.values()) {
+    for (DeferredBlock<? extends Block> block : NSRegistryHelper.LeavesHashMap.values()) {
       ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutoutMipped());
     }
 

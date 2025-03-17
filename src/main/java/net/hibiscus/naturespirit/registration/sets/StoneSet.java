@@ -2,48 +2,44 @@ package net.hibiscus.naturespirit.registration.sets;
 
 import com.google.common.base.Supplier;
 import net.hibiscus.naturespirit.registration.NSRegistryHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.registries.RegistryObject;
-
-import static net.hibiscus.naturespirit.registration.NSRegistryHelper.registerTransparentBlock;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class StoneSet {
 
 
-  private RegistryObject<Block> cobbled;
-  private RegistryObject<Block> cobbledStairs;
-  private RegistryObject<Block> cobbledSlab;
-  private RegistryObject<Block> cobbledWall;
-  private RegistryObject<Block> mossyCobbled;
-  private RegistryObject<Block> mossyCobbledStairs;
-  private RegistryObject<Block> mossyCobbledSlab;
-  private RegistryObject<Block> mossyCobbledWall;
-  private RegistryObject<Block> base;
-  private RegistryObject<Block> baseStairs;
-  private RegistryObject<Block> baseSlab;
-  private RegistryObject<Block> polished;
-  private RegistryObject<Block> polishedStairs;
-  private RegistryObject<Block> polishedSlab;
-  private RegistryObject<Block> polishedWall;
-  private RegistryObject<Block> tiles;
-  private RegistryObject<Block> tilesStairs;
-  private RegistryObject<Block> tilesSlab;
-  private RegistryObject<Block> tilesWall;
-  private RegistryObject<Block> bricks;
-  private RegistryObject<Block> bricksStairs;
-  private RegistryObject<Block> bricksSlab;
-  private RegistryObject<Block> bricksWall;
-  private RegistryObject<Block> chiseled;
-  private RegistryObject<Block> crackedBricks;
-  private RegistryObject<Block> crackedTiles;
-  private RegistryObject<Block> mossyBricks;
-  private RegistryObject<Block> mossyBricksStairs;
-  private RegistryObject<Block> mossyBricksSlab;
-  private RegistryObject<Block> mossyBricksWall;
+  private DeferredBlock<Block> cobbled;
+  private DeferredBlock<StairBlock> cobbledStairs;
+  private DeferredBlock<SlabBlock> cobbledSlab;
+  private DeferredBlock<WallBlock> cobbledWall;
+  private DeferredBlock<Block> mossyCobbled;
+  private DeferredBlock<StairBlock> mossyCobbledStairs;
+  private DeferredBlock<SlabBlock> mossyCobbledSlab;
+  private DeferredBlock<WallBlock> mossyCobbledWall;
+  private DeferredBlock<? extends Block> base;
+  private DeferredBlock<StairBlock> baseStairs;
+  private DeferredBlock<SlabBlock> baseSlab;
+  private DeferredBlock<Block> polished;
+  private DeferredBlock<StairBlock> polishedStairs;
+  private DeferredBlock<SlabBlock> polishedSlab;
+  private DeferredBlock<WallBlock> polishedWall;
+  private DeferredBlock<Block> tiles;
+  private DeferredBlock<StairBlock> tilesStairs;
+  private DeferredBlock<SlabBlock> tilesSlab;
+  private DeferredBlock<WallBlock> tilesWall;
+  private DeferredBlock<Block> bricks;
+  private DeferredBlock<StairBlock> bricksStairs;
+  private DeferredBlock<SlabBlock> bricksSlab;
+  private DeferredBlock<WallBlock> bricksWall;
+  private DeferredBlock<Block> chiseled;
+  private DeferredBlock<Block> crackedBricks;
+  private DeferredBlock<Block> crackedTiles;
+  private DeferredBlock<Block> mossyBricks;
+  private DeferredBlock<StairBlock> mossyBricksStairs;
+  private DeferredBlock<SlabBlock> mossyBricksSlab;
+  private DeferredBlock<WallBlock> mossyBricksWall;
 
   private final String name;
   private final MapColor mapColor;
@@ -102,7 +98,6 @@ public class StoneSet {
         crackedTiles = createBasic("cracked_" + getName() + "_tiles", () -> Blocks.CRACKED_STONE_BRICKS);
       }
     }
-//    addToBuildingTab(itemBefore, item2Before, this);
   }
 
   public StoneSet(String name, MapColor mapColor, float hardness, boolean hasCobbled, boolean hasCracked, boolean hasMossy,
@@ -130,7 +125,7 @@ public class StoneSet {
     registerStone();
   }
 
-  private RegistryObject<Block> createBlockWithItem(String blockID, Supplier<Block> block) {
+  private <T extends Block> DeferredBlock<T> createBlockWithItem(String blockID, Supplier<T> block) {
       return NSRegistryHelper.registerBlock(blockID, block);
   }
 
@@ -138,24 +133,24 @@ public class StoneSet {
     return name;
   }
 
-  private RegistryObject<Block> createBasic(String name, Supplier<Block> template) {
-    return createBlockWithItem(name, () -> new Block(BlockBehaviour.Properties.copy(template.get()).destroyTime(hardness).mapColor(getMapColor())));
+  private DeferredBlock<Block> createBasic(String name, Supplier<Block> template) {
+    return createBlockWithItem(name, () -> new Block(BlockBehaviour.Properties.ofFullCopy(template.get()).destroyTime(hardness).mapColor(getMapColor())));
   }
 
-  private RegistryObject<Block> createRotatable(String name, Supplier<Block> template) {
-    return createBlockWithItem(name, () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(template.get()).destroyTime(hardness).mapColor(getMapColor())));
+  private DeferredBlock<RotatedPillarBlock> createRotatable(String name, Supplier<Block> template) {
+    return createBlockWithItem(name, () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(template.get()).destroyTime(hardness).mapColor(getMapColor())));
   }
 
-  private RegistryObject<Block> createStairs(String name, RegistryObject<Block> template) {
-    return createBlockWithItem(name + "_stairs", () -> new StairBlock(() -> template.get().defaultBlockState(), BlockBehaviour.Properties.copy(template.get())));
+  private DeferredBlock<StairBlock> createStairs(String name, DeferredBlock<? extends Block> template) {
+    return createBlockWithItem(name + "_stairs", () -> new StairBlock(template.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(template.get())));
   }
 
-  private RegistryObject<Block> createSlab(String name, RegistryObject<Block> template) {
-    return createBlockWithItem(name + "_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(template.get())));
+  private DeferredBlock<SlabBlock> createSlab(String name, DeferredBlock<? extends Block> template) {
+    return createBlockWithItem(name + "_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(template.get())));
   }
 
-  private RegistryObject<Block> createWall(String name, RegistryObject<Block> template) {
-    return createBlockWithItem(name + "_wall", () -> new WallBlock(BlockBehaviour.Properties.copy(template.get()).forceSolidOn()));
+  private DeferredBlock<WallBlock> createWall(String name, DeferredBlock<Block> template) {
+    return createBlockWithItem(name + "_wall", () -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(template.get()).forceSolidOn()));
   }
 
   public boolean hasTiles() {
@@ -178,150 +173,121 @@ public class StoneSet {
     return isRotatable;
   }
 
-//  public static void addToBuildingTab(Item proceedingItem, Item naturalStonePlacement, StoneSet stoneSet) {
-//    ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> {
-//      entries.addAfter(proceedingItem, stoneSet.getBase(), stoneSet.getBaseStairs(), stoneSet.getBaseSlab(),
-//          stoneSet.getChiseled(), stoneSet.getPolished(), stoneSet.getPolishedStairs(), stoneSet.getPolishedSlab(), stoneSet.getPolishedWall(), stoneSet.getBricks(),
-//          stoneSet.getBricksStairs(), stoneSet.getBricksSlab(), stoneSet.getBricksWall());
-//      if (stoneSet.hasCobbled()) {
-//        entries.addAfter(stoneSet.getBaseSlab(), stoneSet.getCobbled(), stoneSet.getCobbledStairs(), stoneSet.getCobbledSlab(), stoneSet.getCobbledWall());
-//        if (stoneSet.hasMossy()) {
-//          entries.addAfter(stoneSet.getCobbledWall(), stoneSet.getMossyCobbled(), stoneSet.getMossyCobbledStairs(), stoneSet.getMossyCobbledSlab(), stoneSet.getMossyCobbledWall());
-//        }
-//      }
-//      if (stoneSet.hasCracked()) {
-//        entries.addAfter(stoneSet.getBricks(), stoneSet.getCrackedBricks());
-//      }
-//      if (stoneSet.hasTiles()) {
-//        entries.addAfter(stoneSet.getBricksWall(), stoneSet.getTiles(), stoneSet.getTilesStairs(), stoneSet.getTilesSlab(), stoneSet.getTilesWall());
-//        if (stoneSet.hasCracked()) {
-//          entries.addAfter(stoneSet.getTiles(), stoneSet.getCrackedTiles());
-//        }
-//      }
-//      if (stoneSet.hasMossy()) {
-//        entries.addAfter(stoneSet.getBricksWall(), stoneSet.getMossyBricks(), stoneSet.getMossyBricksStairs(), stoneSet.getMossyBricksSlab(), stoneSet.getMossyBricksWall());
-//      }
-//    });
-//    ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(entries -> entries.addAfter(naturalStonePlacement, stoneSet.getBase()));
-//  }
-
-  public RegistryObject<Block> getCobbled() {
+  public DeferredBlock<Block> getCobbled() {
     return cobbled;
   }
 
-  public RegistryObject<Block> getCobbledStairs() {
-    return cobbledStairs;
-  }
+  public DeferredBlock<StairBlock> getCobbledStairs() {return cobbledStairs;}
 
-  public RegistryObject<Block> getCobbledSlab() {
+  public DeferredBlock<SlabBlock> getCobbledSlab() {
     return cobbledSlab;
   }
 
-  public RegistryObject<Block> getCobbledWall() {
+  public DeferredBlock<WallBlock> getCobbledWall() {
     return cobbledWall;
   }
 
-  public RegistryObject<Block> getBase() {
+  public DeferredBlock<? extends Block> getBase() {
     return base;
   }
 
-  public RegistryObject<Block> getBaseStairs() {
+  public DeferredBlock<StairBlock> getBaseStairs() {
     return baseStairs;
   }
 
-  public RegistryObject<Block> getBaseSlab() {
+  public DeferredBlock<SlabBlock> getBaseSlab() {
     return baseSlab;
   }
 
-  public RegistryObject<Block> getPolished() {
+  public DeferredBlock<Block> getPolished() {
     return polished;
   }
 
-  public RegistryObject<Block> getPolishedStairs() {
+  public DeferredBlock<StairBlock> getPolishedStairs() {
     return polishedStairs;
   }
 
-  public RegistryObject<Block> getPolishedSlab() {
+  public DeferredBlock<SlabBlock> getPolishedSlab() {
     return polishedSlab;
   }
 
-  public RegistryObject<Block> getPolishedWall() {
+  public DeferredBlock<WallBlock> getPolishedWall() {
     return polishedWall;
   }
 
-  public RegistryObject<Block> getTiles() {
+  public DeferredBlock<Block> getTiles() {
     return tiles;
   }
 
-  public RegistryObject<Block> getTilesStairs() {
+  public DeferredBlock<StairBlock> getTilesStairs() {
     return tilesStairs;
   }
 
-  public RegistryObject<Block> getTilesSlab() {
+  public DeferredBlock<SlabBlock> getTilesSlab() {
     return tilesSlab;
   }
 
-  public RegistryObject<Block> getTilesWall() {
+  public DeferredBlock<WallBlock> getTilesWall() {
     return tilesWall;
   }
 
-  public RegistryObject<Block> getBricks() {
+  public DeferredBlock<Block> getBricks() {
     return bricks;
   }
 
-  public RegistryObject<Block> getBricksStairs() {
+  public DeferredBlock<StairBlock> getBricksStairs() {
     return bricksStairs;
   }
 
-  public RegistryObject<Block> getBricksSlab() {
+  public DeferredBlock<SlabBlock> getBricksSlab() {
     return bricksSlab;
   }
 
-  public RegistryObject<Block> getBricksWall() {
+  public DeferredBlock<WallBlock> getBricksWall() {
     return bricksWall;
   }
 
-  public RegistryObject<Block> getChiseled() {
+  public DeferredBlock<Block> getChiseled() {
     return chiseled;
   }
 
-  public RegistryObject<Block> getCrackedBricks() {
+  public DeferredBlock<Block> getCrackedBricks() {
     return crackedBricks;
   }
 
-  public RegistryObject<Block> getCrackedTiles() {
+  public DeferredBlock<Block> getCrackedTiles() {
     return crackedTiles;
   }
 
-  public RegistryObject<Block> getMossyBricks() {
+  public DeferredBlock<Block> getMossyBricks() {
     return mossyBricks;
   }
 
-  public RegistryObject<Block> getMossyBricksStairs() {
+  public DeferredBlock<StairBlock> getMossyBricksStairs() {
     return mossyBricksStairs;
   }
 
-  public RegistryObject<Block> getMossyBricksSlab() {
+  public DeferredBlock<SlabBlock> getMossyBricksSlab() {
     return mossyBricksSlab;
   }
 
-  public RegistryObject<Block> getMossyBricksWall() {
+  public DeferredBlock<WallBlock> getMossyBricksWall() {
     return mossyBricksWall;
   }
 
-  public RegistryObject<Block> getMossyCobbled() {
+  public DeferredBlock<Block> getMossyCobbled() {
     return mossyCobbled;
   }
 
-  public RegistryObject<Block> getMossyCobbledStairs() {
+  public DeferredBlock<StairBlock> getMossyCobbledStairs() {
     return mossyCobbledStairs;
   }
 
-  public RegistryObject<Block> getMossyCobbledSlab() {
+  public DeferredBlock<SlabBlock> getMossyCobbledSlab() {
     return mossyCobbledSlab;
   }
 
-  public RegistryObject<Block> getMossyCobbledWall() {
+  public DeferredBlock<WallBlock> getMossyCobbledWall() {
     return mossyCobbledWall;
   }
 

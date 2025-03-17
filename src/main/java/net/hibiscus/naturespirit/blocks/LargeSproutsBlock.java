@@ -21,7 +21,7 @@ public class LargeSproutsBlock extends TallGrassBlock {
   }
 
   @Override
-  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean bl) {
+  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
     return false;
   }
 

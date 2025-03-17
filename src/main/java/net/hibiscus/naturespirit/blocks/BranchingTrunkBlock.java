@@ -1,6 +1,7 @@
 package net.hibiscus.naturespirit.blocks;
 
 
+import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.core.BlockPos;
@@ -26,7 +27,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraftforge.common.ToolAction;
+import net.neoforged.neoforge.common.ItemAbility;
 
 import javax.annotation.Nullable;
 
@@ -137,7 +138,7 @@ public class BranchingTrunkBlock extends PipeBlock implements SimpleWaterloggedB
     return 5;
   }
   @Override
-  public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
+  public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ItemAbility itemAbility, boolean simulate) {
     if(context.getItemInHand().getItem() instanceof AxeItem) {
       if (state.is(NSBlocks.ALLUAUDIA.get())) {
         return NSBlocks.STRIPPED_ALLUAUDIA.get().defaultBlockState().setValue(BranchingTrunkBlock.DOWN, state.getValue(BranchingTrunkBlock.DOWN)).setValue(
@@ -164,7 +165,7 @@ public class BranchingTrunkBlock extends PipeBlock implements SimpleWaterloggedB
       }
     }
 
-    return super.getToolModifiedState(state, context, toolAction, simulate);
+    return super.getToolModifiedState(state, context, itemAbility, simulate);
   }
 
   @Override
@@ -186,4 +187,8 @@ public class BranchingTrunkBlock extends PipeBlock implements SimpleWaterloggedB
     return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
   }
 
+  @Override
+  protected MapCodec<? extends PipeBlock> codec() {
+    return null;
+  }
 }
