@@ -72,11 +72,11 @@ public class NatureSpirit {
         NSWorldGen.FEATURES.register(modEventBus);
         NSVillagers.VILLAGER_TYPES.register(modEventBus);
         modEventBus.addListener(this::creativeInventory);
+        modEventBus.addListener(this::addPackFinders);
         NSCriteria.CRITERIA.register(modEventBus);
 
         NeoForge.EVENT_BUS.addListener(this::wandererTrades);
         ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, NSConfig.SPEC);
-        modEventBus.addListener(this::addPackFinders);
 
 
         if(ModList.get().isLoaded("arts_and_crafts")) {
@@ -450,7 +450,7 @@ public class NatureSpirit {
             event.insertAfter(NSBlocks.MAHOGANY.getSapling().get().asItem().getDefaultInstance(), NSBlocks.SAXAUL.getSapling().get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
-            event.insertAfter(Items.BAMBOO_HANGING_SIGN.getDefaultInstance(), NSBlocks.REDWOOD.getSignItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_TAB_ONLY);
+            event.insertAfter(Items.BAMBOO_HANGING_SIGN.getDefaultInstance(), NSBlocks.REDWOOD.getSignItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(NSBlocks.REDWOOD.getSignItem().get().getDefaultInstance(), NSBlocks.REDWOOD.getHangingSignItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(NSBlocks.REDWOOD.getHangingSignItem().get().getDefaultInstance(), NSBlocks.SUGI.getSignItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(NSBlocks.SUGI.getSignItem().get().getDefaultInstance(), NSBlocks.SUGI.getHangingSignItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
@@ -504,7 +504,7 @@ public class NatureSpirit {
 
         }
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.insertAfter(Items.BAMBOO_CHEST_RAFT.getDefaultInstance(), NSBlocks.REDWOOD.getBoatItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_TAB_ONLY);
+            event.insertAfter(Items.BAMBOO_CHEST_RAFT.getDefaultInstance(), NSBlocks.REDWOOD.getBoatItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(NSBlocks.REDWOOD.getBoatItem().get().getDefaultInstance(), NSBlocks.REDWOOD.getChestBoatItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(NSBlocks.REDWOOD.getChestBoatItem().get().getDefaultInstance(), NSBlocks.SUGI.getBoatItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             event.insertAfter(NSBlocks.SUGI.getBoatItem().get().getDefaultInstance(), NSBlocks.SUGI.getChestBoatItem().get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
@@ -733,9 +733,7 @@ public class NatureSpirit {
             event.insertAfter(itemStacks.get(i-1).asItem().getDefaultInstance(), itemStacks.get(i).asItem().getDefaultInstance(), tabVisibility);
         }
     }
-
     public void addPackFinders(AddPackFindersEvent event) {
-
         if(ModList.get().isLoaded("arts_and_crafts")) {
             event.addPackFinders(
                     ResourceLocation.fromNamespaceAndPath(MOD_ID, "resourcepacks/arts_and_crafts_res"),
@@ -743,7 +741,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.arts_and_crafts"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
             event.addPackFinders(
                     ResourceLocation.fromNamespaceAndPath(MOD_ID, "resourcepacks/arts_and_crafts_dat"),
@@ -751,24 +749,24 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.arts_and_crafts"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         event.addPackFinders(
                 ResourceLocation.fromNamespaceAndPath(MOD_ID, "resourcepacks/plank_consistency"),
                 PackType.CLIENT_RESOURCES,
                 Component.translatable("pack.natures_spirit.plank_consistency"),
-                PackSource.BUILT_IN,
-                true,
-                Pack.Position.BOTTOM
+                PackSource.FEATURE,
+                false,
+                Pack.Position.TOP
         );
         event.addPackFinders(
                 ResourceLocation.fromNamespaceAndPath(MOD_ID, "resourcepacks/emissive_ores_compatibility"),
                 PackType.CLIENT_RESOURCES,
                 Component.translatable("pack.natures_spirit.emissive_ores_compatibility"),
-                PackSource.BUILT_IN,
-                true,
-                Pack.Position.BOTTOM
+                PackSource.FEATURE,
+                false,
+                Pack.Position.TOP
         );
         if (NSConfig.badlandsToggle) {
             event.addPackFinders(
@@ -777,7 +775,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_badlands"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         if (NSConfig.birchForestToggle) {
@@ -787,7 +785,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_birch_forest"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         if (NSConfig.darkForestToggle) {
@@ -797,7 +795,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_dark_forest"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         if (NSConfig.desertToggle) {
@@ -807,7 +805,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_desert"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         if (NSConfig.flowerForestToggle) {
@@ -817,7 +815,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_flower_forest"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         if (NSConfig.jungleToggle) {
@@ -827,7 +825,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_jungle"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         if (NSConfig.mountainBiomesToggle) {
@@ -837,7 +835,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_mountain_biomes"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         if (NSConfig.savannaToggle) {
@@ -847,7 +845,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_savannas"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         if (NSConfig.swampToggle) {
@@ -857,7 +855,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_swamp"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         if (NSConfig.vanillaTreesToggle) {
@@ -867,7 +865,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_vanilla_trees"),
                     PackSource.BUILT_IN,
                     false,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
         if (NSConfig.windsweptHillsToggle) {
@@ -877,7 +875,7 @@ public class NatureSpirit {
                     Component.translatable("pack.natures_spirit.modified_windswept_hills"),
                     PackSource.BUILT_IN,
                     true,
-                    Pack.Position.BOTTOM
+                    Pack.Position.TOP
             );
         }
 

@@ -1,444 +1,444 @@
 {
   "values": {
-    "red_moss_block": {
+    "natures_spirit:red_moss_block": {
       "chance": 0.65
     },
-    "red_moss_carpet": {
+    "natures_spirit:red_moss_carpet": {
       "chance": 0.3
     },
-    "lotus_flower_item": {
+    "natures_spirit:lotus_flower": {
       "chance": 0.65
     },
-    "lotus_stem": {
+    "natures_spirit:lotus_stem": {
       "chance": 0.2
     },
-    "azolla_item": {
+    "natures_spirit:azolla": {
       "chance": 0.3
     },
-    "helvola_flower": {
+    "natures_spirit:helvola_flower": {
       "chance": 0.3
     },
-    "helvola_pad_item": {
+    "natures_spirit:helvola_pad": {
       "chance": 0.3
     },
-    "desert_turnip": {
+    "natures_spirit:desert_turnip": {
       "chance": 0.3
     },
-    "desert_turnip_block": {
+    "natures_spirit:desert_turnip_block": {
       "chance": 0.65
     },
-    "desert_turnip_root_block": {
+    "natures_spirit:desert_turnip_root_block": {
       "chance": 0.5
     },
-    "whole_pizza": {
+    "natures_spirit:whole_pizza": {
       "chance": 1.0
     },
-    "three_quarters_pizza": {
+    "natures_spirit:three_quarters_pizza": {
       "chance": 0.85
     },
-    "half_pizza": {
+    "natures_spirit:half_pizza": {
       "chance": 0.5
     },
-    "quarter_pizza": {
+    "natures_spirit:quarter_pizza": {
       "chance": 0.35
     },
-    "aureate_succulent": {
+    "natures_spirit:aureate_succulent": {
       "chance": 0.65
     },
-    "drowsy_succulent": {
+    "natures_spirit:drowsy_succulent": {
       "chance": 0.65
     },
-    "foamy_succulent": {
+    "natures_spirit:foamy_succulent": {
       "chance": 0.65
     },
-    "sage_succulent": {
+    "natures_spirit:sage_succulent": {
       "chance": 0.65
     },
-    "imperial_succulent": {
+    "natures_spirit:imperial_succulent": {
       "chance": 0.65
     },
-    "ornate_succulent": {
+    "natures_spirit:ornate_succulent": {
       "chance": 0.65
     },
-    "regal_succulent": {
+    "natures_spirit:regal_succulent": {
       "chance": 0.65
     },
-    "coconut_thatch": {
+    "natures_spirit:coconut_thatch": {
       "chance": 0.65
     },
-    "coconut_thatch_carpet": {
+    "natures_spirit:coconut_thatch_carpet": {
       "chance": 0.1
     },
-    "coconut_thatch_stairs": {
+    "natures_spirit:coconut_thatch_stairs": {
       "chance": 0.5
     },
-    "coconut_thatch_slab": {
+    "natures_spirit:coconut_thatch_slab": {
       "chance": 0.3
     },
-    "xeric_thatch": {
+    "natures_spirit:xeric_thatch": {
       "chance": 0.65
     },
-    "xeric_thatch_carpet": {
+    "natures_spirit:xeric_thatch_carpet": {
       "chance": 0.1
     },
-    "xeric_thatch_stairs": {
+    "natures_spirit:xeric_thatch_stairs": {
       "chance": 0.5
     },
-    "xeric_thatch_slab": {
+    "natures_spirit:xeric_thatch_slab": {
       "chance": 0.3
     },
-    "evergreen_thatch": {
+    "natures_spirit:evergreen_thatch": {
       "chance": 0.65
     },
-    "evergreen_thatch_carpet": {
+    "natures_spirit:evergreen_thatch_carpet": {
       "chance": 0.1
     },
-    "evergreen_thatch_stairs": {
+    "natures_spirit:evergreen_thatch_stairs": {
       "chance": 0.5
     },
-    "evergreen_thatch_slab": {
+    "natures_spirit:evergreen_thatch_slab": {
       "chance": 0.3
     },
-    "redwood_sapling": {
+    "natures_spirit:redwood_sapling": {
       "chance": 0.3
     },
-    "sugi_sapling": {
+    "natures_spirit:sugi_sapling": {
       "chance": 0.3
     },
-    "purple_wisteria_sapling": {
+    "natures_spirit:purple_wisteria_sapling": {
       "chance": 0.3
     },
-    "white_wisteria_sapling": {
+    "natures_spirit:white_wisteria_sapling": {
       "chance": 0.3
     },
-    "blue_wisteria_sapling": {
+    "natures_spirit:blue_wisteria_sapling": {
       "chance": 0.3
     },
-    "pink_wisteria_sapling": {
+    "natures_spirit:pink_wisteria_sapling": {
       "chance": 0.3
     },
-    "fir_sapling": {
+    "natures_spirit:fir_sapling": {
       "chance": 0.3
     },
-    "willow_sapling": {
+    "natures_spirit:willow_sapling": {
       "chance": 0.3
     },
-    "aspen_sapling": {
+    "natures_spirit:aspen_sapling": {
       "chance": 0.3
     },
-    "red_maple_sapling": {
+    "natures_spirit:red_maple_sapling": {
       "chance": 0.3
     },
-    "orange_maple_sapling": {
+    "natures_spirit:orange_maple_sapling": {
       "chance": 0.3
     },
-    "yellow_maple_sapling": {
+    "natures_spirit:yellow_maple_sapling": {
       "chance": 0.3
     },
-    "cypress_sapling": {
+    "natures_spirit:cypress_sapling": {
       "chance": 0.3
     },
-    "olive_sapling": {
+    "natures_spirit:olive_sapling": {
       "chance": 0.3
     },
-    "joshua_sapling": {
+    "natures_spirit:joshua_sapling": {
       "chance": 0.3
     },
-    "ghaf_sapling": {
+    "natures_spirit:ghaf_sapling": {
       "chance": 0.3
     },
-    "palo_verde_sapling": {
+    "natures_spirit:palo_verde_sapling": {
       "chance": 0.3
     },
-    "cedar_sapling": {
+    "natures_spirit:cedar_sapling": {
       "chance": 0.3
     },
-    "larch_sapling": {
+    "natures_spirit:larch_sapling": {
       "chance": 0.3
     },
-    "mahogany_sapling": {
+    "natures_spirit:mahogany_sapling": {
       "chance": 0.3
     },
-    "saxaul_sapling": {
+    "natures_spirit:saxaul_sapling": {
       "chance": 0.3
     },
-    "redwood_leaves": {
+    "natures_spirit:redwood_leaves": {
       "chance": 0.3
     },
-    "frosty_redwood_leaves": {
+    "natures_spirit:frosty_redwood_leaves": {
       "chance": 0.3
     },
-    "sugi_leaves": {
+    "natures_spirit:sugi_leaves": {
       "chance": 0.3
     },
-    "purple_wisteria_leaves": {
+    "natures_spirit:purple_wisteria_leaves": {
       "chance": 0.3
     },
-    "white_wisteria_leaves": {
+    "natures_spirit:white_wisteria_leaves": {
       "chance": 0.3
     },
-    "blue_wisteria_leaves": {
+    "natures_spirit:blue_wisteria_leaves": {
       "chance": 0.3
     },
-    "pink_wisteria_leaves": {
+    "natures_spirit:pink_wisteria_leaves": {
       "chance": 0.3
     },
-    "part_purple_wisteria_leaves": {
+    "natures_spirit:part_purple_wisteria_leaves": {
       "chance": 0.3
     },
-    "part_white_wisteria_leaves": {
+    "natures_spirit:part_white_wisteria_leaves": {
       "chance": 0.3
     },
-    "part_blue_wisteria_leaves": {
+    "natures_spirit:part_blue_wisteria_leaves": {
       "chance": 0.3
     },
-    "part_pink_wisteria_leaves": {
+    "natures_spirit:part_pink_wisteria_leaves": {
       "chance": 0.3
     },
-    "fir_leaves": {
+    "natures_spirit:fir_leaves": {
       "chance": 0.3
     },
-    "frosty_fir_leaves": {
+    "natures_spirit:frosty_fir_leaves": {
       "chance": 0.3
     },
-    "willow_leaves": {
+    "natures_spirit:willow_leaves": {
       "chance": 0.3
     },
-    "aspen_leaves": {
+    "natures_spirit:aspen_leaves": {
       "chance": 0.3
     },
-    "yellow_aspen_leaves": {
+    "natures_spirit:yellow_aspen_leaves": {
       "chance": 0.3
     },
-    "red_maple_leaves": {
+    "natures_spirit:red_maple_leaves": {
       "chance": 0.3
     },
-    "orange_maple_leaves": {
+    "natures_spirit:orange_maple_leaves": {
       "chance": 0.3
     },
-    "yellow_maple_leaves": {
+    "natures_spirit:yellow_maple_leaves": {
       "chance": 0.3
     },
-    "cypress_leaves": {
+    "natures_spirit:cypress_leaves": {
       "chance": 0.3
     },
-    "olive_leaves": {
+    "natures_spirit:olive_leaves": {
       "chance": 0.3
     },
-    "joshua_leaves": {
+    "natures_spirit:joshua_leaves": {
       "chance": 0.3
     },
-    "ghaf_leaves": {
+    "natures_spirit:ghaf_leaves": {
       "chance": 0.3
     },
-    "palo_verde_leaves": {
+    "natures_spirit:palo_verde_leaves": {
       "chance": 0.3
     },
-    "cedar_leaves": {
+    "natures_spirit:cedar_leaves": {
       "chance": 0.3
     },
-    "coconut_leaves": {
+    "natures_spirit:coconut_leaves": {
       "chance": 0.3
     },
-    "larch_leaves": {
+    "natures_spirit:larch_leaves": {
       "chance": 0.3
     },
-    "mahogany_leaves": {
+    "natures_spirit:mahogany_leaves": {
       "chance": 0.3
     },
-    "saxaul_leaves": {
+    "natures_spirit:saxaul_leaves": {
       "chance": 0.3
     },
-    "purple_wisteria_vines": {
+    "natures_spirit:purple_wisteria_vines": {
       "chance": 0.3
     },
-    "white_wisteria_vines": {
+    "natures_spirit:white_wisteria_vines": {
       "chance": 0.3
     },
-    "blue_wisteria_vines": {
+    "natures_spirit:blue_wisteria_vines": {
       "chance": 0.3
     },
-    "pink_wisteria_vines": {
+    "natures_spirit:pink_wisteria_vines": {
       "chance": 0.3
     },
-    "willow_vines": {
+    "natures_spirit:willow_vines": {
       "chance": 0.3
     },
-    "lavender": {
+    "natures_spirit:lavender": {
       "chance": 0.4
     },
-    "bleeding_heart": {
+    "natures_spirit:bleeding_heart": {
       "chance": 0.4
     },
-    "blue_bulbs": {
+    "natures_spirit:blue_bulbs": {
       "chance": 0.4
     },
-    "carnation": {
+    "natures_spirit:carnation": {
       "chance": 0.4
     },
-    "gardenia": {
+    "natures_spirit:gardenia": {
       "chance": 0.4
     },
-    "snapdragon": {
+    "natures_spirit:snapdragon": {
       "chance": 0.4
     },
-    "foxglove": {
+    "natures_spirit:foxglove": {
       "chance": 0.4
     },
-    "begonia": {
+    "natures_spirit:begonia": {
       "chance": 0.4
     },
-    "marigold": {
+    "natures_spirit:marigold": {
       "chance": 0.4
     },
-    "bluebell": {
+    "natures_spirit:bluebell": {
       "chance": 0.4
     },
-    "tiger_lily": {
+    "natures_spirit:tiger_lily": {
       "chance": 0.4
     },
-    "purple_wildflower": {
+    "natures_spirit:purple_wildflower": {
       "chance": 0.4
     },
-    "yellow_wildflower": {
+    "natures_spirit:yellow_wildflower": {
       "chance": 0.4
     },
-    "red_heather": {
+    "natures_spirit:red_heather": {
       "chance": 0.4
     },
-    "white_heather": {
+    "natures_spirit:white_heather": {
       "chance": 0.4
     },
-    "purple_heather": {
+    "natures_spirit:purple_heather": {
       "chance": 0.4
     },
-    "anemone": {
+    "natures_spirit:anemone": {
       "chance": 0.3
     },
-    "dwarf_blossoms": {
+    "natures_spirit:dwarf_blossoms": {
       "chance": 0.3
     },
-    "protea": {
+    "natures_spirit:protea": {
       "chance": 0.3
     },
-    "hibiscus": {
+    "natures_spirit:hibiscus": {
       "chance": 0.3
     },
-    "blue_iris": {
+    "natures_spirit:blue_iris": {
       "chance": 0.3
     },
-    "black_iris": {
+    "natures_spirit:black_iris": {
       "chance": 0.3
     },
-    "ruby_blossoms": {
+    "natures_spirit:ruby_blossoms": {
       "chance": 0.4
     },
-    "silverbush": {
+    "natures_spirit:silverbush": {
       "chance": 0.4
     },
-    "cattail": {
+    "natures_spirit:cattail": {
       "chance": 0.4
     },
-    "tall_frigid_grass": {
+    "natures_spirit:tall_frigid_grass": {
       "chance": 0.3
     },
-    "frigid_grass": {
+    "natures_spirit:frigid_grass": {
       "chance": 0.3
     },
-    "tall_scorched_grass": {
+    "natures_spirit:tall_scorched_grass": {
       "chance": 0.3
     },
-    "scorched_grass": {
+    "natures_spirit:scorched_grass": {
       "chance": 0.3
     },
-    "tall_beach_grass": {
+    "natures_spirit:tall_beach_grass": {
       "chance": 0.3
     },
-    "beach_grass": {
+    "natures_spirit:beach_grass": {
       "chance": 0.3
     },
-    "tall_sedge_grass": {
+    "natures_spirit:tall_sedge_grass": {
       "chance": 0.3
     },
-    "sedge_grass": {
+    "natures_spirit:sedge_grass": {
       "chance": 0.3
     },
-    "large_flaxen_fern": {
+    "natures_spirit:large_flaxen_fern": {
       "chance": 0.3
     },
-    "flaxen_fern": {
+    "natures_spirit:flaxen_fern": {
       "chance": 0.3
     },
-    "tall_oat_grass": {
+    "natures_spirit:tall_oat_grass": {
       "chance": 0.3
     },
-    "oat_grass": {
+    "natures_spirit:oat_grass": {
       "chance": 0.3
     },
-    "large_lush_fern": {
+    "natures_spirit:large_lush_fern": {
       "chance": 0.3
     },
-    "lush_fern": {
+    "natures_spirit:lush_fern": {
       "chance": 0.3
     },
-    "tall_melic_grass": {
+    "natures_spirit:tall_melic_grass": {
       "chance": 0.3
     },
-    "melic_grass": {
+    "natures_spirit:melic_grass": {
       "chance": 0.3
     },
-    "green_bearberries": {
+    "natures_spirit:green_bearberries": {
       "chance": 0.3
     },
-    "red_bearberries": {
+    "natures_spirit:red_bearberries": {
       "chance": 0.3
     },
-    "purple_bearberries": {
+    "natures_spirit:purple_bearberries": {
       "chance": 0.3
     },
-    "green_bitter_sprouts": {
+    "natures_spirit:green_bitter_sprouts": {
       "chance": 0.3
     },
-    "red_bitter_sprouts": {
+    "natures_spirit:red_bitter_sprouts": {
       "chance": 0.3
     },
-    "purple_bitter_sprouts": {
+    "natures_spirit:purple_bitter_sprouts": {
       "chance": 0.3
     },
-    "olives": {
+    "natures_spirit:olives": {
       "chance": 0.3
     },
-    "olive_branch": {
+    "natures_spirit:olive_branch": {
       "chance": 0.5
     },
-    "coconut_block": {
+    "natures_spirit:coconut": {
       "chance": 0.2
     },
-    "coconut_sprout": {
+    "natures_spirit:coconut_sprout": {
       "chance": 0.2
     },
-    "coconut_shell": {
+    "natures_spirit:coconut_shell": {
       "chance": 0.1
     },
-    "coconut_half": {
+    "natures_spirit:coconut_half": {
       "chance": 0.1
     },
-    "shiitake_mushroom": {
+    "natures_spirit:shiitake_mushroom": {
       "chance": 0.1
     },
-    "gray_polypore": {
+    "natures_spirit:gray_polypore": {
       "chance": 0.1
     },
-    "alluaudia": {
+    "natures_spirit:alluaudia": {
       "chance": 0.2
     },
-    "alluaudia_bundle": {
+    "natures_spirit:alluaudia_bundle": {
       "chance": 0.2
     },
-    "stripped_alluaudia": {
+    "natures_spirit:stripped_alluaudia": {
       "chance": 0.2
     },
-    "stripped_alluaudia_bundle": {
+    "natures_spirit:stripped_alluaudia_bundle": {
       "chance": 0.2
     }
   }
