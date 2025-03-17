@@ -9,6 +9,7 @@ import net.hibiscus.naturespirit.items.NSBoatItem;
 import net.hibiscus.naturespirit.registration.NSParticleTypes;
 import net.hibiscus.naturespirit.registration.NSRegistryHelper;
 import net.hibiscus.naturespirit.world.tree.*;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -115,7 +116,7 @@ public class WoodSet {
 
   private void registerWood() {
     blockSetType = createBlockSetType();
-    woodType = Suppliers.memoize(() -> new WoodType(MOD_ID + ":" + getName(), blockSetType.get()));
+    woodType = Suppliers.memoize(() -> WoodType.register(new WoodType(MOD_ID + ":" + getName(), blockSetType.get())));
 
     log = woodPreset == WoodPreset.JOSHUA ? createJoshuaLog() : createLog();
     strippedLog = woodPreset == WoodPreset.JOSHUA ? createStrippedJoshuaLog() : createStrippedLog();
@@ -216,6 +217,7 @@ public class WoodSet {
     hangingWallSign = createWallHangingSign();
     signItem = createSignItem();
     hangingSignItem = createHangingSignItem();
+
     boatItem = createItem(getName() + "_boat", () -> new NSBoatItem(false, boatType.get(), new Item.Properties().stacksTo(1)));
     chestBoatItem = createItem(getName() + "_chest_boat", () -> new NSBoatItem(true, boatType.get(), new Item.Properties().stacksTo(1)));
   }
@@ -1116,20 +1118,20 @@ public class WoodSet {
   }
 
   private RegistryObject<Block> createSign() {
-    return registerBlockWithoutItem(getName() + "_sign", () -> new StandingSignBlock(Properties.copy(getSignBase()).mapColor(this.getTopColor()), getWoodType().get()));
+    return registerBlockWithoutItem(getName() + "_sign", () -> new NSStandingSignBlock(Properties.copy(getSignBase()).mapColor(this.getTopColor()), getWoodType().get()));
   }
 
   private RegistryObject<Block> createWallSign() {
-    return registerBlockWithoutItem(getName() + "_wall_sign", () -> new WallSignBlock(Properties.copy(getSignBase()).mapColor(this.getTopColor()).dropsLike(sign.get()), getWoodType().get()));
+    return registerBlockWithoutItem(getName() + "_wall_sign", () -> new NSWallSignBlock(Properties.copy(getSignBase()).mapColor(this.getTopColor()).dropsLike(sign.get()), getWoodType().get()));
   }
 
   private RegistryObject<Block> createHangingSign() {
-    return registerBlockWithoutItem(getName() + "_hanging_sign", () -> new CeilingHangingSignBlock(Properties.copy(getHangingSignBase()).mapColor(this.getTopColor()), getWoodType().get()));
+    return registerBlockWithoutItem(getName() + "_hanging_sign", () -> new NSHangingSignBlock(Properties.copy(getHangingSignBase()).mapColor(this.getTopColor()), getWoodType().get()));
   }
 
   private RegistryObject<Block> createWallHangingSign() {
     return registerBlockWithoutItem(getName() + "_wall_hanging_sign",
-            () -> new WallHangingSignBlock(Properties.copy(getHangingSignBase()).mapColor(this.getTopColor()).dropsLike(hangingSign.get()), getWoodType().get()));
+            () -> new NSWallHangingSignBlock(Properties.copy(getHangingSignBase()).mapColor(this.getTopColor()).dropsLike(hangingSign.get()), getWoodType().get()));
   }
 
   public RegistryObject<Block> createSapling(AbstractTreeGrower saplingGenerator) {

@@ -3,6 +3,8 @@ package net.hibiscus.naturespirit.registration;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import net.hibiscus.naturespirit.blocks.*;
+import net.hibiscus.naturespirit.blocks.block_entities.NSHangingSignBlockEntity;
+import net.hibiscus.naturespirit.blocks.block_entities.NSSignBlockEntity;
 import net.hibiscus.naturespirit.blocks.block_entities.PizzaBlockEntity;
 import net.hibiscus.naturespirit.datagen.NSConfiguredFeatures;
 import net.hibiscus.naturespirit.entity.NSBoatEntity;
@@ -22,6 +24,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -509,10 +512,10 @@ public class NSBlocks {
       return 5;
     }
   });
-  public static final RegistryObject<Block> PAPER_SIGN = registerBlockWithoutItem("paper_sign", () -> new StandingSignBlock(BlockBehaviour.Properties.copy(SUGI.getSign().get()), PAPER_WOOD_TYPE.get()));
-  public static final RegistryObject<Block> PAPER_WALL_SIGN = registerBlockWithoutItem("paper_wall_sign", () -> new WallSignBlock(BlockBehaviour.Properties.copy(SUGI.getSign().get()).dropsLike(PAPER_SIGN.get()), PAPER_WOOD_TYPE.get()));
-  public static final RegistryObject<Block> PAPER_HANGING_SIGN = registerBlockWithoutItem("paper_hanging_sign", () -> new CeilingHangingSignBlock(BlockBehaviour.Properties.copy(SUGI.getHangingSign().get()), PAPER_WOOD_TYPE.get()));
-  public static final RegistryObject<Block> PAPER_WALL_HANGING_SIGN = registerBlockWithoutItem("paper_wall_hanging_sign", () -> new WallHangingSignBlock(BlockBehaviour.Properties.copy(SUGI.getHangingSign().get()).dropsLike(PAPER_HANGING_SIGN.get()), PAPER_WOOD_TYPE.get()));
+  public static final RegistryObject<Block> PAPER_SIGN = registerBlockWithoutItem("paper_sign", () -> new NSStandingSignBlock(BlockBehaviour.Properties.copy(SUGI.getSign().get()), PAPER_WOOD_TYPE.get()));
+  public static final RegistryObject<Block> PAPER_WALL_SIGN = registerBlockWithoutItem("paper_wall_sign", () -> new NSWallSignBlock(BlockBehaviour.Properties.copy(SUGI.getSign().get()).dropsLike(PAPER_SIGN.get()), PAPER_WOOD_TYPE.get()));
+  public static final RegistryObject<Block> PAPER_HANGING_SIGN = registerBlockWithoutItem("paper_hanging_sign", () -> new NSHangingSignBlock(BlockBehaviour.Properties.copy(SUGI.getHangingSign().get()), PAPER_WOOD_TYPE.get()));
+  public static final RegistryObject<Block> PAPER_WALL_HANGING_SIGN = registerBlockWithoutItem("paper_wall_hanging_sign", () -> new NSWallHangingSignBlock(BlockBehaviour.Properties.copy(SUGI.getHangingSign().get()).dropsLike(PAPER_HANGING_SIGN.get()), PAPER_WOOD_TYPE.get()));
   public static final RegistryObject<Item> PAPER_SIGN_ITEM = registerItem("paper_sign", () -> new SignItem(new Item.Properties().stacksTo(16), PAPER_SIGN.get(), PAPER_WALL_SIGN.get()));
   public static final RegistryObject<Item> PAPER_HANGING_SIGN_ITEM = registerItem("paper_hanging_sign", () -> new HangingSignItem(PAPER_HANGING_SIGN.get(), PAPER_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 
@@ -863,6 +866,88 @@ public class NSBlocks {
       false,
       new SaxaulSaplingGenerator()
   );
+
+  public static final RegistryObject<BlockEntityType<NSSignBlockEntity>> NS_SIGN =
+          BLOCK_ENTITIES.register("sign", () ->
+                  BlockEntityType.Builder.of(NSSignBlockEntity::new,
+                          NSBlocks.REDWOOD.getSign().get(),
+                          NSBlocks.REDWOOD.getWallSign().get(),
+                          NSBlocks.SUGI.getSign().get(),
+                          NSBlocks.SUGI.getWallSign().get(),
+                          NSBlocks.WISTERIA.getSign().get(),
+                          NSBlocks.WISTERIA.getWallSign().get(),
+                          NSBlocks.FIR.getSign().get(),
+                          NSBlocks.FIR.getWallSign().get(),
+                          NSBlocks.WILLOW.getSign().get(),
+                          NSBlocks.WILLOW.getWallSign().get(),
+                          NSBlocks.ASPEN.getSign().get(),
+                          NSBlocks.ASPEN.getWallSign().get(),
+                          NSBlocks.MAPLE.getSign().get(),
+                          NSBlocks.MAPLE.getWallSign().get(),
+                          NSBlocks.CYPRESS.getSign().get(),
+                          NSBlocks.CYPRESS.getWallSign().get(),
+                          NSBlocks.OLIVE.getSign().get(),
+                          NSBlocks.OLIVE.getWallSign().get(),
+                          NSBlocks.JOSHUA.getSign().get(),
+                          NSBlocks.JOSHUA.getWallSign().get(),
+                          NSBlocks.GHAF.getSign().get(),
+                          NSBlocks.GHAF.getWallSign().get(),
+                          NSBlocks.PALO_VERDE.getSign().get(),
+                          NSBlocks.PALO_VERDE.getWallSign().get(),
+                          NSBlocks.COCONUT.getSign().get(),
+                          NSBlocks.COCONUT.getWallSign().get(),
+                          NSBlocks.CEDAR.getSign().get(),
+                          NSBlocks.CEDAR.getWallSign().get(),
+                          NSBlocks.LARCH.getSign().get(),
+                          NSBlocks.LARCH.getWallSign().get(),
+                          NSBlocks.MAHOGANY.getSign().get(),
+                          NSBlocks.MAHOGANY.getWallSign().get(),
+                          NSBlocks.SAXAUL.getSign().get(),
+                          NSBlocks.SAXAUL.getWallSign().get(),
+                          PAPER_SIGN.get(),
+                          PAPER_WALL_SIGN.get()
+                  ).build(null));
+
+  public static final RegistryObject<BlockEntityType<NSHangingSignBlockEntity>> NS_HANGING_SIGN =
+          BLOCK_ENTITIES.register("hanging_sign", () ->
+                  BlockEntityType.Builder.of(NSHangingSignBlockEntity::new,
+                          NSBlocks.REDWOOD.getHangingSign().get(),
+                          NSBlocks.REDWOOD.getHangingWallSign().get(),
+                          NSBlocks.SUGI.getHangingSign().get(),
+                          NSBlocks.SUGI.getHangingWallSign().get(),
+                          NSBlocks.WISTERIA.getHangingSign().get(),
+                          NSBlocks.WISTERIA.getHangingWallSign().get(),
+                          NSBlocks.FIR.getHangingSign().get(),
+                          NSBlocks.FIR.getHangingWallSign().get(),
+                          NSBlocks.WILLOW.getHangingSign().get(),
+                          NSBlocks.WILLOW.getHangingWallSign().get(),
+                          NSBlocks.ASPEN.getHangingSign().get(),
+                          NSBlocks.ASPEN.getHangingWallSign().get(),
+                          NSBlocks.MAPLE.getHangingSign().get(),
+                          NSBlocks.MAPLE.getHangingWallSign().get(),
+                          NSBlocks.CYPRESS.getHangingSign().get(),
+                          NSBlocks.CYPRESS.getHangingWallSign().get(),
+                          NSBlocks.OLIVE.getHangingSign().get(),
+                          NSBlocks.OLIVE.getHangingWallSign().get(),
+                          NSBlocks.JOSHUA.getHangingSign().get(),
+                          NSBlocks.JOSHUA.getHangingWallSign().get(),
+                          NSBlocks.GHAF.getHangingSign().get(),
+                          NSBlocks.GHAF.getHangingWallSign().get(),
+                          NSBlocks.PALO_VERDE.getHangingSign().get(),
+                          NSBlocks.PALO_VERDE.getHangingWallSign().get(),
+                          NSBlocks.COCONUT.getHangingSign().get(),
+                          NSBlocks.COCONUT.getHangingWallSign().get(),
+                          NSBlocks.CEDAR.getHangingSign().get(),
+                          NSBlocks.CEDAR.getHangingWallSign().get(),
+                          NSBlocks.LARCH.getHangingSign().get(),
+                          NSBlocks.LARCH.getHangingWallSign().get(),
+                          NSBlocks.MAHOGANY.getHangingSign().get(),
+                          NSBlocks.MAHOGANY.getHangingWallSign().get(),
+                          NSBlocks.SAXAUL.getHangingSign().get(),
+                          NSBlocks.SAXAUL.getHangingWallSign().get(),
+                          PAPER_HANGING_SIGN.get(),
+                          PAPER_WALL_HANGING_SIGN.get()
+                  ).build(null));
 
   public static final RegistryObject<Block> PAPER_LANTERN = registerTransparentBlock("paper_lantern", () -> new PaperLanternBlock(
           BlockBehaviour.Properties.of().mapColor(MapColor.QUARTZ).forceSolidOn().strength(0.5F).sound(SoundType.LANTERN).lightLevel((state) -> 15).noOcclusion()

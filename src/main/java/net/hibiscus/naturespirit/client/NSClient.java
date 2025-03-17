@@ -18,6 +18,8 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
+import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.FoliageColor;
@@ -116,6 +118,8 @@ public class NSClient {
     Sheets.addWoodType(NSBlocks.LARCH.getWoodType().get());
     Sheets.addWoodType(NSBlocks.MAHOGANY.getWoodType().get());
     Sheets.addWoodType(NSBlocks.SAXAUL.getWoodType().get());
+
+
     ItemBlockRenderTypes.setRenderLayer(NSBlocks.PIZZA_BLOCK.get(), RenderType.cutout());
     ItemBlockRenderTypes.setRenderLayer(NSBlocks.LARGE_CALCITE_BUD.get(), RenderType.cutout());
     ItemBlockRenderTypes.setRenderLayer(NSBlocks.SMALL_CALCITE_BUD.get(), RenderType.cutout());
@@ -164,6 +168,9 @@ public class NSClient {
     event.registerEntityRenderer(NSEntityTypes.CHEESE_ARROW.get(), CheeseArrowEntityRenderer::new);
     event.registerEntityRenderer(NSEntityTypes.NS_BOAT.get(), pContext -> new NSBoatRenderer(pContext, false));
     event.registerEntityRenderer(NSEntityTypes.NS_CHEST_BOAT.get(), pContext -> new NSBoatRenderer(pContext, true));
+
+    event.registerBlockEntityRenderer(NSBlocks.NS_SIGN.get(), SignRenderer::new);
+    event.registerBlockEntityRenderer(NSBlocks.NS_HANGING_SIGN.get(), HangingSignRenderer::new);
   }
   @SubscribeEvent
   public static void registerEntityRenderLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
