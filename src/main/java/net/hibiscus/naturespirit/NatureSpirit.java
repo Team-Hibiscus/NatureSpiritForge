@@ -43,6 +43,7 @@ import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.village.WandererTradesEvent;
+import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import terrablender.api.Regions;
 import terrablender.api.SurfaceRuleManager;
 
@@ -77,6 +78,7 @@ public class NatureSpirit {
         modEventBus.addListener(this::creativeInventory);
         modEventBus.addListener(this::addPackFinders);
         modEventBus.addListener(this::blockTypes);
+        modEventBus.addListener(this::datapackRegistries);
         NSCriteria.CRITERIA.register(modEventBus);
 
         NeoForge.EVENT_BUS.addListener(this::wandererTrades);
@@ -155,6 +157,15 @@ public class NatureSpirit {
             ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(NSBlocks.SAXAUL.getSapling().getId(), NSBlocks.SAXAUL.getPottedSapling());
             NSCauldronBehavior.registerBehavior();
         });
+    }
+
+    public void datapackRegistries(DataPackRegistryEvent.NewRegistry event) {
+        event.dataPackRegistry(
+                PIZZA_TOPPING_VARIANT,
+                PizzaToppingVariant.CODEC,
+                PizzaToppingVariant.CODEC,
+                builder -> builder.maxId(256).sync(true)
+        );
     }
 
     public void wandererTrades(WandererTradesEvent event) {
