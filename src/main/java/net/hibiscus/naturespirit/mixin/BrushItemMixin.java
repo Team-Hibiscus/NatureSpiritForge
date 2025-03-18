@@ -29,7 +29,7 @@ public class BrushItemMixin {
   @Unique
   public long naturespirit$nextDustTime = 0;
 
-  @Inject(method = "onUseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"))
+  @Inject(method = "onUseTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"))
   private void injectCalciteClusterBrushing(Level world, LivingEntity user, ItemStack stack, int remainingUseTicks, CallbackInfo ci, @Local BlockState blockState, @Local BlockPos blockPos, @Local BlockHitResult blockHitResult, @Local
       Player playerEntity) {
     if (blockState.is(NSBlocks.SMALL_CALCITE_BUD.get()) || blockState.is(NSBlocks.LARGE_CALCITE_BUD.get()) || blockState.is(NSBlocks.CALCITE_CLUSTER.get())) {
@@ -61,7 +61,7 @@ public class BrushItemMixin {
     return new ItemEntity(world, g, h, i, new ItemStack(NSBlocks.CHALK_POWDER.get(), world.getRandom().nextIntBetweenInclusive(1, 3)));
   }
 
-  @Inject(method = "useOn", at = @At("HEAD"))
+  @Inject(method = "useOn(Lnet/minecraft/world/item/context/UseOnContext;)Lnet/minecraft/world/InteractionResult;", at = @At("HEAD"))
   private void useOnBlock(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
     naturespirit$nextDustTime = context.getLevel().getGameTime() + 10L;
   }

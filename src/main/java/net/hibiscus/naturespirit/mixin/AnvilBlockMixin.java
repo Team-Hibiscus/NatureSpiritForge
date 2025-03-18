@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AnvilBlock.class)
 public class AnvilBlockMixin {
 
-  @Inject(method = "onLand", at = @At("HEAD"))
+  @Inject(method = "onLand(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/item/FallingBlockEntity;)V", at = @At("HEAD"))
   private void onLanding(Level world, BlockPos pos, BlockState fallingBlockState, BlockState currentStateInPos, FallingBlockEntity fallingBlockEntity, CallbackInfo info) {
     if (NSConfig.deepslateGenerator) {
       if (world.getBlockState(pos.below()).is(Blocks.STONE) && world.getBlockState(pos.below(2)).is(Blocks.MAGMA_BLOCK)) {
