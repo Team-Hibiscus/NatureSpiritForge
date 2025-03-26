@@ -29,26 +29,26 @@ public class NSChestBoatEntity extends ChestBoat {
 
     @Override
     public Item getDropItem() {
-        switch (getNSVariant()) {
-            case REDWOOD -> NSBlocks.REDWOOD.getBoatItem().get();
-            case SUGI -> NSBlocks.SUGI.getBoatItem().get();
-            case WISTERIA -> NSBlocks.WISTERIA.getBoatItem().get();
-            case FIR -> NSBlocks.FIR.getBoatItem().get();
-            case WILLOW -> NSBlocks.WILLOW.getBoatItem().get();
-            case ASPEN -> NSBlocks.ASPEN.getBoatItem().get();
-            case MAPLE -> NSBlocks.MAPLE.getBoatItem().get();
-            case CYPRESS -> NSBlocks.CYPRESS.getBoatItem().get();
-            case OLIVE -> NSBlocks.OLIVE.getBoatItem().get();
-            case JOSHUA -> NSBlocks.JOSHUA.getBoatItem().get();
-            case GHAF -> NSBlocks.GHAF.getBoatItem().get();
-            case PALO_VERDE -> NSBlocks.PALO_VERDE.getBoatItem().get();
-            case COCONUT -> NSBlocks.COCONUT.getBoatItem().get();
-            case CEDAR -> NSBlocks.CEDAR.getBoatItem().get();
-            case LARCH -> NSBlocks.LARCH.getBoatItem().get();
-            case MAHOGANY -> NSBlocks.MAHOGANY.getBoatItem().get();
-            case SAXAUL -> NSBlocks.SAXAUL.getBoatItem().get();
-        }
-        return super.getDropItem();
+        return switch (getNSVariant()) {
+            case REDWOOD -> NSBlocks.REDWOOD.getChestBoatItem().get();
+            case SUGI -> NSBlocks.SUGI.getChestBoatItem().get();
+            case WISTERIA -> NSBlocks.WISTERIA.getChestBoatItem().get();
+            case FIR -> NSBlocks.FIR.getChestBoatItem().get();
+            case WILLOW -> NSBlocks.WILLOW.getChestBoatItem().get();
+            case ASPEN -> NSBlocks.ASPEN.getChestBoatItem().get();
+            case MAPLE -> NSBlocks.MAPLE.getChestBoatItem().get();
+            case CYPRESS -> NSBlocks.CYPRESS.getChestBoatItem().get();
+            case OLIVE -> NSBlocks.OLIVE.getChestBoatItem().get();
+            case JOSHUA -> NSBlocks.JOSHUA.getChestBoatItem().get();
+            case GHAF -> NSBlocks.GHAF.getChestBoatItem().get();
+            case PALO_VERDE -> NSBlocks.PALO_VERDE.getChestBoatItem().get();
+            case COCONUT -> NSBlocks.COCONUT.getChestBoatItem().get();
+            case CEDAR -> NSBlocks.CEDAR.getChestBoatItem().get();
+            case LARCH -> NSBlocks.LARCH.getChestBoatItem().get();
+            case MAHOGANY -> NSBlocks.MAHOGANY.getChestBoatItem().get();
+            case SAXAUL -> NSBlocks.SAXAUL.getChestBoatItem().get();
+            default -> super.getDropItem();
+        };
     }
 
     public void setVariant(NSBoatEntity.Type pVariant) {
@@ -61,10 +61,14 @@ public class NSChestBoatEntity extends ChestBoat {
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
+        this.writeLeashData(pCompound, this.getLeashData());
+        this.addChestVehicleSaveData(pCompound, this.registryAccess());
         pCompound.putString("Type", this.getNSVariant().getSerializedName());
     }
 
     protected void readAdditionalSaveData(CompoundTag pCompound) {
+        this.writeLeashData(pCompound, this.getLeashData());
+        this.readChestVehicleSaveData(pCompound, this.registryAccess());
         if (pCompound.contains("Type", 8)) {
             this.setVariant(NSBoatEntity.Type.byName(pCompound.getString("Type")));
         }
