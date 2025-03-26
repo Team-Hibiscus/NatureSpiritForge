@@ -123,3 +123,4 @@ run/
 *.probe
 *.bin
 *.lock
+runs/junit/junit_test_args.txt
