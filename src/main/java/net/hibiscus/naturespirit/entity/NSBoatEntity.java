@@ -51,6 +51,7 @@ public class NSBoatEntity extends Boat {
             case LARCH -> NSBlocks.LARCH.getBoatItem().get();
             case MAHOGANY -> NSBlocks.MAHOGANY.getBoatItem().get();
             case SAXAUL -> NSBlocks.SAXAUL.getBoatItem().get();
+            default -> super.getDropItem();
         };
     }
 
@@ -68,10 +69,12 @@ public class NSBoatEntity extends Boat {
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
+        this.writeLeashData(pCompound, this.getLeashData());
         pCompound.putString("Type", this.getNSVariant().getSerializedName());
     }
 
     protected void readAdditionalSaveData(CompoundTag pCompound) {
+        this.setLeashData(this.readLeashData(pCompound));
         if (pCompound.contains("Type", 8)) {
             this.setVariant(Type.byName(pCompound.getString("Type")));
         }
