@@ -61,14 +61,12 @@ public class NSChestBoatEntity extends ChestBoat {
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
-        this.writeLeashData(pCompound, this.getLeashData());
-        this.addChestVehicleSaveData(pCompound, this.registryAccess());
+        this.addChestVehicleSaveData(pCompound);
         pCompound.putString("Type", this.getNSVariant().getSerializedName());
     }
 
     protected void readAdditionalSaveData(CompoundTag pCompound) {
-        this.writeLeashData(pCompound, this.getLeashData());
-        this.readChestVehicleSaveData(pCompound, this.registryAccess());
+        this.readChestVehicleSaveData(pCompound);
         if (pCompound.contains("Type", 8)) {
             this.setVariant(NSBoatEntity.Type.byName(pCompound.getString("Type")));
         }
