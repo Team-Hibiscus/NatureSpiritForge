@@ -13,7 +13,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 
 public class NSChestBoatEntity extends ChestBoat {
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.INT);
 
     public NSChestBoatEntity(EntityType<? extends ChestBoat> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -56,8 +55,13 @@ public class NSChestBoatEntity extends ChestBoat {
     }
 
     protected void defineSynchedData(SynchedEntityData.Builder p_326198_) {
-        super.defineSynchedData(p_326198_);
         p_326198_.define(DATA_ID_TYPE, NSBoatEntity.Type.REDWOOD.ordinal());
+        p_326198_.define(DATA_ID_PADDLE_LEFT, false);
+        p_326198_.define(DATA_ID_PADDLE_RIGHT, false);
+        p_326198_.define(DATA_ID_BUBBLE_TIME, 0);
+        p_326198_.define(DATA_ID_HURT, 0);
+        p_326198_.define(DATA_ID_HURTDIR, 1);
+        p_326198_.define(DATA_ID_DAMAGE, 0.0F);
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
