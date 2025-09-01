@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.Block;
 import java.util.function.IntFunction;
 
 public class NSBoatEntity extends Boat {
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.INT);
 
     public NSBoatEntity(EntityType<? extends Boat> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -66,6 +65,12 @@ public class NSBoatEntity extends Boat {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_ID_TYPE, Type.REDWOOD.ordinal());
+        this.entityData.define(DATA_ID_HURT, 0);
+        this.entityData.define(DATA_ID_HURTDIR, 1);
+        this.entityData.define(DATA_ID_DAMAGE, 0.0F);
+        this.entityData.define(DATA_ID_PADDLE_LEFT, false);
+        this.entityData.define(DATA_ID_PADDLE_RIGHT, false);
+        this.entityData.define(DATA_ID_BUBBLE_TIME, 0);
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
