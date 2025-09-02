@@ -23,10 +23,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -54,6 +51,7 @@ import terrablender.api.Regions;
 import terrablender.api.SurfaceRuleManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static net.minecraft.world.entity.npc.VillagerType.DESERT;
@@ -325,6 +323,42 @@ public class NatureSpirit {
             ComposterBlock.COMPOSTABLES.put(NSBlocks.ALLUAUDIA_BUNDLE.get(), .2F);
             ComposterBlock.COMPOSTABLES.put(NSBlocks.STRIPPED_ALLUAUDIA.get(), .2F);
             ComposterBlock.COMPOSTABLES.put(NSBlocks.STRIPPED_ALLUAUDIA_BUNDLE.get(), .2F);
+
+            AxeItem.STRIPPABLES.put(NSBlocks.REDWOOD.getLog().get(), NSBlocks.REDWOOD.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.SUGI.getLog().get(), NSBlocks.SUGI.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.WISTERIA.getLog().get(), NSBlocks.WISTERIA.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.FIR.getLog().get(), NSBlocks.FIR.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.WILLOW.getLog().get(), NSBlocks.WILLOW.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.ASPEN.getLog().get(), NSBlocks.ASPEN.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.MAPLE.getLog().get(), NSBlocks.MAPLE.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.CYPRESS.getLog().get(), NSBlocks.CYPRESS.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.OLIVE.getLog().get(), NSBlocks.OLIVE.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.GHAF.getLog().get(), NSBlocks.GHAF.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.PALO_VERDE.getLog().get(), NSBlocks.PALO_VERDE.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.CEDAR.getLog().get(), NSBlocks.CEDAR.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.COCONUT.getLog().get(), NSBlocks.COCONUT.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.LARCH.getLog().get(), NSBlocks.LARCH.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.MAHOGANY.getLog().get(), NSBlocks.MAHOGANY.getStrippedLog().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.SAXAUL.getLog().get(), NSBlocks.SAXAUL.getStrippedLog().get());
+
+            AxeItem.STRIPPABLES.put(NSBlocks.REDWOOD.getWood().get(), NSBlocks.REDWOOD.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.SUGI.getWood().get(), NSBlocks.SUGI.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.WISTERIA.getWood().get(), NSBlocks.WISTERIA.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.FIR.getWood().get(), NSBlocks.FIR.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.WILLOW.getWood().get(), NSBlocks.WILLOW.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.ASPEN.getWood().get(), NSBlocks.ASPEN.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.MAPLE.getWood().get(), NSBlocks.MAPLE.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.CYPRESS.getWood().get(), NSBlocks.CYPRESS.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.OLIVE.getWood().get(), NSBlocks.OLIVE.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.GHAF.getWood().get(), NSBlocks.GHAF.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.PALO_VERDE.getWood().get(), NSBlocks.PALO_VERDE.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.CEDAR.getWood().get(), NSBlocks.CEDAR.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.COCONUT.getWood().get(), NSBlocks.COCONUT.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.LARCH.getWood().get(), NSBlocks.LARCH.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.MAHOGANY.getWood().get(), NSBlocks.MAHOGANY.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.SAXAUL.getWood().get(), NSBlocks.SAXAUL.getStrippedWood().get());
+            AxeItem.STRIPPABLES.put(NSBlocks.ALLUAUDIA_BUNDLE.get(), NSBlocks.STRIPPED_ALLUAUDIA_BUNDLE.get());
+            AxeItem.STRIPPABLES.put(NSBlocks.JOSHUA.getBundle().get(), NSBlocks.JOSHUA.getStrippedBundle().get());
 
             NSCauldronBehavior.registerBehavior();
         });
