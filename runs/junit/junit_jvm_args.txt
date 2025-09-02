@@ -5,7 +5,7 @@ forgejunituserdev
 --assetIndex
 asset-index
 --assetsDir
-C:\Users\ekans\.gradle\caches\minecraft\assets
+/Users/ekansh/.gradle/caches/minecraft/assets
 --gameDir
 .
 --fml.neoForgeVersion
