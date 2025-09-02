@@ -139,7 +139,7 @@ public class BranchingTrunkBlock extends PipeBlock implements SimpleWaterloggedB
   }
   @Override
   public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ItemAbility itemAbility, boolean simulate) {
-    if(context.getItemInHand().getItem() instanceof AxeItem) {
+    if(context.getItemInHand().getItem() instanceof AxeItem || context.getItemInHand().is(ItemTags.AXES)) {
       if (state.is(NSBlocks.ALLUAUDIA.get())) {
         return NSBlocks.STRIPPED_ALLUAUDIA.get().defaultBlockState().setValue(BranchingTrunkBlock.DOWN, state.getValue(BranchingTrunkBlock.DOWN)).setValue(
                 BranchingTrunkBlock.UP,

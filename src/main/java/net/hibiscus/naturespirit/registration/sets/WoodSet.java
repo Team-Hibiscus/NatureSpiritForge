@@ -626,26 +626,22 @@ public class WoodSet {
     return listItem;
   }
 
-  private DeferredBlock<StrippableLogBlock> createLog() {
+  private DeferredBlock<RotatedPillarBlock> createLog() {
     return createBlockWithItem(getLogName(), () -> log(topColor, sideColor, strippedLog));
   }
 
   private DeferredBlock<RotatedPillarBlock> createStrippedLog() {
-    return createBlockWithItem("stripped_" + getLogName(), () -> strippedLog(topColor, sideColor));
+    return createBlockWithItem("stripped_" + getLogName(), () -> log(topColor, sideColor));
   }
 
-  private DeferredBlock<StrippableLogBlock> createBundle() {
+  private DeferredBlock<RotatedPillarBlock> createBundle() {
     return createBlockWithItem(getName() + "_bundle", () -> log(topColor, sideColor, strippedBundle));
   }
 
   private DeferredBlock<RotatedPillarBlock> createStrippedBundle() {
-    return createBlockWithItem("stripped_" + getName() + "_bundle", () -> strippedLog(topColor, sideColor));
+    return createBlockWithItem("stripped_" + getName() + "_bundle", () -> log(topColor, sideColor));
   }
-  
-  private static StrippableLogBlock log(MapColor p_285370_, MapColor p_285126_, DeferredBlock<? extends Block> strippedLog) {
-    return new StrippableLogBlock(Properties.of().mapColor((p_152624_) -> p_152624_.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? p_285370_ : p_285126_).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava(), strippedLog);
-  }
-  private static RotatedPillarBlock strippedLog(MapColor p_285370_, MapColor p_285126_) {
+  private static RotatedPillarBlock log(MapColor p_285370_, MapColor p_285126_) {
     return new RotatedPillarBlock(Properties.of().mapColor((p_152624_) -> p_152624_.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? p_285370_ : p_285126_).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava()){
       @Override
       public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
