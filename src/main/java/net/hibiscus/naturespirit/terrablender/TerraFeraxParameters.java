@@ -746,7 +746,7 @@ public class TerraFeraxParameters extends OverworldBiomeBuilder {
   }
 
   private ResourceKey<Biome> getStratifiedDesertOrRegularBiome(int temperature, int humidity, Climate.Parameter weirdness) {
-    return temperature == 4 ? (NSConfig.hasLivelyDunes ? NSBiomes.STRATIFIED_DESERT : this.pickBadlandsBiome(humidity, weirdness))
+    return temperature == 4 ? (NSConfig.hasStratifiedDesert ? NSBiomes.STRATIFIED_DESERT : this.pickBadlandsBiome(humidity, weirdness))
         : this.pickMiddleBiome(temperature, humidity, weirdness);
   }
 
@@ -791,7 +791,7 @@ public class TerraFeraxParameters extends OverworldBiomeBuilder {
     if (temperature <= 2) {
       return weirdness.max() < 0L ? Biomes.JAGGED_PEAKS : Biomes.FROZEN_PEAKS;
     } else {
-      return temperature == 3 ? Biomes.STONY_PEAKS : (NSConfig.hasLivelyDunes ? NSBiomes.STRATIFIED_DESERT : this.pickBadlandsBiome(humidity, weirdness));
+      return temperature == 3 ? Biomes.STONY_PEAKS : (NSConfig.hasStratifiedDesert ? NSBiomes.STRATIFIED_DESERT : this.pickBadlandsBiome(humidity, weirdness));
     }
   }
 

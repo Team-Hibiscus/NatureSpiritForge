@@ -778,7 +778,7 @@ public class TerraFlavaParameters extends OverworldBiomeBuilder {
   }
 
   private ResourceKey<Biome> getWoodedDrylandsOrRegularBiome(int temperature, int humidity, Climate.Parameter weirdness) {
-    return temperature == 4 ? NSBiomes.WOODED_DRYLANDS : this.pickMiddleBiome(temperature, humidity, weirdness);
+    return temperature == 4 && NSConfig.hasWoodedDrylands ? NSBiomes.WOODED_DRYLANDS : this.pickMiddleBiome(temperature, humidity, weirdness);
   }
 
   private ResourceKey<Biome> pickBadlandsBiome(int humidity, Climate.Parameter weirdness) {
