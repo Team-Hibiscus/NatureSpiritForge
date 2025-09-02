@@ -69,15 +69,7 @@ public class MilkCauldronBlock extends AbstractCauldronBlock {
         );
       }
       if (!player.isCreative() && !player.isSpectator()) {
-        ItemStack itemStack = new ItemStack(Items.BUCKET);
         player.getItemInHand(hand).shrink(1);
-        if (player.getItemInHand(hand).isEmpty()) {
-          player.setItemInHand(hand, itemStack);
-        } else {
-          if (player.getInventory().add(itemStack)) {
-            player.drop(itemStack, false);
-          }
-        }
       }
       return InteractionResult.SUCCESS;
     }
