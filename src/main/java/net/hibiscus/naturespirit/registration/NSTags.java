@@ -32,13 +32,13 @@ public class NSTags {
     public static final TagKey<Item> CHALK_SLABS = createTag("chalk_slabs");
     public static final TagKey<Item> COCONUT_HALVES = createTag("coconut_halves");
     public static final TagKey<Item> OLIVES = createTag("olives");
-      public static final TagKey<Item> FORGE_AXES = createForgeTag("tools/axes");
+    public static final TagKey<Item> C_AXES = createCTag("axes");
 
     private static TagKey<Item> createTag(String name) {
       return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(NatureSpirit.MOD_ID, name));
     }
-      private static TagKey<Item> createForgeTag(String name) {
-          return TagKey.create(Registries.ITEM, new ResourceLocation("forge", name));
+      private static TagKey<Item> createCTag(String name) {
+          return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", name));
       }
   }
 

@@ -51,9 +51,9 @@ public class WoodSet {
   private Supplier<WoodType> woodType;
   private DeferredBlock<? extends Block> log;
   private DeferredBlock<? extends Block> strippedLog;
-  private DeferredBlock<StrippableLogBlock> bundle;
+  private DeferredBlock<RotatedPillarBlock> bundle;
   private DeferredBlock<RotatedPillarBlock> strippedBundle;
-  private DeferredBlock<StrippableLogBlock> wood;
+  private DeferredBlock<RotatedPillarBlock> wood;
   private DeferredBlock<RotatedPillarBlock> strippedWood;
   private DeferredBlock<? extends LeavesBlock> leaves;
   private DeferredBlock<? extends LeavesBlock> frostyLeaves;
@@ -347,7 +347,7 @@ public class WoodSet {
     return strippedLog;
   }
 
-  public DeferredBlock<StrippableLogBlock> getBundle() {
+  public DeferredBlock<RotatedPillarBlock> getBundle() {
     return bundle;
   }
 
@@ -355,7 +355,7 @@ public class WoodSet {
     return strippedBundle;
   }
 
-  public DeferredBlock<StrippableLogBlock> getWood() {
+  public DeferredBlock<RotatedPillarBlock> getWood() {
     return wood;
   }
 
@@ -627,7 +627,7 @@ public class WoodSet {
   }
 
   private DeferredBlock<RotatedPillarBlock> createLog() {
-    return createBlockWithItem(getLogName(), () -> log(topColor, sideColor, strippedLog));
+    return createBlockWithItem(getLogName(), () -> log(topColor, sideColor));
   }
 
   private DeferredBlock<RotatedPillarBlock> createStrippedLog() {
@@ -635,7 +635,7 @@ public class WoodSet {
   }
 
   private DeferredBlock<RotatedPillarBlock> createBundle() {
-    return createBlockWithItem(getName() + "_bundle", () -> log(topColor, sideColor, strippedBundle));
+    return createBlockWithItem(getName() + "_bundle", () -> log(topColor, sideColor));
   }
 
   private DeferredBlock<RotatedPillarBlock> createStrippedBundle() {
@@ -670,7 +670,7 @@ public class WoodSet {
         Properties.of().ignitedByLava().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
   }
 
-  private DeferredBlock<StrippableLogBlock> createWood() {
+  private DeferredBlock<RotatedPillarBlock> createWood() {
     return createBlockWithItem(getWoodName(), () -> log(sideColor, sideColor));
   }
 
