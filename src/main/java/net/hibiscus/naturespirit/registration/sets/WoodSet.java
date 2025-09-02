@@ -671,11 +671,11 @@ public class WoodSet {
   }
 
   private DeferredBlock<StrippableLogBlock> createWood() {
-    return createBlockWithItem(getWoodName(), () -> log(sideColor, sideColor, strippedWood));
+    return createBlockWithItem(getWoodName(), () -> log(sideColor, sideColor));
   }
 
   private DeferredBlock<RotatedPillarBlock> createStrippedWood() {
-    return createBlockWithItem("stripped_" + getWoodName(), () -> strippedLog(topColor, topColor));
+    return createBlockWithItem("stripped_" + getWoodName(), () -> log(topColor, topColor));
   }
 
   private DeferredBlock<LeavesBlock> createLeaves() {
