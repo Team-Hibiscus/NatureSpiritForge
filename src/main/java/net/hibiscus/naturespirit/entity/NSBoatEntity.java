@@ -3,6 +3,7 @@ package net.hibiscus.naturespirit.entity;
 import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSEntityTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -53,6 +54,11 @@ public class NSBoatEntity extends Boat {
             default -> super.getDropItem();
         };
     }
+
+    protected Component getTypeName() {
+        return EntityType.BOAT.getDescription(); // Forge: Use getter to allow overriding by mods
+    }
+
 
     public void setVariant(Type pVariant) {
         this.entityData.set(DATA_ID_TYPE, pVariant.ordinal());
