@@ -244,7 +244,23 @@ public class NSBlocks {
       return 5;
     }
   });
-  public static final RegistryObject<Block> ALLUAUDIA_BUNDLE = registerTransparentBlock("alluaudia_bundle", () -> new StrippableLogBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).noOcclusion().sound(SoundType.VINE).destroyTime(.6f).strength(.6f), STRIPPED_ALLUAUDIA_BUNDLE));
+  public static final RegistryObject<Block> ALLUAUDIA_BUNDLE = registerTransparentBlock("alluaudia_bundle", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).noOcclusion().sound(SoundType.VINE).destroyTime(.6f).strength(.6f)) {
+
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+          return true;
+      }
+
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+          return 5;
+      }
+
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+          return 5;
+      }
+  });
 
   public static final FoodProperties OLIVE_COMPONENT = (new FoodProperties.Builder()).nutrition(2).saturationMod(0.4F).build();
   public static final RegistryObject<Item> OLIVES = registerItem("olives", () -> new Item(new Item.Properties().food(OLIVE_COMPONENT)));
