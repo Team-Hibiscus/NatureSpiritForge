@@ -3,6 +3,7 @@ package net.hibiscus.naturespirit.entity;
 import net.hibiscus.naturespirit.registration.NSBlocks;
 import net.hibiscus.naturespirit.registration.NSEntityTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -58,6 +59,10 @@ public class NSChestBoatEntity extends ChestBoat {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_ID_TYPE, NSBoatEntity.Type.REDWOOD.ordinal());
+    }
+
+    protected Component getTypeName() {
+        return EntityType.CHEST_BOAT.getDescription(); // Forge: Use getter to allow overriding by mods
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
