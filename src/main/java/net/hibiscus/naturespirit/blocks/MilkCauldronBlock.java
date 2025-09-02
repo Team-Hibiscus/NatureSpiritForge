@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -53,8 +54,8 @@ public class MilkCauldronBlock extends AbstractCauldronBlock {
   }
 
   @Override
-  public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, @NotNull Player player, BlockHitResult hit) {
-    if (player.getItemInHand(player.getUsedItemHand()).is(NSTags.Items.CHEESE_MAKER) && !state.getValue(AGE_INTO_CHEESE)) {
+  public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    if (stack.is(NSTags.Items.CHEESE_MAKER) && !state.getValue(AGE_INTO_CHEESE)) {
       world.setBlock(pos, state.setValue(AGE_INTO_CHEESE, true), Block.UPDATE_CLIENTS);
       BlockState blockState = world.getBlockState(pos);
       world.playSound(null, pos, SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.BLOCKS, 1F, 1F);
@@ -76,19 +77,11 @@ public class MilkCauldronBlock extends AbstractCauldronBlock {
         );
       }
       if (!player.isCreative() && !player.isSpectator()) {
-        ItemStack itemStack = new ItemStack(Items.BUCKET);
         player.getItemInHand(player.getUsedItemHand()).shrink(1);
-        if (player.getItemInHand(player.getUsedItemHand()).isEmpty()) {
-          player.setItemInHand(player.getUsedItemHand(), itemStack);
-        } else {
-          if (player.getInventory().add(itemStack)) {
-            player.drop(itemStack, false);
-          }
-        }
       }
-      return InteractionResult.SUCCESS;
+      return ItemInteractionResult.SUCCESS;
     }
-    return super.useWithoutItem(state, world, pos, player, hit);
+    return super.useItemOn(stack, state, world, pos, player, hand, hit);
   }
 
   @Override
