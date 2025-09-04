@@ -80,10 +80,12 @@ public class NSBoatEntity extends Boat {
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
         pCompound.putString("Type", this.getNSVariant().getSerializedName());
     }
 
     protected void readAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
         if (pCompound.contains("Type", 8)) {
             this.setVariant(Type.byName(pCompound.getString("Type")));
         }
