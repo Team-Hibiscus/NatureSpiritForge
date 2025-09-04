@@ -56,7 +56,6 @@ public class NSChestBoatEntity extends ChestBoat {
     }
 
     protected void defineSynchedData() {
-        super.defineSynchedData();
         this.entityData.define(DATA_ID_TYPE, NSBoatEntity.Type.REDWOOD.ordinal());
         this.entityData.define(DATA_ID_HURT, 0);
         this.entityData.define(DATA_ID_HURTDIR, 1);

@@ -69,7 +69,6 @@ public class NSBoatEntity extends Boat {
     }
 
     protected void defineSynchedData() {
-        super.defineSynchedData();
         this.entityData.define(DATA_ID_TYPE, Type.REDWOOD.ordinal());
         this.entityData.define(DATA_ID_HURT, 0);
         this.entityData.define(DATA_ID_HURTDIR, 1);
