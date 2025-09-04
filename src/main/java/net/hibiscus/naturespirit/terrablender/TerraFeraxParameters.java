@@ -306,7 +306,7 @@ public class TerraFeraxParameters extends OverworldBiomeBuilder {
             this.erosionParameters[6],
             weirdness,
             0.0F,
-            NSConfig.hasLivelyDunes ? registryKey2 : registryKey
+            NSConfig.hasStratifiedDesert ? registryKey2 : registryKey
         );
       }
     }
@@ -363,7 +363,7 @@ public class TerraFeraxParameters extends OverworldBiomeBuilder {
             this.erosionParameters[3],
             weirdness,
             0.0F,
-            NSConfig.hasLivelyDunes ? registryKey2 : registryKey
+            NSConfig.hasStratifiedDesert ? registryKey2 : registryKey
         );
         this.addSurfaceBiome(parameters,
             parameterRange,
@@ -372,7 +372,7 @@ public class TerraFeraxParameters extends OverworldBiomeBuilder {
             this.erosionParameters[2],
             weirdness,
             0.0F,
-            NSConfig.hasLivelyDunes ? registryKey2 : registryKey
+            NSConfig.hasStratifiedDesert ? registryKey2 : registryKey
         );
         this.addSurfaceBiome(parameters,
             parameterRange,
@@ -401,7 +401,7 @@ public class TerraFeraxParameters extends OverworldBiomeBuilder {
             this.erosionParameters[5],
             weirdness,
             0.0F,
-            NSConfig.hasLivelyDunes ? registryKey2 : registryKey6
+            NSConfig.hasStratifiedDesert ? registryKey2 : registryKey6
         );
         this.addSurfaceBiome(parameters,
             parameterRange,
@@ -482,7 +482,7 @@ public class TerraFeraxParameters extends OverworldBiomeBuilder {
         this.addSurfaceBiome(parameters, parameterRange, parameterRange2, this.farInlandContinentalness, this.erosionParameters[1], weirdness, 0.0F,
             i == 0 ? registryKey9 : registryKey5);
         this.addSurfaceBiome(parameters, parameterRange, parameterRange2, this.nearInlandContinentalness, this.erosionParameters[2], weirdness, 0.0F,
-            NSConfig.hasLivelyDunes ? registryKey2 : registryKey);
+            NSConfig.hasStratifiedDesert ? registryKey2 : registryKey);
         this.addSurfaceBiome(parameters, parameterRange, parameterRange2, this.midInlandContinentalness, this.erosionParameters[2], weirdness, 0.0F, registryKey2);
         this.addSurfaceBiome(parameters, parameterRange, parameterRange2, this.farInlandContinentalness, this.erosionParameters[2], weirdness, 0.0F, registryKey5);
         this.addSurfaceBiome(parameters,
@@ -492,7 +492,7 @@ public class TerraFeraxParameters extends OverworldBiomeBuilder {
             this.erosionParameters[3],
             weirdness,
             0.0F,
-            NSConfig.hasLivelyDunes ? registryKey2 : registryKey
+            NSConfig.hasStratifiedDesert ? registryKey2 : registryKey
         );
         this.addSurfaceBiome(parameters,
             parameterRange,
@@ -512,7 +512,7 @@ public class TerraFeraxParameters extends OverworldBiomeBuilder {
               this.erosionParameters[4],
               weirdness,
               0.0F,
-              NSConfig.hasLivelyDunes ? registryKey2 : registryKey
+              NSConfig.hasStratifiedDesert ? registryKey2 : registryKey
           );
         } else {
           this.addSurfaceBiome(parameters,
@@ -603,7 +603,7 @@ public class TerraFeraxParameters extends OverworldBiomeBuilder {
             Climate.Parameter.span(this.erosionParameters[2], this.erosionParameters[3]),
             weirdness,
             0.0F,
-            NSConfig.hasLivelyDunes ? registryKey2 : registryKey
+            NSConfig.hasStratifiedDesert ? registryKey2 : registryKey
         );
         this.addSurfaceBiome(parameters,
             parameterRange,
